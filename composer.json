@@ -1,0 +1,17 @@
+{
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.6",
+        "php-di/php-di": "^7.0",
+        "php-di/slim-bridge": "^3.4",
+        "slim/twig-view": "^3.3"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
+    "autoload": {
+        "psr-4": {
+            "division": "app/"
+        }
+    }
+}
