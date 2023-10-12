@@ -5,10 +5,11 @@
         "php-di/php-di": "^7.0",
         "php-di/slim-bridge": "^3.4",
         "slim/twig-view": "^3.3",
-	  "ext-pdo": "*"
+	    "ext-pdo": "*"
 	},
     "require-dev": {
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "phpunit/phpunit": "10.4.1"
     },
     "autoload": {
         "psr-4": {
