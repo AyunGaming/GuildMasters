@@ -1,0 +1,40 @@
+{% extends 'base.twig' %}
+
+{% block title %} Connexion {% endblock %}
+
+{% block styles %}
+	<link rel="stylesheet" href="/public/css/login.css">
+{% endblock %}
+
+{% block body %}
+	<section class="container">
+		<img draggable="false" class="characters" src="/public/images/kid_goku.png" alt="Images de Goku">
+		<div class="login-container">
+			<img draggable="false" class="circle circle-one" src="/public/images/db_2star.png" alt="Dragon ball à 2 étoiles">
+			<div class="form-container">
+				<h1 class="opacity">Connexion</h1>
+
+				{% for flash in flashes %}
+					<div class="alert alert-{{ flash.type }} alert-dismissible fade show" role="alert">
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						{{ flash.message|raw }}
+					</div>
+				{% endfor %}
+
+				<form method="post" action="">
+					<label for="login">Login:</label>
+					<input id="login" name="login" type="text" required><br>
+
+					<label for="password">Mot de passe:</label>
+					<input id="password" name="password" type="password" required><br>
+
+					<button class="opacity" type="submit">Se connecter</button>
+					<br>
+				</form>
+
+			</div>
+			<img draggable="false" class="circle circle-two" src="/public/images/db_4star.png" alt="Dragon ball à 4 étoiles">
+		</div>
+		<img draggable="false" class="characters" src="/public/images/kamesennin.png" alt="Image de Kamesennin">
+	</section>
+{% endblock %}
