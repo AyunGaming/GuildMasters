@@ -15,7 +15,7 @@ class DatabaseTest extends TestCase{
 	}
 
 	public function testLoadConfig(): void{
-		$this->expectNotToPerformAssertions();
+		//$this->expectNotToPerformAssertions();
 		try {
 			DatabaseConfig::load();
 		} catch (CannotParseFileException $exception){
@@ -24,7 +24,7 @@ class DatabaseTest extends TestCase{
 	}
 
 	public function testDatabaseConnect():void{
-		$this->expectNotToPerformAssertions();
+		//$this->expectNotToPerformAssertions();
 		try {
 			new Database(DatabaseConfig::load());
 		} catch (\PDOException $pdo){

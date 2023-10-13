@@ -1,6 +1,6 @@
 
     {modifier} function {reference}{method_name}({arguments_decl}){return_declaration}
-    {{deprecation}
+    {{deprecation}}
         $__phpunit_arguments = [{arguments_call}];
         $__phpunit_count     = func_num_args();
 
