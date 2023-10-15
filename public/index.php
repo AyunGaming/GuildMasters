@@ -45,7 +45,7 @@ $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
 	$user = $request->getAttribute(User::class);
-	return $twig->render($response, 'base.twig', [
+	return $twig->render($response, 'characters.twig', [
 		'user_id' => @$_SESSION['a2v_user'],
 		'user' => $user
 	]);
