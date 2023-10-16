@@ -59,7 +59,7 @@ class Character {
 	}
 
 	public function getTagString(): string {
-		return implode(',',$this->tags);
+		return implode(',', $this->tags);
 	}
 
 	public function hydrate(array $data): void {

@@ -2,6 +2,10 @@
 
 {% block title %} Gestion des personnages {% endblock %}
 
+{% block styles %}
+	<link rel="stylesheet" href="/public/css/table.css">
+{% endblock %}
+
 {% block body %}
 	<div class="container">
 		<div class="row justify-content-center">
@@ -9,34 +13,53 @@
 				<div class="card shadow-2-strong" style="background-color: #f5f7fa">
 					<div class="card-body">
 						<div class="table-responsive">
-							<table class="table table-borderless mb-0">
+							<table class="table table-borderless mb-0 table-striped">
 								<thead>
-									<tr>
-										<th scope="col">Image</th>
-										<th scope="col">Rarity</th>
-										<th scope="col">Legends Limited</th>
-										<th scope="col">Name</th>
-										<th scope="col">Color</th>
-										<th scope="col">Tags</th>
-									</tr>
+								<tr>
+									<th class="text-center" scope="col">Image</th>
+									<th class="text-center" scope="col">Rarity</th>
+									<th class="text-center" scope="col">Legends Limited</th>
+									<th class="text-center" scope="col">Name</th>
+									<th class="text-center" scope="col">Color</th>
+									<th class="text-center" scope="col">Tags</th>
+								</tr>
 								</thead>
 								<tbody>
-									{% for character in characters %}
-										<tr>
-											<td>{{ character.getImage() }}</td>
-											<td>{{ character.getRarity().value }}</td>
-											<td>{{ character.getLF() }}</td>
-											<td>{{ character.getName() }}</td>
-											<td>{{ character.getColor().value }}</td>
-											<td>{{ character.getTagString() }}</td>
-											<td>
-												<button type="button" class="btn btn-primary btn-sm px-3">Edit</button>
-											</td>
-											<td>
-												<button type="button" class="btn btn-primary btn-sm px-3">Delete</button>
-											</td>
-										</tr>
-									{% endfor %}
+								{% for character in characters %}
+									<tr>
+										<td class="image">
+											<img draggable="false"
+												 src="/public/images/characters/{{ character.getImage() }}.png"
+												 alt="Image de {{ character.getImage() }}" width="150" height="150">
+										</td>
+										<td class="image">
+											<img draggable="false"
+												 src="/public/images/rarities/{{ character.getRarity().value }}.png"
+												 alt="Image de la rareté {{ character.getRarity().value }}">
+										</td>
+										<td class="image">
+											{% if character.getLF() %}
+												<img draggable="false" src="/public/images/lf/LF.png" alt="Image de LF">
+											{% else %}
+												<img draggable="false" src="/public/images/lf/NOTLF.png"
+													 alt="Image de non LF" width="50" height="50">
+											{% endif %}
+										</td>
+										<td>{{ character.getName() }}</td>
+										<td>
+											<img draggable="false"
+												 src="/public/images/colors/{{ character.getColor().value }}.png"
+												 alt="Image de la couleur {{ character.getColor().value }}" width="50">
+										</td>
+										<td>{{ character.getTagString() }}</td>
+										<td>
+											<button type="button" class="btn btn-primary btn-sm px-3">Edit</button>
+										</td>
+										<td>
+											<button type="button" class="btn btn-primary btn-sm px-3">Delete</button>
+										</td>
+									</tr>
+								{% endfor %}
 								</tbody>
 							</table>
 						</div>
