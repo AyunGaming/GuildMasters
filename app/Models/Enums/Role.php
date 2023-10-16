@@ -1,6 +1,6 @@
 <?php
 
-namespace division\Models;
+namespace division\Models\Enums;
 
 enum Role: string {
 	case MEMBER = 'member';

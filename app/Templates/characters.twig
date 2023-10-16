@@ -24,15 +24,16 @@
 									{% for character in characters %}
 										<tr>
 											<td>{{ character.getImage() }}</td>
-											<td>{{ character.getRarity() }}</td>
+											<td>{{ character.getRarity().value }}</td>
 											<td>{{ character.getLF() }}</td>
 											<td>{{ character.getName() }}</td>
-											<td>{{ character.getColor() }}</td>
-											<td>{{ character.getTags() }}</td>
+											<td>{{ character.getColor().value }}</td>
+											<td>{{ character.getTagString() }}</td>
 											<td>
-												<button type="button" class="btn btn-primary btn-sm px-3">
-													<a href="{{ url_for('home') }}"></a>
-												</button>
+												<button type="button" class="btn btn-primary btn-sm px-3">Edit</button>
+											</td>
+											<td>
+												<button type="button" class="btn btn-primary btn-sm px-3">Delete</button>
 											</td>
 										</tr>
 									{% endfor %}
