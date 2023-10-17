@@ -1,13 +1,12 @@
 <?php
 
-session_start();
-
 use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use division\Configs\DatabaseConfig;
 use division\Data\DAO\UserDAO;
 use division\Data\Database;
 use division\HTTP\Middlewares\GetUserMiddleware;
+use division\HTTP\Routing\CharacterController;
 use division\HTTP\Routing\UserController;
 use division\Models\Managers\UserManager;
 use division\Models\User;
@@ -16,6 +15,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteCollectorProxy;
 use Slim\Views\Twig;
 use \Slim\Views\TwigMiddleware;
+
+session_start();
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -43,9 +44,12 @@ $app->group('/signin', static function(RouteCollectorProxy $signIn){
 
 $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
+
+$app->get('/characters', CharacterController::class)->setName('character-list');
+
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
 	$user = $request->getAttribute(User::class);
-	return $twig->render($response, 'characters.twig', [
+	return $twig->render($response, 'main.twig', [
 		'user_id' => @$_SESSION['a2v_user'],
 		'user' => $user
 	]);

@@ -2,7 +2,7 @@
 
 namespace division\HTTP\Middlewares;
 
-use division\Models\Role;
+use division\Models\Enums\Role;
 use division\Utils\Flashes;
 use division\Utils\FlashMessage;
 use Fig\Http\Message\StatusCodeInterface;
