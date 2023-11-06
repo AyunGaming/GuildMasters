@@ -54,15 +54,24 @@ class Character {
 		return $this->tags;
 	}
 
-	public function setTags(array $tags): void {
-		$this->tags = $tags;
-	}
-
 	public function getTagString(): string {
-		return implode(', ', $this->tags);
+		$string = "";
+		for ($i = 0; $i <= count($this->tags)-1; $i++) {
+			if ($i === count($this->tags)-1) {
+				$string .= $this->tags[$i]->getName();
+			} else {
+				$string .= $this->tags[$i]->getName() . ', ';
+			}
+		}
+
+		return $string;
 	}
 
 	public function hydrate(array $data): void {
+		if(array_key_exists('Id',$data)){
+			$this->image = $data['Id'];
+		}
+
 		if (array_key_exists('Image', $data)) {
 			$this->image = $data['Image'];
 		}
@@ -95,14 +104,13 @@ class Character {
 			$this->color = $color;
 		}
 
-		if (array_key_exists('Tags', $data)) {
-			$tagString = explode(',', $data['Tags']);
-			$tags = [];
-			foreach ($tagString as $tagData) {
-				$this->tags[] = $tagData;
+		if (array_key_exists('Tags', $data) && is_array($data['Tags'])) {
+			$this->tags = [];
+			foreach ($data['Tags'] as $tagData) {
+				$tag = new Tag();
+				$tag->hydrate($tagData);
+				$this->tags[] = $tag;
 			}
-			$tag = new Tag();
-			$tag->hydrate($tags);
 		}
 	}
 }

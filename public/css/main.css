@@ -1,22 +1,22 @@
-#titles{
+#titles {
 	padding-top: 30px;
 }
 
-h2{
+h2 {
 	position: relative;
 	text-align: center;
 }
 
-#kamenews{
-	background-color: rgba(77,55,29,0.75);
+#kamenews {
+	background-color: rgba(77, 55, 29, 0.75);
 }
 
-.carousel-item img{
+.carousel-item img {
 	margin: auto;
 	width: auto;
 	height: 500px;
 }
 
-#kamenewsCarousel{
+#kamenewsCarousel {
 	padding-top: 80px;
 }
