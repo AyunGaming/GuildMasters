@@ -2,16 +2,47 @@
 
 namespace division\Models\Managers;
 
+use division\Data\DAO\CharacterTagDAO;
 use division\Data\DAO\Interfaces\ICharacterDAO;
+use division\Data\DAO\Interfaces\ICharacterTagDAO;
+use division\Models\Character;
 
 class CharacterManager {
 	private ICharacterDAO $characterDAO;
+	private ICharacterTagDAO $characterTagDAO;
 
-	public function __construct(ICharacterDAO $characterDAO) {
+	public function __construct(ICharacterDAO $characterDAO, ICharacterTagDAO $characterTagDAO) {
 		$this->characterDAO = $characterDAO;
+		$this->characterTagDAO = $characterTagDAO;
 	}
 
 	public function getAllCharacters(): ?array {
-		return $this->characterDAO->getAll();
+		$characters = $this->characterDAO->getAll();
+
+		foreach ($characters as $character) {
+			$data['Tags'] = [];
+			$characterTags = $this->characterTagDAO->getByCharacter($character->getImage());
+			$i = 0;
+			foreach ($characterTags as $tag) {
+				$data['Tags'][$i]['id'] = $tag->getId();
+				$data['Tags'][$i]['name'] = $tag->getName();
+				$i++;
+			}
+			$character->hydrate($data);
+
+		}
+
+		return $characters;
+	}
+
+	public function getByImage(string $image): ?Character {
+		return $this->characterDAO->getByImage($image);
+	}
+
+	public function updateCharacter(array $data): ?Character {
+		$character = new Character();
+		$character->hydrate($data);
+
+		return $this->characterDAO->update($character,$data['oldId']);
 	}
 }

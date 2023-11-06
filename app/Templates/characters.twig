@@ -6,6 +6,10 @@
 	<link rel="stylesheet" href="/public/css/table.css">
 {% endblock %}
 
+{% block script %}
+	<script type="text/javascript" src="/public/js/getUserInfos.js"></script>
+{% endblock %}
+
 {% block body %}
 	<div class="container">
 		<div class="row justify-content-center mt-3">
@@ -28,34 +32,37 @@
 								{% for character in characters %}
 									<tr>
 										<td class="image">
-											<img draggable="false"
+											<img draggable="false" id="characterImage"
 												 src="/public/images/characters/{{ character.getImage() }}.png"
 												 alt="Image de {{ character.getImage() }}" width="150" height="150">
 										</td>
 										<td class="image">
-											<img draggable="false"
+											<img draggable="false" id="characterRarity"
 												 src="/public/images/rarities/{{ character.getRarity().value }}.png"
 												 alt="Image de la rareté {{ character.getRarity().value }}">
 										</td>
 										<td class="image">
-											{% if character.getLF() %}
-												<img draggable="false" src="/public/images/lf/LF.png" alt="Image de LF">
+											{% if character.isLF() %}
+												<img draggable="false" id="lf" src="/public/images/lf/LF.png"
+													 alt="Image de LF" width="50" height="50">
 											{% else %}
-												<img draggable="false" src="/public/images/lf/NOTLF.png"
+												<img draggable="false" id="notLF" src="/public/images/lf/NOTLF.png"
 													 alt="Image de non LF" width="50" height="50">
 											{% endif %}
 										</td>
-										<td>{{ character.getName() }}</td>
+										<td id="characterName">{{ character.getName() }}</td>
 										<td>
-											<img draggable="false"
+											<img draggable="false" id="characterColor"
 												 src="/public/images/colors/{{ character.getColor().value }}.png"
 												 alt="Image de la couleur {{ character.getColor().value }}" width="50">
 										</td>
-										<td>{{ character.getTagString() }}</td>
+										<td id="characterTags">{{ character.getTagString() }}</td>
 										<td>
-											<button type="button" class="btn btn-primary btn-sm px-3">
+											<a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+											   data-bs-target="#updateCharacterToMenuModal"
+											   onclick="getUserInfos('{{ character.getImage() }}', '{{ character.getRarity().value }}', '{{ character.isLF() }}', '{{ character.getName() }}', '{{ character.getColor().value }}', '{{ character.getTagString() }}')">
 												<i class="bi-pencil"></i>
-											</button>
+											</a>
 										</td>
 										<td>
 											<button type="button" class="btn btn-primary btn-sm px-3">
@@ -72,4 +79,77 @@
 			</div>
 		</div>
 	</div>
+
+	<section class="modals">
+		<div class="modal fade" id="updateCharacterToMenuModal" tabindex="-1"
+			 aria-labelledby="updateCharacterToMenuModal"
+			 aria-hidden="true">
+			<div class="modal-xl modal-dialog modal-dialog-centered modal-dialog-scrollable">
+				<div class="body modal-content">
+					<div class="body-opaque modal-header">
+						<p class="modal-title fs-5" id="updateCharacterToMenuModal">
+							<span class="fs-5 h1">Mettre à jour un personnage</span><br>
+							<span class="fs-6 h2 text-muted fst-italic">Modifiez les infos du personnage</span>
+						</p>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body row">
+						<div class="form-container">
+							<form method="post" action="/admin/characters/update-character" enctype="multipart/form-data">
+								<div class="form-group">
+									<input type="text" class="form-control" id="oldId" name="oldId">
+								</div>
+								<div class="form-group mt-3">
+									<label for="updateId">ID:</label>
+									<input type="text" class="form-control" id="updateId" name="Id">
+								</div>
+								<div class="form-group mt-3">
+									<label for="updateImage">Image:</label>
+									<input type="file" class="form-control" id="updateImage" name="Image"
+										   accept="image/">
+								</div>
+								<div class="form-group mt-3">
+									<label for="updateName">Nom:</label>
+									<input type="text" class="form-control" id="updateName" name="Name"
+										   required>
+								</div>
+								<div class="form-group mt-3">
+									<label for="updateRarity">Rareté :</label>
+									<select class="form-control" id="updateRarity" name="Rarity" required>
+										{% for rarity in rarities %}
+											<option value="{{ rarity.value }}">{{ rarity.value|title }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="form-group mt-3">
+									<label class="form-check-label" for="updateIsLfCheckbox">Legends Limited</label>
+									<input class="form-check-input" type="checkbox" name="IsLF" id="updateIsLfCheckbox">
+								</div>
+								<div class="form-group mt-3">
+									<label for="updateColor">Couleur: </label>
+									<select class="form-control" id="updateColor" name="Color" required>
+										{% for color in colors %}
+											<option value="{{ color.value }}">{{ color.value|title }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="form-group mt-3">
+									<label for="updateTags">Tags: </label>
+									<select id="updateTags" class="form-control form-select" multiple name="Tags[]">
+										{% for tag in tags %}
+											<option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="body-opaque modal-footer">
+									<button type="submit" class="btn btn-primary">Modifier</button>
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 {% endblock %}
