@@ -2,7 +2,7 @@
 
 namespace division\Models\Managers;
 
-use division\Data\DAO\Interfaces\ICharacterDAO;
+use division\Data\DAO\Interfaces\characters\ICharacterDAO;
 
 class CharacterManager {
 	private ICharacterDAO $characterDAO;

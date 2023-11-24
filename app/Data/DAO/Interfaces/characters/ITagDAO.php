@@ -1,6 +1,6 @@
 <?php
 
-namespace division\Data\DAO\Interfaces;
+namespace division\Data\DAO\Interfaces\characters;
 
 use division\Models\Tag;
 

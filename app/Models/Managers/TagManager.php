@@ -2,7 +2,7 @@
 
 namespace division\Models\Managers;
 
-use division\Data\DAO\Interfaces\ITagDAO;
+use division\Data\DAO\Interfaces\characters\ITagDAO;
 
 class TagManager {
 	private ITagDAO $tagDAO;

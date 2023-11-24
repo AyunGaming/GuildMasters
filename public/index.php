@@ -7,6 +7,7 @@ use division\Data\DAO\UserDAO;
 use division\Data\Database;
 use division\HTTP\Middlewares\GetUserMiddleware;
 use division\HTTP\Routing\CharacterController;
+use division\HTTP\Routing\KamenewsController;
 use division\HTTP\Routing\UserController;
 use division\Models\Managers\UserManager;
 use division\Models\User;
@@ -46,6 +47,8 @@ $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
 
 $app->get('/characters', CharacterController::class)->setName('character-list');
+
+$app->get('/kamenews', KamenewsController::class)->setName('kamenews');
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
 	$user = $request->getAttribute(User::class);

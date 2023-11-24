@@ -62,7 +62,7 @@ class User {
 			$this->login = $data['login'];
 		}
 
-		if(array_key_exists('email',$data)){
+		if(array_key_exists('email',$data) && $data['email'] !== null){
 			$this->email = $data['email'];
 		}
 

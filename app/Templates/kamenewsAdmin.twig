@@ -1,0 +1,52 @@
+{% extends "base.twig" %}
+
+{% block title %}Gestion kamenews{% endblock %}
+
+{% block styles %}
+ 	<link rel="stylesheet" href="/public/css/kamenewsAdmin.css">
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<h1>Kamenews</h1>
+		<div class="row justify-content-end">
+			<div class="col-2 me-3 me-sm-0">
+				<a href="#" class="btn btn-sm btn-success">
+					Créer un nouveau kamenews
+				</a>
+			</div>
+		</div>
+		<div class="row mt-5 justify-content-center">
+			<div class="col-sm-6 col-md-4 col-lg-3 me-3 text-center">
+				<a href="#" class="btn btn-link">
+					<div class="card">
+						<img class="card-img-top" src="/public/images/db_2star.png"width="150">
+						<h2>Kamenews n°24</h2>
+						<p class="fs-6 fst-italic">07/10/2023</p>
+						<p>Edition du kamenews n°24 concernant la partie 3 du 5ème anniversaire.</p>
+					</div>
+				</a>
+			</div>
+			<div class="col-sm-6 col-md-4 col-lg-3 me-3 text-center">
+				<a href="#" class="btn btn-link">
+					<div class="card">
+						<img class="card-img-top" src="/public/images/db_2star.png">
+						<h2>Kamenews n°23</h2>
+						<p class="fs-6 fst-italic">28/09/2023</p>
+						<p>Edition du kamenews n°23 concernant la partie 2 du 5ème anniversaire.</p>
+					</div>
+				</a>
+			</div>
+			<div class="col-sm-6 col-md-4 col-lg-3 me-3 text-center">
+				<a href="#" class="btn btn-link">
+					<div class="card">
+						<img class="card-img-top" src="/public/images/db_2star.png">
+						<h2>Kamenews n°22</h2>
+						<p class="fs-6 fst-italic">20/09/2023</p>
+						<p>Edition du kamenews n°22 concernant la partie 1 du 5ème anniversaire.</p>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

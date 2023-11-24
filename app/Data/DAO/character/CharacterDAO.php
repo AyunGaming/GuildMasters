@@ -1,8 +1,9 @@
 <?php
 
-namespace division\Data\DAO;
+namespace division\Data\DAO\character;
 
-use division\Data\DAO\Interfaces\ICharacterDAO;
+use division\Data\DAO\BaseDAO;
+use division\Data\DAO\Interfaces\characters\ICharacterDAO;
 use division\Models\Character;
 use PDOException;
 
