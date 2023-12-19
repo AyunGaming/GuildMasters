@@ -5,7 +5,9 @@ namespace division\Models\Managers;
 use division\Data\DAO\CharacterTagDAO;
 use division\Data\DAO\Interfaces\ICharacterDAO;
 use division\Data\DAO\Interfaces\ICharacterTagDAO;
+use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
+use Exception;
 
 class CharacterManager {
 	private ICharacterDAO $characterDAO;
@@ -35,14 +37,19 @@ class CharacterManager {
 		return $characters;
 	}
 
-	public function getByImage(string $image): ?Character {
+	public function getByImage(string $image): Character {
 		return $this->characterDAO->getByImage($image);
 	}
 
-	public function updateCharacter(array $data): ?Character {
-		$character = new Character();
-		$character->hydrate($data);
+	public function updateCharacter(array $data): void {
+		try{
+			$character = new Character();
+			$character->hydrate($data);
 
-		return $this->characterDAO->update($character,$data['oldId']);
+			$this->characterDAO->update($character,$data['oldId']);
+		}
+		catch (Exception $e){
+			throw new CannotUpdateCharacterException($e->getMessage());
+		}
 	}
 }
