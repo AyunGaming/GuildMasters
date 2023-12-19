@@ -5,8 +5,9 @@ namespace division\Models;
 use division\Exceptions\InvalidEnumException;
 use division\Models\Enums\Color;
 use division\Models\Enums\Rarity;
+use JsonSerializable;
 
-class Character {
+class Character implements JsonSerializable {
 	private string $image;
 	private Rarity $rarity;
 	private bool $isLF;
@@ -22,17 +23,11 @@ class Character {
 		return $this->rarity;
 	}
 
-	public function setRarity(Rarity $rarity): void {
-		$this->rarity = $rarity;
-	}
 
 	public function isLF(): bool {
 		return $this->isLF;
 	}
 
-	public function setIsLF(bool $isLF): void {
-		$this->isLF = $isLF;
-	}
 
 	public function getName(): string {
 		return $this->name;
@@ -46,18 +41,10 @@ class Character {
 		return $this->color;
 	}
 
-	public function setColor(Color $color): void {
-		$this->color = $color;
-	}
-
-	public function getTags(): array {
-		return $this->tags;
-	}
-
 	public function getTagString(): string {
 		$string = "";
-		for ($i = 0; $i <= count($this->tags)-1; $i++) {
-			if ($i === count($this->tags)-1) {
+		for ($i = 0; $i <= count($this->tags) - 1; $i++) {
+			if ($i === count($this->tags) - 1) {
 				$string .= $this->tags[$i]->getName();
 			} else {
 				$string .= $this->tags[$i]->getName() . ', ';
@@ -68,7 +55,7 @@ class Character {
 	}
 
 	public function hydrate(array $data): void {
-		if(array_key_exists('Id',$data)){
+		if (array_key_exists('Id', $data)) {
 			$this->image = $data['Id'];
 		}
 
@@ -112,5 +99,9 @@ class Character {
 				$this->tags[] = $tag;
 			}
 		}
+	}
+
+	public function jsonSerialize(): mixed {
+		return ['image' => $this->image,'rarity' => $this->rarity,'isLF' => $this->isLF,'name' => $this->name,'color' => $this->color,'tags' => $this->tags];
 	}
 }

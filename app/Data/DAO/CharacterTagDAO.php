@@ -46,7 +46,7 @@ class CharacterTagDAO extends BaseDAO implements ICharacterTagDAO {
 				return [$character, $tag];
 			}
 			return [];
-		} catch (\PDOException) {
+		} catch (PDOException) {
 			return [];
 		}
 	}
@@ -62,7 +62,7 @@ class CharacterTagDAO extends BaseDAO implements ICharacterTagDAO {
 				return [$character, $tag];
 			}
 			return [];
-		} catch (\PDOException) {
+		} catch (PDOException) {
 			return [];
 		}
 	}

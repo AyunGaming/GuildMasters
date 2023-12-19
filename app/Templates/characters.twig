@@ -7,17 +7,82 @@
 {% endblock %}
 
 {% block script %}
-	<script type="text/javascript" src="/public/js/getUserInfos.js"></script>
+	<script type="text/javascript" src="/public/js/getUserInfos.js" defer></script>
+	<script type="text/javascript" src="/public/js/SearchCharacter.js" defer></script>
 {% endblock %}
 
 {% block body %}
 	<div class="container">
+		<div class="row mt-3">
+			{% for flash in flashes %}
+				<div class="alert alert-{{ flash.type }} alert-dismissible fade show" role="alert">
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					{{ flash.message|raw }}
+				</div>
+			{% endfor %}
+		</div>
 		<div class="row justify-content-center mt-3">
 			<div class="col-12">
 				<div class="card shadow-2-strong" style="background-color: #f5f7fa">
 					<div class="card-body">
+						<div class="row">
+							<div class="col-11">
+								<input type="search" class="form-control" id="search" placeholder="Rechercher...">
+							</div>
+							<div class="col">
+								<button type="button" class="form-control btn-sm btn-primary" id="filtersBtn">Filters</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="section" id="filters" style="display: none;">
+								<div class="mb-5 mt-3 ms-3">
+									<div class="row">
+										<div class="col-3">
+											<h5 class="mb-4">Rarity</h5>
+											{%  for rarity in rarities %}
+												<div class="row mb-1">
+													<div class="col-sm">
+														<input type="radio" id="rarity" name="rarity" value="{{ rarity.value }}">
+														<label class="filter" for="rarity">{{ rarity.value }}</label><br>
+													</div>
+												</div>
+											{% endfor %}
+										</div>
+										<div class="col-3 ms-5 ps-5">
+											<h5 class="mb-4">Color</h5>
+											{% for color in colors %}
+												<div class="row mb-1">
+													<div class="col-sm">
+														<input type="radio" id="color" name="color" value="{{ color.value }}">
+														<label class="filter" for="color">{{ color.value }}</label><br>
+													</div>
+												</div>
+											{% endfor%}
+										</div>
+										<div class="col-4 ms-5 ps-5">
+											<div class="row mb-3">
+												<h5 class="mb-4">Tags</h5>
+												<select id="filterTags" class="form-control form-select" multiple name="Tags[]">
+													{% for tag in tags %}
+														<option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
+													{% endfor %}
+												</select>
+												<br>
+											</div>
+											<h5>Legends limited</h5>
+											<div class="row form-group pt-3">
+												<div class="col">
+													<label class="form-check-label" for="updateIsLfCheckbox">Legends Limited</label>
+													<input class="form-check-input" type="checkbox" name="updateIsLfCheckbox" id="filterLf">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="table-responsive">
-							<table class="table table-borderless mb-0 table-striped">
+							<table class="table table-borderless mb-0 table-striped" id="characters">
 								<thead>
 								<tr>
 									<th class="text-center" scope="col">Image</th>
@@ -60,14 +125,16 @@
 										<td>
 											<a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal"
 											   data-bs-target="#updateCharacterToMenuModal"
-											   onclick="getUserInfos('{{ character.getImage() }}', '{{ character.getRarity().value }}', '{{ character.isLF() }}', '{{ character.getName() }}', '{{ character.getColor().value }}', '{{ character.getTagString() }}')">
+											   onclick="getUpdateUserInfos('{{ character.getImage() }}', '{{ character.getRarity().value }}', '{{ character.isLF() }}', '{{ character.getName() }}', '{{ character.getColor().value }}', '{{ character.getTagString() }}')">
 												<i class="bi-pencil"></i>
 											</a>
 										</td>
 										<td>
-											<button type="button" class="btn btn-primary btn-sm px-3">
+											<a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+												data-bs-target="#deleteCharacterModal"
+											    onclick="getDeleteUserInfos('{{ character.getImage() }}', '{{ character.getName() }}')">
 												<i class="bi-trash"></i>
-											</button>
+											</a>
 										</td>
 									</tr>
 								{% endfor %}
@@ -101,7 +168,7 @@
 								</div>
 								<div class="form-group mt-3">
 									<label for="updateId">ID:</label>
-									<input type="text" class="form-control" id="updateId" name="Id">
+									<input type="text" class="form-control" id="updateId" name="Id" required>
 								</div>
 								<div class="form-group mt-3">
 									<label for="updateImage">Image:</label>
@@ -151,5 +218,32 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="modal fade" id="deleteCharacterModal" tabindex="-1" aria-labelledby="deleteCharacterModal"
+			 aria-hidden="true">
+			<div class="modal-lg modal-dialog modal-dialog-centered">
+				<div class="body modal-content">
+					<div class="body-opaque modal-header">
+						<p class="modal-title fs-5" id="updateCharacterToMenuModal">
+							<span class="fs-5 h1">Supprimer un personnage</span><br>
+						</p>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<span id="deleteConfirm"></span>
+					</div>
+					<form method="post" action="/admin/characters/delete-character" enctype="multipart/form-data">
+						<input id="characterId" name="ID" type="text" hidden="hidden">
+
+						<div class="body-opaque modal-footer">
+							<button type="submit" class="btn btn-danger">Supprimer</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 	</section>
+
+	<div id="charactersList" class="d-none">{{ characters|json_encode(constant('JSON_UNESCAPED_UNICODE')) }}</div>
 {% endblock %}

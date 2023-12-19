@@ -3,7 +3,11 @@
 namespace division\Data\DAO;
 
 use division\Data\DAO\Interfaces\ICharacterDAO;
+use division\Exceptions\CannotDeleteCharacterException;
+use division\Exceptions\CannotGetCharacterException;
+use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
+use JsonSerializable;
 use PDOException;
 
 class CharacterDAO extends BaseDAO implements ICharacterDAO {
@@ -12,24 +16,23 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 		try {
 			$statement = $this->database->prepare('SELECT * FROM dbl_characters');
 
-			if($statement->execute() === false){
-				return [];
+			if($statement->execute() !== false){
+				$characters = [];
+				foreach (($statement->fetchAll() ?? []) as $datum) {
+					$character = new Character();
+					$character->hydrate($datum);
+					$characters[] = $character;
+				}
+				return $characters;
 			}
-
-			$characters = [];
-			foreach (($statement->fetchAll() ?? []) as $datum) {
-				$character = new Character();
-				$character->hydrate($datum);
-				$characters[] = $character;
-			}
-			return $characters;
-		} catch (PDOException) {
-			return [];
+			throw new CannotGetCharacterException("Impossible de récupérer les personnages");
+		} catch (PDOException $PDOException) {
+			throw new CannotGetCharacterException($PDOException->getMessage());
 		}
 	}
 
 
-	public function getByImage(string $image): ?Character {
+	public function getByImage(string $image): Character {
 		try {
 			$req = $this->database->prepare('SELECT * FROM dbl_characters WHERE Image = ?');
 
@@ -42,14 +45,15 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 				$character->hydrate($data);
 				return $character;
 			}
-			return null;
-		} catch (PDOException) {
-			return null;
+
+			throw new CannotGetCharacterException("Impossible de récupérer le personnage");
+		} catch (PDOException $PDOException) {
+			throw new CannotUpdateCharacterException($PDOException->getMessage());
 		}
 	}
 
 
-	public function update(Character $character, string $oldId): ?Character {
+	public function update(Character $character, string $oldId): void {
 		try {
 			$req = $this->database->prepare('UPDATE dbl_characters SET Image = ?, Rarity = ?, IsLF = ?, Name = ?, Color = ? WHERE Image = ?');
 
@@ -60,12 +64,27 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 			$req->bindValue(5, $character->getColor()->value);
 			$req->bindValue(6, $oldId);
 
-			if ($req->execute() !== false) {
-					return $character;
+			if ($req->execute() === false) {
+				throw new CannotUpdateCharacterException("Impossible de modifier le personnage");
 			}
-			return null;
-		} catch (PDOException) {
-			return null;
+		} catch (PDOException $PDOException) {
+			//throw new CannotUpdateCharacterException($PDOException->getMessage());
+			var_dump($code = $PDOException->errorInfo[1]);
+			die();
+		}
+	}
+
+	public function delete(Character $character): void {
+		try {
+			$req = $this->database->prepare('DELETE FROM dbl_characters WHERE Image = ?');
+
+			$req->bindValue(1, $character->getImage());
+
+			if ($req->execute() === false) {
+				throw new CannotDeleteCharacterException("Impossible de supprimer le personnage !");
+			}
+		} catch (PDOException $PDOException) {
+			throw new CannotDeleteCharacterException($PDOException->getMessage());
 		}
 	}
 }

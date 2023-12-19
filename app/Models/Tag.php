@@ -2,7 +2,9 @@
 
 namespace division\Models;
 
-class Tag {
+use JsonSerializable;
+
+class Tag implements JsonSerializable {
 	private int $id;
 	private string $name;
 
@@ -30,5 +32,10 @@ class Tag {
 
 	public function __toString(): string {
 		return $this->name;
+	}
+
+
+	public function jsonSerialize(): mixed {
+		return ['id' => $this->id, 'name' => $this->name];
 	}
 }
