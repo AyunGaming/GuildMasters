@@ -33,6 +33,8 @@ function getDeleteUserInfos(image,name){
 }
 
 
+
+
 $('#filterTags').select2({
 	theme: "bootstrap-5",
 	placeholder: 'Sélectionner les tags',

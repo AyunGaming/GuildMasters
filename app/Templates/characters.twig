@@ -27,6 +27,10 @@
 					<div class="card-body">
 						<div class="row">
 							<div class="col-11">
+								<select name="select-character-research" id="character-research">
+									<option value="name" selected>Nom</option>
+									<option value="id">ID</option>
+								</select>
 								<input type="search" class="form-control" id="search" placeholder="Rechercher...">
 							</div>
 							<div class="col">
@@ -42,7 +46,7 @@
 											{%  for rarity in rarities %}
 												<div class="row mb-1">
 													<div class="col-sm">
-														<input type="radio" id="rarity" name="rarity" value="{{ rarity.value }}">
+														<input type="radio" id="rarity" name="rarity" class="filter-btn" value="{{ rarity.value }}">
 														<label class="filter" for="rarity">{{ rarity.value }}</label><br>
 													</div>
 												</div>
@@ -53,7 +57,7 @@
 											{% for color in colors %}
 												<div class="row mb-1">
 													<div class="col-sm">
-														<input type="radio" id="color" name="color" value="{{ color.value }}">
+														<input type="radio" id="color" name="color" class="filter-btn" value="{{ color.value }}">
 														<label class="filter" for="color">{{ color.value }}</label><br>
 													</div>
 												</div>
@@ -62,21 +66,22 @@
 										<div class="col-4 ms-5 ps-5">
 											<div class="row mb-3">
 												<h5 class="mb-4">Tags</h5>
-												<select id="filterTags" class="form-control form-select" multiple name="Tags[]">
+												<select id="filterTags" class="form-control form-select" multiple name="Tags[]" onchange="search()">
 													{% for tag in tags %}
 														<option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
 													{% endfor %}
 												</select>
 												<br>
 											</div>
+										</div>
 											<h5>Legends limited</h5>
 											<div class="row form-group pt-3">
 												<div class="col">
 													<label class="form-check-label" for="updateIsLfCheckbox">Legends Limited</label>
-													<input class="form-check-input" type="checkbox" name="updateIsLfCheckbox" id="filterLf">
+													<input class="form-check-input filter-check" type="checkbox" name="updateIsLfCheckbox" id="updateIsLfCheckbox">
 												</div>
 											</div>
-										</div>
+
 									</div>
 								</div>
 							</div>
@@ -85,6 +90,7 @@
 							<table class="table table-borderless mb-0 table-striped" id="characters">
 								<thead>
 								<tr>
+									<th class="text-center" scope="col">ID</th>
 									<th class="text-center" scope="col">Image</th>
 									<th class="text-center" scope="col">Rarity</th>
 									<th class="text-center" scope="col">Legends Limited</th>
@@ -95,7 +101,8 @@
 								</thead>
 								<tbody>
 								{% for character in characters %}
-									<tr>
+									<tr class="character">
+										<td class="fw-bold">{{ character.getImage() }}</td>
 										<td class="image">
 											<img draggable="false" id="characterImage"
 												 src="/public/images/characters/{{ character.getImage() }}.png"
@@ -232,7 +239,7 @@
 					<div class="modal-body">
 						<span id="deleteConfirm"></span>
 					</div>
-					<form method="post" action="/admin/characters/delete-character" enctype="multipart/form-data">
+					<form method="post" action="{{ url_for("delete-character") }}" enctype="multipart/form-data">
 						<input id="characterId" name="ID" type="text" hidden="hidden">
 
 						<div class="body-opaque modal-footer">
