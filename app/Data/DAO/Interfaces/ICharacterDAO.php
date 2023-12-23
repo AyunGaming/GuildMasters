@@ -6,6 +6,8 @@ use division\Models\Character;
 
 interface ICharacterDAO {
 
+	public function create(Character $character): void;
+
 	public function getAll(): array;
 
 	public function getByImage(string $image): Character;

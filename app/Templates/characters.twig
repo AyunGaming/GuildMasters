@@ -25,16 +25,19 @@
 			<div class="col-12">
 				<div class="card shadow-2-strong" style="background-color: #f5f7fa">
 					<div class="card-body">
-						<div class="row">
-							<div class="col-11">
+						<div class="row align-items-center">
+							<div class="col">
 								<select name="select-character-research" id="character-research">
 									<option value="name" selected>Nom</option>
 									<option value="id">ID</option>
 								</select>
+							</div>
+							<div class="col-8">
 								<input type="search" class="form-control" id="search" placeholder="Rechercher...">
 							</div>
 							<div class="col">
-								<button type="button" class="form-control btn-sm btn-primary" id="filtersBtn">Filters</button>
+								<a href="{{ url_for('character-create') }}" class="form-control btn btn-sm btn-success">Créer un personnage</a>
+								<button type="button" class="form-control btn-sm btn-primary mt-2" id="filtersBtn">Filters</button>
 							</div>
 						</div>
 						<div class="row">
@@ -71,17 +74,18 @@
 														<option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
 													{% endfor %}
 												</select>
-												<br>
 											</div>
 										</div>
-											<h5>Legends limited</h5>
-											<div class="row form-group pt-3">
-												<div class="col">
-													<label class="form-check-label" for="updateIsLfCheckbox">Legends Limited</label>
-													<input class="form-check-input filter-check" type="checkbox" name="updateIsLfCheckbox" id="updateIsLfCheckbox">
-												</div>
+										<h5>Legends limited</h5>
+										<div class="row form-group pt-3">
+											<div class="col">
+												<label class="form-check-label" for="updateIsLfCheckbox">Legends Limited</label>
+												<input class="form-check-input filter-check" type="checkbox" name="updateIsLfCheckbox" id="updateIsLfCheckbox">
 											</div>
-
+											<div class="col-3">
+												<button id="resetTags" class="btn btn-sm btn-secondary">Reinitialiser les filtres</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

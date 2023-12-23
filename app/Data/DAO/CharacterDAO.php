@@ -3,6 +3,7 @@
 namespace division\Data\DAO;
 
 use division\Data\DAO\Interfaces\ICharacterDAO;
+use division\Exceptions\CannotCreateCharacterException;
 use division\Exceptions\CannotDeleteCharacterException;
 use division\Exceptions\CannotGetCharacterException;
 use division\Exceptions\CannotUpdateCharacterException;
@@ -11,6 +12,22 @@ use JsonSerializable;
 use PDOException;
 
 class CharacterDAO extends BaseDAO implements ICharacterDAO {
+
+	public function create(Character $character): void {
+		$statement = $this->database->prepare("INSERT INTO characters ('Image','Rarity','IsLF','Name','Color') VALUES (?,?,?,?,?)");
+
+		$statement->bindValue(1,$character->getImage());
+		$statement->bindValue(2,$character->getRarity()->value);
+		$statement->bindValue(3,$character->isLF());
+		$statement->bindValue(4,$character->getName());
+		$statement->bindValue(5,$character->getColor()->value);
+
+		try{
+			$statement->execute();
+		} catch (PDOException) {
+			throw new CannotCreateCharacterException("Impossible de créer le personnage: " . $character->getImage());
+		}
+	}
 
 	public function getAll(): array {
 		try {
@@ -68,9 +85,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 				throw new CannotUpdateCharacterException("Impossible de modifier le personnage");
 			}
 		} catch (PDOException $PDOException) {
-			//throw new CannotUpdateCharacterException($PDOException->getMessage());
-			var_dump($code = $PDOException->errorInfo[1]);
-			die();
+			throw new CannotUpdateCharacterException($PDOException->getMessage());
 		}
 	}
 

@@ -45,6 +45,7 @@ $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
 $app->group('/admin', static function (RouteCollectorProxy $admin){
 	$admin->group('/characters', static function (RouteCollectorProxy $characters) {
+		$characters->get('/create-character', [CharacterController::class,'viewCreateCharacter'])->setName('character-create');
 		$characters->post('/update-character', [CharacterController::class, 'postUpdateCharacter'])->setName('character-update');
 		$characters->post('/delete-character', [CharacterController::class, 'postDeleteCharacter'])->setName('delete-character');
 		$characters->get('/list-characters',[CharacterController::class,'viewListCharacters'])->setName('character-list');
@@ -53,7 +54,7 @@ $app->group('/admin', static function (RouteCollectorProxy $admin){
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
 	$user = $request->getAttribute(User::class);
-	return $twig->render($response, 'main.twig', [
+	return $twig->render($response, 'charactersCreate.twig', [
 		'user_id' => @$_SESSION['a2v_user'],
 		'user' => $user
 	]);

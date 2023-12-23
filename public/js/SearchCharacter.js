@@ -3,40 +3,43 @@ let filtersBtn = document.getElementById('filtersBtn');
 let charactersString = document.getElementById('charactersList').innerText;
 let filters_buttons = document.querySelectorAll('.filter-btn');
 let filter_check = document.querySelectorAll('.filter-check');
+let resetTagsBtn = document.getElementById('resetTags');
 
-filtersBtn.addEventListener('click',function (){
+filtersBtn.addEventListener('click', function () {
 	displayFilters();
 })
 
-searchBox.addEventListener('keyup',function () {
+searchBox.addEventListener('keyup', function () {
 	search();
 })
 
-filters_buttons.forEach(function (input){
-	input.addEventListener('click', function (){
+filters_buttons.forEach(function (input) {
+	input.addEventListener('click', function () {
 		search();
 	})
 })
 
-filter_check.forEach(function (input){
-	input.addEventListener('change', function (){
+filter_check.forEach(function (input) {
+	input.addEventListener('change', function () {
 		search();
 	})
 })
 
-function displayFilters(){
+resetTagsBtn.addEventListener('click', function () {
+	resetFilters();
+})
+
+function displayFilters() {
 	let filterDiv = document.getElementById('filters');
 
-	if(filterDiv.style.display === 'none'){
+	if (filterDiv.style.display === 'none') {
 		filterDiv.style.display = "flex";
-	}
-	else{
+	} else {
 		filterDiv.style.display = 'none';
 	}
 }
 
-function search()
-{
+function search() {
 	// Declare variables
 	let category, filter, table;
 	category = document.getElementById("character-research");
@@ -44,27 +47,37 @@ function search()
 	table = document.getElementById("characters");
 
 	let rarity = document.querySelector('input[name="rarity"]:checked');
-	if(rarity) {rarity=rarity.value;} else {rarity="all";}
+	if (rarity) {
+		rarity = rarity.value;
+	} else {
+		rarity = "all";
+	}
 
 	let color = document.querySelector('input[name="color"]:checked');
-	if(color) {color=color.value;} else {color="all";}
+	if (color) {
+		color = color.value;
+	} else {
+		color = "all";
+	}
 
 	let lf = document.querySelector('input[name="updateIsLfCheckbox"]:checked');
-	if(lf) {lf="lf";} else {lf="notlf";}
+	if (lf) {
+		lf = "lf";
+	} else {
+		lf = "notlf";
+	}
 
 	let selectedValues = [];
 	let select = document.querySelector('#filterTags');
 
-	for(let i = 0; i < select.length; i++)
-	{
-		if (select.options[i].selected)
-		{
+	for (let i = 0; i < select.length; i++) {
+		if (select.options[i].selected) {
 			selectedValues.push(select.options[i].value);
 		}
 	}
 
 	let dict = {
-		"name":3,
+		"name": 3,
 	}
 
 	let rows = table.rows;
@@ -75,13 +88,12 @@ function search()
 
 		let cells = row.cells;
 
-		let rarCell = cells[2].children[0].src.slice(47,-4);
-		let lfCell = cells[3].children[0].src.slice(41,-4);
-		let colCell = cells[5].children[0].src.slice(45,-4);
+		let rarCell = cells[2].children[0].src.slice(47, -4);
+		let lfCell = cells[3].children[0].src.slice(41, -4);
+		let colCell = cells[5].children[0].src.slice(45, -4);
 		let tagsCell = cells[6].innerHTML;
-		let searchCell = cells[dict[category.value]];
 
-		console.log(cells[6])
+		let searchCell = cells[dict[category.value]];
 
 		let sfil = search_filter(rarity, lf, color, selectedValues);
 		let showRow = true;
@@ -113,11 +125,14 @@ function search()
 				}
 			});
 		}
+
+
 		if (sfil[3].length !== 0 && showRow) //si au moins un tag et doit etre montré
 		{
-
+			let tagArray = tagsCell.split(",")
+			tagArray = trimTagArray(tagArray)
 			sfil[3].forEach(element => {
-				if (!tagsCell.split(",").includes(element)) {
+				if (!tagArray.includes(element)) {
 					showRow = false;
 				}
 			});
@@ -137,11 +152,9 @@ function search()
 	}
 }
 
-function search_filter(rarity, lf, color, tags)
-{
+function search_filter(rarity, lf, color, tags) {
 	let filters = [];
-	if (rarity === "all")
-	{
+	if (rarity === "all") {
 
 		filters.push(["HERO", "EXTREME", "SPARKING", "ULTRA"]);
 	} else {
@@ -149,16 +162,14 @@ function search_filter(rarity, lf, color, tags)
 		filters.push([rarity]);
 	}
 
-	if (lf === "lf")
-	{
+	if (lf === "lf") {
 		filters.push([lf]);
 	} else {
 
 		filters.push(["lf", "notlf"]);
 	}
 
-	if (color === "all")
-	{
+	if (color === "all") {
 
 		filters.push(["rou", "jau", "vio", "ver", "ble", "lum"]);
 	} else {
@@ -166,8 +177,7 @@ function search_filter(rarity, lf, color, tags)
 		filters.push([color]);
 	}
 
-	if (tags === [])
-	{
+	if (tags === []) {
 
 		filters.push([]);
 	} else {
@@ -175,6 +185,19 @@ function search_filter(rarity, lf, color, tags)
 	}
 
 	return filters;
+}
+
+function resetFilters() {
+	document.getElementById("filterTags").selectedIndex = -1;
+	$("#filterTags").end();
+	search();
+}
+
+function trimTagArray(array) {
+	for (let i = 1; i < array.length; i++) {
+		array[i] = array[i].trim()
+	}
+	return array
 }
 
 let characters = JSON.parse(charactersString);

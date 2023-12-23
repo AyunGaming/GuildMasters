@@ -45,7 +45,6 @@ h1 {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height: 100vh;
 }
 
 .dragon {
@@ -56,7 +55,7 @@ h1 {
 	display: block;
 }
 
-.login-container {
+.create-container {
 	min-width: 300px;
 	position: relative;
 	background-color: #C57616;
@@ -75,11 +74,11 @@ h1 {
 }
 
 .form-container form {
-	max-width: 400px;
+	width: 400px;
 	margin: 0 auto;
 }
 
-.login-container form input {
+.create-container form input {
 	display: block;
 	padding: 14px;
 	width: 100%;
@@ -97,13 +96,31 @@ h1 {
 	-moz-border-radius: 5px;
 }
 
-.login-container form input:focus {
+.create-container form input:focus {
 	box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
 	animation: wobble 0.3s ease-in;
 	-webkit-animation: wobble 0.3s ease-in;
 }
 
-.login-container form button {
+.create-container form select {
+	display: block;
+	padding: 14px;
+	width: 100%;
+	margin: 1.5rem 0;
+	color: var(--color);
+	outline: none;
+	background-color: #2725251f;
+	border: none;
+	border-radius: 5px;
+	font-weight: 500;
+	letter-spacing: 1px;
+	font-size: 15px;
+	backdrop-filter: blur(15px);
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+}
+
+.create-container form button {
 	background-color: var(--primary-color);
 	color: var(--color);
 	display: block;
@@ -126,7 +143,7 @@ h1 {
 	-o-transition: all 0.1s ease-in-out;
 }
 
-.login-container form button:hover {
+.create-container form button:hover {
 	box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.15);
 	transform: scale(1.02);
 	-ms-transform: scale(1.02);
