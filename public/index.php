@@ -1,6 +1,7 @@
 <?php
 
 session_start();
+ini_set('display_errors',1);
 
 use DI\Bridge\Slim\Bridge;
 use DI\Container;
@@ -29,7 +30,7 @@ try {
 
 $container->set(Database::class, $database);
 
-$twig = Twig::create(__DIR__ . '/../app/templates');
+$twig = Twig::create(__DIR__ . '/../app/Templates');
 $container->set(Twig::class, $twig);
 
 $app = Bridge::create($container);
