@@ -2,7 +2,6 @@
 
 namespace division\Data\DAO;
 
-use division\Data\DAO\Interfaces\IUserDAO;
 use division\Models\User;
 use PDOException;
 
