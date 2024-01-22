@@ -16,9 +16,6 @@ use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 
 class UserController extends AbstractController {
-	public function __construct(private readonly Database $database){
-	}
-
 	public function login(Request $request, Response $response): Response{
 		$post = $request->getParsedBody();
 

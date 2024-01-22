@@ -1,0 +1,85 @@
+{% extends "base.twig" %}
+
+{% block title %}Création personnage - Division{% endblock %}
+
+{% block styles %}
+	<link rel="stylesheet" href="/public/css/createCharacter.css">
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<form id="characterForm" action="" method="post" enctype="multipart/form-data">
+			<!-- Etape 1: Informations de base -->
+			<div class="" id="step1">
+				<h2>Informations de base</h2>
+				<label class="required" for="characterImage">Image</label>
+				<input type="file" id="characterImage" name="characterImage" required>
+				<br>
+				<label class="required" for="characterID">ID du personnage</label>
+				<input type="text" id="characterID" name="Id" placeholder="DBLXX-XXX" required>
+				<br>
+				<label class="required" for="characterName">Nom du personnage</label>
+				<input type="text" id="characterName" name="Name" required>
+				<br>
+
+				<button type="button" onclick="nextStep(2)">Suivant</button>
+			</div>
+
+			<!-- Etape 2: Infos -->
+			<div class="step" id="step2">
+				<h2>Infos</h2>
+				<label class="required" for="characterRarity">Rareté</label>
+				<select id="characterRarity" name="Rarity" required>
+					{% for rarity in rarities %}
+						<option value="{{ rarity.value }}">{{ rarity.value|title }}</option>
+					{% endfor %}
+				</select>
+				<br>
+
+				<label for="characterLL">Legends limited ?</label>
+				<input type="checkbox" id="characterLL" name="IsLF">
+				<br>
+
+				<label class="required" for="characterColor">Couleur du personnage</label>
+				<select id="characterColor" name="Color" required>
+					{% for color in colors %}
+						<option value="{{ color.value }}">{{ color.value|title }}</option>
+					{% endfor %}
+				</select>
+				<br>
+
+				<button type="button" onclick="prevStep(1)">Précédent</button>
+				<button type="button" onclick="nextStep(3)">Suivant</button>
+			</div>
+
+			<!-- Etape 3: Tags -->
+			<div class="step" id="step3">
+				<h2>Tags</h2>
+				<label for="characterTags">Tags:</label>
+				<select class="form-control form-select" id="characterTags" name="Tags" multiple>
+					{% for tag in tags %}
+						<option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
+					{% endfor %}
+				</select>
+				<br>
+
+				<button type="button" onclick="prevStep(2)">Précédent</button>
+				<button type="button" onclick="nextStep(4)">Suivant</button>
+			</div>
+
+			<!-- Etape 4: Confirmation -->
+			<div class="step" id="step4">
+				<h2>Confirmation</h2>
+				<div id="confirmationSummary">
+					<!-- Récapitulatif des informations -->
+				</div>
+				<button type="button" onclick="prevStep(3)">Précédent</button>
+				<button type="submit">Confirmer</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script src="/public/js/createCharacter.js" defer></script>
+{% endblock %}

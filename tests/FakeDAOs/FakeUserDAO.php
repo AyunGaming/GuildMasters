@@ -2,7 +2,7 @@
 
 namespace division\tests\FakeDAOs;
 
-use division\Data\DAO\IUserDAO;
+use division\Data\DAO\Interfaces\IUserDAO;
 use division\Models\User;
 
 class FakeUserDAO implements IUserDAO {

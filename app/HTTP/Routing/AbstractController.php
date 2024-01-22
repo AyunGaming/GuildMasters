@@ -2,6 +2,9 @@
 
 namespace division\HTTP\Routing;
 
-abstract class AbstractController {
+use division\Data\Database;
 
+abstract class AbstractController {
+	public function __construct(protected readonly Database $database) {
+	}
 }

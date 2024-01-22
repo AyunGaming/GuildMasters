@@ -1,0 +1,49 @@
+{% extends 'base.twig' %}
+
+{% block title %} Division Z {% endblock %}
+
+{% block styles %}
+	<link rel="stylesheet" href="/public/css/main.css">
+{% endblock %}
+
+{% block body %}
+	<div id="titles" class="container">
+		<div class="d-flex justify-content-center">
+			<div>
+				<h1>Bienvenue chez la Division Z !</h1>
+				<h2>Guilde française Db Legends</h2>
+			</div>
+		</div>
+	</div>
+	<div id="kamenews">
+		<div class="justify-content-start">
+			<h3 class="text-start">Dernier kamenews</h3>
+			<div id="kamenewsCarousel" class="carousel slide" data-bs-ride="carousel">
+				<div class="carousel-indicators">
+					<button type="button" data-bs-target="#kamenewsCarousel" data-bs-slide-to="0" class="active pt-1" aria-current="true" aria-label="Slide 1"></button>
+					<button type="button" data-bs-target="#kamenewsCarousel" data-bs-slide-to="1" class="pt-1" aria-label="Slide 2"></button>
+					<button type="button" data-bs-target="#kamenewsCarousel" data-bs-slide-to="2" class="pt-1" aria-label="Slide 3"></button>
+				</div>
+				<div class="carousel-inner">
+					<div class="carousel-item active">
+						<img draggable="false" src="/public/images/kid_goku.png" class="d-block" alt="Image 1 du Kamenews">
+					</div>
+					<div class="carousel-item">
+						<img draggable="false" src="/public/images/kamesennin.png" class="d-block" alt="Image 2 du Kamenews">
+					</div>
+					<div class="carousel-item">
+						<img draggable="false" src="/public/images/gokuHi.png" class="d-block" alt="Image 3 du Kamenews">
+					</div>
+				</div>
+				<button class="carousel-control-prev" type="button" data-bs-target="#kamenewsCarousel" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#kamenewsCarousel" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
+			</div>
+		</div>
+	</div>
+{% endblock %}
