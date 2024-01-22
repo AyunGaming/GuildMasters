@@ -3,6 +3,7 @@
 namespace division\Models;
 
 use division\Exceptions\InvalidEnumException;
+use division\Models\Enums\Role;
 
 class User {
 	private int $id;
