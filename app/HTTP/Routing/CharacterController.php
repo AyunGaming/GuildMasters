@@ -100,7 +100,7 @@ class CharacterController extends AbstractController {
 
 	public function postCreateCharacter(Request $request, Response $response): Response {
 		$post = $request->getParsedBody();
-		$file = $request->getUploadedFiles()['Image'];
+		$file = $request->getUploadedFiles()['characterImage'];
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 
@@ -111,10 +111,10 @@ class CharacterController extends AbstractController {
 		if (!array_key_exists('IsLF', $post)) {
 			$post['IsLF'] = false;
 		}
-
 		$tags = $this->setTagsPost($post);
 
 		unset($post['Tags']);
+
 
 		try {
 			$this->characterManager->createCharacter($post);
@@ -127,6 +127,7 @@ class CharacterController extends AbstractController {
 			foreach ($tags as $tag) {
 				$this->characterTagDAO->create($character, $tag);
 			}
+			Flashes::add(FlashMessage::success("Le personnage {$post['Id']} a été créé !"));
 		} catch (\RuntimeException $e) {
 			Flashes::add(FlashMessage::danger($e->getMessage()));
 		}
@@ -188,8 +189,7 @@ class CharacterController extends AbstractController {
 	}
 
 	public function viewListCharacters(Request $request, Response $response, Twig $twig): Response {
-		$tagDAO = new TagDAO($this->database);
-		$tags = $tagDAO->getAll();
+		$tags = $this->tagManager->getAllTags();
 		$characters = $this->getCharacterList();
 		$user = $request->getAttribute(User::class);
 		return $twig->render($response, 'characters.twig', [
@@ -203,6 +203,16 @@ class CharacterController extends AbstractController {
 	}
 
 	public function viewCreateCharacter(Request $request, Response $response, Twig $twig): Response {
-		
+		$tags = $this->tagManager->getAllTags();
+		$characters = $this->getCharacterList();
+		$user = $request->getAttribute(User::class);
+		return $twig->render($response, 'charactersCreate.twig', [
+			'flashes' => Flashes::all(),
+			'user' => $user,
+			'characters' => $characters,
+			'rarities' => Rarity::cases(),
+			'colors' => Color::cases(),
+			'tags' => $tags
+		]);
 	}
 }

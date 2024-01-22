@@ -8,7 +8,7 @@
 
 {% block body %}
 	<div class="container">
-		<form id="characterForm">
+		<form id="characterForm" action="" method="post" enctype="multipart/form-data">
 			<!-- Etape 1: Informations de base -->
 			<div class="" id="step1">
 				<h2>Informations de base</h2>
@@ -16,10 +16,10 @@
 				<input type="file" id="characterImage" name="characterImage" required>
 				<br>
 				<label class="required" for="characterID">ID du personnage</label>
-				<input type="text" id="characterID" name="characterID" placeholder="DBLXX-XXX" required>
+				<input type="text" id="characterID" name="Id" placeholder="DBLXX-XXX" required>
 				<br>
 				<label class="required" for="characterName">Nom du personnage</label>
-				<input type="text" id="characterName" name="characterName" required>
+				<input type="text" id="characterName" name="Name" required>
 				<br>
 
 				<button type="button" onclick="nextStep(2)">Suivant</button>
@@ -29,25 +29,22 @@
 			<div class="step" id="step2">
 				<h2>Infos</h2>
 				<label class="required" for="characterRarity">Rareté</label>
-				<select id="characterRarity" required>
-					<option value="1">HERO</option>
-					<option value="2">EXTREME</option>
-					<option value="3">SPARKING</option>
-					<option value="4">ULTRA</option>
+				<select id="characterRarity" name="Rarity" required>
+					{% for rarity in rarities %}
+						<option value="{{ rarity.value }}">{{ rarity.value|title }}</option>
+					{% endfor %}
 				</select>
 				<br>
 
 				<label for="characterLL">Legends limited ?</label>
-				<input type="checkbox" id="characterLL">
+				<input type="checkbox" id="characterLL" name="IsLF">
 				<br>
 
 				<label class="required" for="characterColor">Couleur du personnage</label>
-				<select id="characterColor" required>
-					<option value="1">Rouge</option>
-					<option value="2">Bleu</option>
-					<option value="3">Vert</option>
-					<option value="4">Jaune</option>
-					<option value="5">Violet</option>
+				<select id="characterColor" name="Color" required>
+					{% for color in colors %}
+						<option value="{{ color.value }}">{{ color.value|title }}</option>
+					{% endfor %}
 				</select>
 				<br>
 
@@ -59,10 +56,10 @@
 			<div class="step" id="step3">
 				<h2>Tags</h2>
 				<label for="characterTags">Tags:</label>
-				<select class="form-control form-select" id="characterTags" multiple>
-					<option value="1">Saiyan</option>
-					<option value="2">Super Saiyan</option>
-					<option value="3">Super Saiyan 2</option>
+				<select class="form-control form-select" id="characterTags" name="Tags" multiple>
+					{% for tag in tags %}
+						<option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
+					{% endfor %}
 				</select>
 				<br>
 
@@ -85,13 +82,4 @@
 
 {% block script %}
 	<script src="/public/js/createCharacter.js" defer></script>
-	<script>
-	window.addEventListener('load', function () {
-		document.getElementById('characterForm').addEventListener('submit', async e => {
-			e.preventDefault();
-			await submitForm('{{ createCharacter }}');
-		})
-	})
-	</script>
-
 {% endblock %}

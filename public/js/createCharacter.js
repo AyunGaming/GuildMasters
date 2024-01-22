@@ -17,7 +17,6 @@ function nextStep(step) {
 	}
 }
 
-
 function prevStep(step) {
 	document.getElementById(`step${currentStep}`).style.display = 'none';
 	document.getElementById(`step${step}`).style.display = 'block';
@@ -66,13 +65,6 @@ function generateSummary() {
   `;
 
 	return summary;
-}
-
-async function submitForm(url){
-	await fetch(url, {
-		method: 'POST',
-		body: new FormData(document.getElementById('characterForm'))
-	});
 }
 
 $('#characterTags').select2({

@@ -36,25 +36,29 @@ $container->set(Twig::class, $twig);
 $app = Bridge::create($container);
 $app->add(TwigMiddleware::createFromContainer($app, Twig::class));
 
-$app->group('/signin', static function(RouteCollectorProxy $signIn){
+$app->group('/signin', static function (RouteCollectorProxy $signIn) {
 	$signIn->post('', [UserController::class, 'login']);
 	$signIn->get('', UserController::class)->setName('sign-in');
 });
 
 $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
-$app->group('/admin', static function (RouteCollectorProxy $admin){
+$app->group('/admin', static function (RouteCollectorProxy $admin) {
 	$admin->group('/characters', static function (RouteCollectorProxy $characters) {
-		$characters->get('/create-character', [CharacterController::class,'viewCreateCharacter'])->setName('character-create');
+		$characters->group('/create', static function (RouteCollectorProxy $create) {
+			$create->post('', [CharacterController::class, 'postCreateCharacter']);
+			$create->get('', [CharacterController::class, 'viewCreateCharacter'])->setName('character-create');
+		});
+
 		$characters->post('/update-character', [CharacterController::class, 'postUpdateCharacter'])->setName('character-update');
 		$characters->post('/delete-character', [CharacterController::class, 'postDeleteCharacter'])->setName('delete-character');
-		$characters->get('/list-characters',[CharacterController::class,'viewListCharacters'])->setName('character-list');
+		$characters->get('/list-characters', [CharacterController::class, 'viewListCharacters'])->setName('character-list');
 	});
 });
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
 	$user = $request->getAttribute(User::class);
-	return $twig->render($response, 'charactersCreate.twig', [
+	return $twig->render($response, 'main.twig', [
 		'user_id' => @$_SESSION['a2v_user'],
 		'user' => $user
 	]);

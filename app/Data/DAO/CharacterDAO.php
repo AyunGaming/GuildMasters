@@ -14,7 +14,7 @@ use PDOException;
 class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
 	public function create(Character $character): void {
-		$statement = $this->database->prepare("INSERT INTO characters ('Image','Rarity','IsLF','Name','Color') VALUES (?,?,?,?,?)");
+		$statement = $this->database->prepare("INSERT INTO dbl_characters (Image,Rarity,IsLF,Name,Color) VALUES (?,?,?,?,?);");
 
 		$statement->bindValue(1,$character->getImage());
 		$statement->bindValue(2,$character->getRarity()->value);
