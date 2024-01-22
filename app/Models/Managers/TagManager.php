@@ -15,4 +15,8 @@ class TagManager {
 	public function getByName(string $name): ?Tag {
 		return $this->tagDAO->getByName($name);
 	}
+
+	public function getAllTags(): array {
+		return $this->tagDAO->getAll();
+	}
 }

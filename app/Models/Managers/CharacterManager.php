@@ -52,4 +52,10 @@ class CharacterManager {
 			throw new CannotUpdateCharacterException($e->getMessage());
 		}
 	}
+
+	public function createCharacter(array $data): void {
+		$character = new Character();
+		$character->hydrate($data);
+		$this->characterDAO->create($character);
+	}
 }

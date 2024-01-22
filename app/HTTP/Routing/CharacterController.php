@@ -27,11 +27,13 @@ class CharacterController extends AbstractController {
 	private TagManager $tagManager;
 	private CharacterManager $characterManager;
 
+	private CharacterTagDAO $characterTagDAO;
+
 	public function __construct(Database $database) {
 		parent::__construct($database);
 		$this->tagManager = new TagManager(new TagDAO($this->database));
 		$this->characterManager = new CharacterManager(new CharacterDAO($this->database), new CharacterTagDAO($this->database));
-
+		$this->characterTagDAO = new CharacterTagDAO($this->database);
 	}
 
 	private function getCharacterList(): array {
@@ -96,6 +98,43 @@ class CharacterController extends AbstractController {
 		}
 	}
 
+	public function postCreateCharacter(Request $request, Response $response): Response {
+		$post = $request->getParsedBody();
+		$file = $request->getUploadedFiles()['characterImage'];
+
+		$parser = RouteContext::fromRequest($request)->getRouteParser();
+
+		$res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list'));
+
+		$post = $this->saveImage($file, $post);
+
+		if (!array_key_exists('IsLF', $post)) {
+			$post['IsLF'] = false;
+		}
+		$tags = $this->setTagsPost($post);
+
+		unset($post['Tags']);
+
+
+		try {
+			$this->characterManager->createCharacter($post);
+		} catch (\RuntimeException $e) {
+			Flashes::add(FlashMessage::danger($e->getMessage()));
+		}
+
+		try {
+			$character = $this->characterManager->getByImage($post['Id']);
+			foreach ($tags as $tag) {
+				$this->characterTagDAO->create($character, $tag);
+			}
+			Flashes::add(FlashMessage::success("Le personnage {$post['Id']} a été créé !"));
+		} catch (\RuntimeException $e) {
+			Flashes::add(FlashMessage::danger($e->getMessage()));
+		}
+
+		return $res;
+	}
+
 	public function postUpdateCharacter(Request $request, Response $response): Response {
 		$post = $request->getParsedBody();
 		$file = $request->getUploadedFiles()['Image'];
@@ -119,12 +158,11 @@ class CharacterController extends AbstractController {
 			Flashes::add(FlashMessage::danger($e->getMessage()));
 		}
 
-		$characterTagDAO = new CharacterTagDAO($this->database);
 
 		try {
 			$character = $this->characterManager->getByImage($post['Id']);
-			$old = $characterTagDAO->getByCharacter($character->getImage());
-			$this->updateTags($character, $tags, $old, $characterTagDAO);
+			$old = $this->characterTagDAO->getByCharacter($character->getImage());
+			$this->updateTags($character, $tags, $old, $this->characterTagDAO);
 		} catch (PDOException) {
 			Flashes::add(FlashMessage::danger("Le personnage {$post['Id']} n'existe pas"));
 		}
@@ -151,11 +189,24 @@ class CharacterController extends AbstractController {
 	}
 
 	public function viewListCharacters(Request $request, Response $response, Twig $twig): Response {
-		$tagDAO = new TagDAO($this->database);
-		$tags = $tagDAO->getAll();
+		$tags = $this->tagManager->getAllTags();
 		$characters = $this->getCharacterList();
 		$user = $request->getAttribute(User::class);
 		return $twig->render($response, 'characters.twig', [
+			'flashes' => Flashes::all(),
+			'user' => $user,
+			'characters' => $characters,
+			'rarities' => Rarity::cases(),
+			'colors' => Color::cases(),
+			'tags' => $tags
+		]);
+	}
+
+	public function viewCreateCharacter(Request $request, Response $response, Twig $twig): Response {
+		$tags = $this->tagManager->getAllTags();
+		$characters = $this->getCharacterList();
+		$user = $request->getAttribute(User::class);
+		return $twig->render($response, 'charactersCreate.twig', [
 			'flashes' => Flashes::all(),
 			'user' => $user,
 			'characters' => $characters,
