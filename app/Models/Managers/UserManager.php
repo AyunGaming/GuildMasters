@@ -2,7 +2,7 @@
 
 namespace division\Models\Managers;
 
-use division\Data\DAO\Interfaces\IUserDAO;
+use division\Data\DAO\IUserDAO;
 use division\Models\User;
 
 class UserManager {

@@ -8,8 +8,8 @@ use PDO;
 class Database extends \PDO {
 
 	public function __construct(DatabaseConfig $config) {
-		$dsn = sprintf('mysql:host=%s;port=%d;dbname=division;charset=%s', $config->getHostName(), $config->getPort(),
-			 $config->getCharset()
+		$dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=%s', $config->getHostName(), $config->getPort(), 
+			$config->getDatabaseName(), $config->getCharset()
 		);
 		parent::__construct($dsn, 'root', 'passwd');
 		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
