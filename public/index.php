@@ -1,8 +1,4 @@
 <?php
-
-session_start();
-ini_set('display_errors',1);
-
 use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use division\Configs\DatabaseConfig;
