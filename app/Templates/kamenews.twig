@@ -9,18 +9,27 @@
 {% block body %}
 	<div class="container-fluid">
 		<h1>Kamenews</h1>
-			<div class="row mt-5 justify-content-center">
-				{% for k in kamenews %}
-					<div class="col-sm-6 col-md-4 col-lg-3 me-3">
-						<a href="#" class="btn btn-link">
-							<div class="card">
-								<img class="card-img-top" src="/public/images/db_2star.png"width="150">
-								<h2>Kamenews n°{{ k.getId() }}</h2>
-								<p class="fs-6 fst-italic">{{ k.getDate() }}</p>
-								<p>{{ k.getDesc() }}</p>
-							</div>
-						</a>
-					</div>
-				{% endfor %}
+		{% if user is not null and user.getRole() is constant('division\\Models\\Enums\\Role::ADMIN') %}
+			<div class="row justify-content-end">
+				<div class="col-2 me-3 me-sm-0">
+					<a href="#" class="btn btn-sm btn-success">
+						Créer un nouveau kamenews
+					</a>
+				</div>
 			</div>
+		{% endif %}
+		<div class="row mt-5 justify-content-center">
+			{% for k in kamenews %}
+				<div class="col-sm-6 col-md-4 col-lg-3 me-3">
+					<a href="#" class="btn btn-link">
+						<div class="card">
+							<img class="card-img-top" src="/public/images/db_2star.png"width="150">
+							<h2>Kamenews n°{{ k.getId() }}</h2>
+							<p class="fs-6 fst-italic">{{ k.getDate() }}</p>
+							<p>{{ k.getDesc() }}</p>
+						</div>
+					</a>
+				</div>
+			{% endfor %}
+		</div>
 {% endblock %}

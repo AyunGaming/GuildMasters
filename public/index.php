@@ -45,14 +45,13 @@ $app->group('/signin', static function(RouteCollectorProxy $signIn){
 
 $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
-
 $app->get('/characters', CharacterController::class)->setName('character-list');
 
 $app->get('/kamenews', KamenewsController::class)->setName('kamenews');
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
 	$user = $request->getAttribute(User::class);
-	return $twig->render($response, 'main.twig', [
+	return $twig->render($response, 'kamenewsAdmin.twig', [
 		'user_id' => @$_SESSION['a2v_user'],
 		'user' => $user
 	]);
