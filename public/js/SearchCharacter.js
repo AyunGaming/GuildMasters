@@ -5,6 +5,8 @@ let filters_buttons = document.querySelectorAll('.filter-btn');
 let filter_check = document.querySelectorAll('.filter-check');
 let resetTagsBtn = document.getElementById('resetTags');
 
+let filters = [];
+
 filtersBtn.addEventListener('click', function () {
 	displayFilters();
 })
@@ -47,15 +49,16 @@ function search() {
 	table = document.getElementById("characters");
 
 	let rarity = document.querySelector('input[name="rarity"]:checked');
-	if (rarity) {
+
+	if (rarity !== null) {
 		rarity = rarity.value;
 	} else {
 		rarity = "all";
 	}
 
 	let color = document.querySelector('input[name="color"]:checked');
-	if (color) {
-		color = color.value;
+	if (color !== null) {
+		color = color.value.toLowerCase();
 	} else {
 		color = "all";
 	}
@@ -77,7 +80,8 @@ function search() {
 	}
 
 	let dict = {
-		"name": 3,
+		"name": 4,
+		"id": 0
 	}
 
 	let rows = table.rows;
@@ -98,28 +102,27 @@ function search() {
 		let sfil = search_filter(rarity, lf, color, selectedValues);
 		let showRow = true;
 
-		if (sfil[0].length === 1 && showRow) //si une seule rareté et doit etre montré
+		if (sfil["rarity"].length === 1 && showRow) //si une seule rareté et doit etre montré
 		{
-			sfil[0].forEach(element => {
+			sfil["rarity"].forEach(element => {
 				if (element.toUpperCase() !== rarCell.toUpperCase()) {
 					showRow = false;
 				}
 			});
 		}
 
-		if (sfil[1].length === 1 && showRow) //si lf et doit etre montré
+		if (sfil["lf"].length === 1 && showRow) //si lf et doit etre montré
 		{
-
-			sfil[1].forEach(element => {
+			sfil["lf"].forEach(element => {
 				if (element.toUpperCase() !== lfCell.toUpperCase()) {
 					showRow = false;
 				}
 			});
 		}
 
-		if (sfil[2].length === 1 && showRow) //si une seule couleur et doit etre montré
+		if (sfil["color"].length === 1 && showRow) //si une seule couleur et doit etre montré
 		{
-			sfil[2].forEach(element => {
+			sfil["color"].forEach(element => {
 				if (element.toUpperCase() !== colCell.toUpperCase()) {
 					showRow = false;
 				}
@@ -127,11 +130,11 @@ function search() {
 		}
 
 
-		if (sfil[3].length !== 0 && showRow) //si au moins un tag et doit etre montré
+		if (sfil["tags"].length !== 0 && showRow) //si au moins un tag et doit etre montré
 		{
 			let tagArray = tagsCell.split(",")
 			tagArray = trimTagArray(tagArray)
-			sfil[3].forEach(element => {
+			sfil["tags"].forEach(element => {
 				if (!tagArray.includes(element)) {
 					showRow = false;
 				}
@@ -143,53 +146,50 @@ function search() {
 		}
 
 		if (showRow) {
-
 			rows[i].style.display = "";
 		} else {
-
 			rows[i].style.display = "none";
 		}
 	}
 }
 
 function search_filter(rarity, lf, color, tags) {
-	let filters = [];
 	if (rarity === "all") {
-
-		filters.push(["HERO", "EXTREME", "SPARKING", "ULTRA"]);
+		filters["rarity"] = ["HERO", "EXTREME", "SPARKING", "ULTRA"];
 	} else {
-
-		filters.push([rarity]);
+		filters["rarity"] = [rarity];
 	}
 
 	if (lf === "lf") {
-		filters.push([lf]);
+		filters["lf"] = [lf];
 	} else {
-
-		filters.push(["lf", "notlf"]);
+		filters["lf"] = ["lf", "notlf"];
 	}
 
 	if (color === "all") {
-
-		filters.push(["rou", "jau", "vio", "ver", "ble", "lum"]);
+		filters["color"] = ["rou", "jau", "vio", "ver", "ble", "lum"];
 	} else {
-
-		filters.push([color]);
+		filters["color"] = [color];
 	}
 
 	if (tags === []) {
-
-		filters.push([]);
+		filters["tags"] = [];
 	} else {
-		filters.push(tags);
+		filters["tags"] = tags;
 	}
 
 	return filters;
 }
 
 function resetFilters() {
-	document.getElementById("filterTags").selectedIndex = -1;
-	$("#filterTags").end();
+	filters = [];
+	$("#filterTags").val('').trigger('change')
+	filter_check.forEach(function (input) {
+		input.checked = false;
+	})
+	filters_buttons.forEach(function (input) {
+		input.checked = false;
+	})
 	search();
 }
 

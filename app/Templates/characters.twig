@@ -49,8 +49,8 @@
 											{%  for rarity in rarities %}
 												<div class="row mb-1">
 													<div class="col-sm">
-														<input type="radio" id="rarity" name="rarity" class="filter-btn" value="{{ rarity.value }}">
-														<label class="filter" for="rarity">{{ rarity.value }}</label><br>
+														<input type="radio" id="{{ rarity.value }}" name="rarity" class="filter-btn" value="{{ rarity.value }}">
+														<label class="filter" for="{{ rarity.value }}">{{ rarity.value }}</label><br>
 													</div>
 												</div>
 											{% endfor %}
@@ -60,8 +60,8 @@
 											{% for color in colors %}
 												<div class="row mb-1">
 													<div class="col-sm">
-														<input type="radio" id="color" name="color" class="filter-btn" value="{{ color.value }}">
-														<label class="filter" for="color">{{ color.value }}</label><br>
+														<input type="radio" id="{{ color.value }}" name="color" class="filter-btn" value="{{ color.value }}">
+														<label class="filter" for="{{ color.value }}">{{ color.value }}</label><br>
 													</div>
 												</div>
 											{% endfor%}
