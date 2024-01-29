@@ -16,6 +16,7 @@ use Slim\Views\Twig;
 use \Slim\Views\TwigMiddleware;
 
 session_start();
+ini_set('display_errors',1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

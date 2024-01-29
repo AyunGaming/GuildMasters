@@ -11,7 +11,7 @@ class Database extends \PDO {
 		$dsn = sprintf('mysql:host=%s;port=%d;dbname=division;charset=%s', $config->getHostName(), $config->getPort(),
 			 $config->getCharset()
 		);
-		parent::__construct($dsn, $config->getUserLogin(), $config->getUserPassword());
+		parent::__construct($dsn, 'root','passwd');
 		$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 		$this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);

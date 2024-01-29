@@ -8,7 +8,6 @@ use division\Exceptions\CannotDeleteCharacterException;
 use division\Exceptions\CannotGetCharacterException;
 use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
-use JsonSerializable;
 use PDOException;
 
 class CharacterDAO extends BaseDAO implements ICharacterDAO {
@@ -18,13 +17,15 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
 		$statement->bindValue(1,$character->getImage());
 		$statement->bindValue(2,$character->getRarity()->value);
-		$statement->bindValue(3,$character->isLF());
+		$statement->bindValue(3,$character->isLF() ? 1 : 0);
 		$statement->bindValue(4,$character->getName());
 		$statement->bindValue(5,$character->getColor()->value);
-
+		
 		try{
 			$statement->execute();
-		} catch (PDOException) {
+		} catch (PDOException $e) {
+			var_dump($e->getMessage());
+			die();
 			throw new CannotCreateCharacterException("Impossible de créer le personnage: " . $character->getImage());
 		}
 	}

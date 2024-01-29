@@ -49,7 +49,7 @@ class CharacterController extends AbstractController {
 
 			if (strtolower($extension) == 'png') {
 				$image = $post['Id'] . '.' . $extension;
-				unlink(__DIR__ . '/../../../public/images/characters/' . $image);
+				file_exists(__DIR__ . '/../../../public/images/characters/' . $image) && unlink(__DIR__ . '/../../../public/images/characters/' . $image);
 				$file->moveTo(__DIR__ . '/../../../public/images/characters/' . $image);
 			}
 		} else {
@@ -119,6 +119,7 @@ class CharacterController extends AbstractController {
 		try {
 			$this->characterManager->createCharacter($post);
 		} catch (\RuntimeException $e) {
+			var_dump("Exception 1");
 			Flashes::add(FlashMessage::danger($e->getMessage()));
 		}
 
@@ -129,6 +130,7 @@ class CharacterController extends AbstractController {
 			}
 			Flashes::add(FlashMessage::success("Le personnage {$post['Id']} a été créé !"));
 		} catch (\RuntimeException $e) {
+			var_dump("Exception 2");
 			Flashes::add(FlashMessage::danger($e->getMessage()));
 		}
 

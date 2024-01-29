@@ -56,6 +56,7 @@ class CharacterManager {
 	public function createCharacter(array $data): void {
 		$character = new Character();
 		$character->hydrate($data);
+
 		$this->characterDAO->create($character);
 	}
 }
