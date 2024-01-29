@@ -53,10 +53,15 @@ class CharacterManager {
 		}
 	}
 
-	public function createCharacter(array $data): void {
+	public function createCharacter(array $data, array $tags): void {
 		$character = new Character();
 		$character->hydrate($data);
 
 		$this->characterDAO->create($character);
+
+		$character = $this->getByImage($data['Id']);
+		foreach ($tags as $tag) {
+			$this->characterTagDAO->create($character, $tag);
+		}
 	}
 }

@@ -24,15 +24,13 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 		try{
 			$statement->execute();
 		} catch (PDOException $e) {
-			var_dump($e->getMessage());
-			die();
 			throw new CannotCreateCharacterException("Impossible de créer le personnage: " . $character->getImage());
 		}
 	}
 
 	public function getAll(): array {
 		try {
-			$statement = $this->database->prepare('SELECT * FROM dbl_characters');
+			$statement = $this->database->prepare("SELECT * FROM dbl_characters ORDER BY Image ASC");
 
 			if($statement->execute() !== false){
 				$characters = [];

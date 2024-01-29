@@ -117,22 +117,23 @@ class CharacterController extends AbstractController {
 
 
 		try {
-			$this->characterManager->createCharacter($post);
+			$this->characterManager->createCharacter($post,$tags);
+			Flashes::add(FlashMessage::success("Le personnage {$post['Id']} a été créé !"));
 		} catch (\RuntimeException $e) {
-			var_dump("Exception 1");
 			Flashes::add(FlashMessage::danger($e->getMessage()));
 		}
 
+
+		/*
 		try {
 			$character = $this->characterManager->getByImage($post['Id']);
 			foreach ($tags as $tag) {
 				$this->characterTagDAO->create($character, $tag);
 			}
-			Flashes::add(FlashMessage::success("Le personnage {$post['Id']} a été créé !"));
+
 		} catch (\RuntimeException $e) {
-			var_dump("Exception 2");
 			Flashes::add(FlashMessage::danger($e->getMessage()));
-		}
+		}*/
 
 		return $res;
 	}
