@@ -6,5 +6,5 @@ interface IKamenewsArticlesDAO {
 
 	public function getByKamenews(int $kamenewsId): array;
 
-	public function delete(int $kamenewsId, int $articleId): void;
+	public function deleteByKamenews(int $kamenewsId): void;
 }
