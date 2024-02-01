@@ -17,7 +17,7 @@
 					<span>Kamenews n°{{ kamenews.getId() }} - {{ kamenews.getTitle() }}</span>
 				</div>
 				<div class="col mt-5 fs-6 fst-italic">
-					<span class="publisher me-5">Published by {{ kamenews.getWriter() }} the {{ kamenews.getDate() }}</span>
+					<span class="publisher me-5">Published by {{ kamenews.getWriter().getLogin() }} the {{ kamenews.getDate() }}</span>
 				</div>
 			</div>
 			{% for article in kamenews.getArticles() %}

@@ -63,4 +63,8 @@ class Kamenews {
 	public function getArticles(): array {
 		return $this->articles;
 	}
+
+	public function getWriter(): User {
+		return $this->writer;
+	}
 }
