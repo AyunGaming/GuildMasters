@@ -1,0 +1,87 @@
+{% extends 'base.twig' %}
+
+{% block title %}Gestion des kamenews{% endblock %}
+
+{% block styles %}
+	<link rel="stylesheet" href="/public/css/table.css">
+{% endblock %}
+
+{% block body %}
+	<h1 class="mt-3 ms-3">Gestion des kamenews</h1>
+	<div class="container">
+		<div class="table-responsive mt-5">
+			<table class="table table-borderless mb-0 table-striped">
+				<thead>
+				<tr>
+					<th class="text-center" scope="col">ID</th>
+					<th class="text-center" scope="col">Date</th>
+					<th class="text-center" scope="col">Titre</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for k in kamenews %}
+					<tr>
+						<td>{{ k.getId() }}</td>
+						<td>{{ k.getDate() }}</td>
+						<td>{{ k.getTitle() }}</td>
+						<td>
+							<button id="{{ k.getId() }}" type="button" class="read-kamenews btn btn-primary btn-sm px-3">
+								<i class="bi-eye-fill"></i>
+							</button>
+							<a href="#" type="button" class="btn btn-primary btn-sm px-3" data-bs-toggle="modal"
+								data-bs-target="#editKamenewsModal">
+								<i class="bi-pencil"></i>
+							</a>
+							<a href="#" type="button" class="btn btn-primary btn-sm px-3" data-bs-toggle="modal"
+								data-bs-target="#deleteKamenewsModal">
+								<i class="bi-trash"></i>
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="modal fade" id="deleteKamenewsModal" tabindex="-1" aria-labelledby="deleteKamenewsModal"
+		 aria-hidden="true">
+		<div class="modal-lg modal-dialog modal-dialog-centered">
+			<div class="body modal-content">
+				<div class="body-opaque modal-header">
+					<p class="modal-title fs-5" id="updateCharacterToMenuModal">
+						<span class="fs-5 h1">Supprimer le kamenews</span><br>
+					</p>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<strong><span id="deleteConfirm">Attention ! Le kamenews complet sera supprimé, articles compris. Si vous
+						souhaitez retirer un ou plusieurs articles veuillez passer par l'édition du kamenews</span></strong>
+				</div>
+				<form method="post" action="" enctype="multipart/form-data">
+					<input id="kamenewsId" name="ID" type="text" hidden="hidden">
+
+					<div class="body-opaque modal-footer">
+						<button type="submit" class="btn btn-danger">Supprimer</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	<script src="/public/js/fetchURLFor.js"></script>
+	<script src="/public/js/kamenews.js"></script>
+	<script>
+		window.addEventListener('load', () => {
+			const btns = document.querySelectorAll('.read-kamenews');
+			btns.forEach(btn => {
+				btn.addEventListener('click', async () => {
+					await readKamenews('{{ read_kamenews_url }}', btn.id)
+				})
+			})
+		})
+	</script>
+{% endblock %}

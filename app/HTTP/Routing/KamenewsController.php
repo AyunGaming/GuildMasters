@@ -39,16 +39,17 @@ class KamenewsController extends AbstractController {
 
 
 	public function readKamenews(Request $request, Response $response, Twig $twig): Response {
+		$user = $request->getAttribute(User::class);
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 
 		try{
 			return $twig->render($response, 'kamenewsViewer.twig', [
+				'user' => $user,
 				'kamenews' => $_SESSION['display_kamenews'],
 			]);
 		} catch (\Exception){
 			return $response->withStatus(StatusCodeInterface::STATUS_NOT_FOUND)->withHeader('Location', $parser->urlFor('home'));
 		}
-
 	}
 
 	public function displayAllKamenews(Request $request, Response $response, Twig $twig): Response {
@@ -62,6 +63,20 @@ class KamenewsController extends AbstractController {
 			]),
 			'user' => $user,
 			'kamenews' => array_reverse($kamenews)
+		]);
+	}
+
+	public function displayAdminKamenews(Request $request, Response $response, Twig $twig): Response {
+		$user = $request->getAttribute(User::class);
+		$kamenews = $this->getAllKamenews();
+
+		$parser = RouteContext::fromRequest($request)->getRouteParser();
+		return $twig->render($response, 'kamenewsAdmin.twig', [
+			'read_kamenews_url' => $parser->urlFor('read-kamenews',[
+				'id' => 'Id'
+			]),
+			'user' => $user,
+			'kamenews' => $kamenews
 		]);
 	}
 }

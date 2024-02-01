@@ -61,6 +61,10 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 		$read->post('/get/{id:[1-9][0-9]*}', [KamenewsController::class, 'postGetKamenews'])->setName('read-kamenews');
 		$read->get('', [KamenewsController::class, 'readKamenews'])->setName('display-kamenews');
 	});
+
+	$kamenews->group('/admin', static function (RouteCollectorProxy $admin){
+		$admin->get('', [KamenewsController::class, 'displayAdminKamenews'])->setName('admin-kamenews');
+	});
 });
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
