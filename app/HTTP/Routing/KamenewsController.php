@@ -9,6 +9,8 @@ use division\Data\DAO\UserDAO;
 use division\Data\Database;
 use division\Models\Managers\KamenewsManager;
 use division\Models\User;
+use division\Utils\Flashes;
+use division\Utils\FlashMessage;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -23,7 +25,7 @@ class KamenewsController extends AbstractController {
 		parent::__construct($database);
 		$kamenewsDAO = new KamenewsDAO($this->database, new UserDAO($this->database));
 		$articlesDAO = new ArticlesDAO($this->database);
-		$this->kamenewsManager = new KamenewsManager($kamenewsDAO, $articlesDAO ,new KamenewsArticlesDAO($this->database,$kamenewsDAO, $articlesDAO));
+		$this->kamenewsManager = new KamenewsManager($kamenewsDAO, $articlesDAO, new KamenewsArticlesDAO($this->database, $kamenewsDAO, $articlesDAO));
 	}
 
 	public function getAllKamenews(): array {
@@ -37,17 +39,30 @@ class KamenewsController extends AbstractController {
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('display-kamenews'));
 	}
 
+	public function deleteKamenews(Request $request, Response $response): Response {
+		$post = $request->getParsedBody();
+
+		try {
+			$this->kamenewsManager->deleteKamenews($post['ID']);
+			Flashes::add(FlashMessage::danger("Le kamenews n°{$post['ID']} n'a pas pu être supprimé"));
+		} catch (\Exception $e) {
+			Flashes::add(FlashMessage::danger("Le kamenews n°{$post['ID']} n'a pas pu être supprimé"));
+		}
+
+		$parser = RouteContext::fromRequest($request)->getRouteParser();
+		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('admin-kamenews'));
+	}
 
 	public function readKamenews(Request $request, Response $response, Twig $twig): Response {
 		$user = $request->getAttribute(User::class);
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 
-		try{
+		try {
 			return $twig->render($response, 'kamenewsViewer.twig', [
 				'user' => $user,
 				'kamenews' => $_SESSION['display_kamenews'],
 			]);
-		} catch (\Exception){
+		} catch (\Exception) {
 			return $response->withStatus(StatusCodeInterface::STATUS_NOT_FOUND)->withHeader('Location', $parser->urlFor('home'));
 		}
 	}
@@ -58,7 +73,7 @@ class KamenewsController extends AbstractController {
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 		return $twig->render($response, 'kamenews.twig', [
-			'read_kamenews_url' => $parser->urlFor('read-kamenews',[
+			'read_kamenews_url' => $parser->urlFor('read-kamenews', [
 				'id' => 'Id'
 			]),
 			'user' => $user,
@@ -72,7 +87,7 @@ class KamenewsController extends AbstractController {
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 		return $twig->render($response, 'kamenewsAdmin.twig', [
-			'read_kamenews_url' => $parser->urlFor('read-kamenews',[
+			'read_kamenews_url' => $parser->urlFor('read-kamenews', [
 				'id' => 'Id'
 			]),
 			'user' => $user,

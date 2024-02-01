@@ -63,6 +63,7 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 	});
 
 	$kamenews->group('/admin', static function (RouteCollectorProxy $admin){
+		$admin->post('/delete-kamenews', [KamenewsController::class, 'deleteKamenews'])->setName('delete-kamenews');
 		$admin->get('', [KamenewsController::class, 'displayAdminKamenews'])->setName('admin-kamenews');
 	});
 });

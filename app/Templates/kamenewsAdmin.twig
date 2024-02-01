@@ -33,7 +33,7 @@
 								<i class="bi-pencil"></i>
 							</a>
 							<a href="#" type="button" class="btn btn-primary btn-sm px-3" data-bs-toggle="modal"
-								data-bs-target="#deleteKamenewsModal">
+								data-bs-target="#deleteKamenewsModal" onclick="getDeleteUserInfos('{{ k.getId() }}')">
 								<i class="bi-trash"></i>
 							</a>
 						</td>
@@ -55,10 +55,10 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<strong><span id="deleteConfirm">Attention ! Le kamenews complet sera supprimé, articles compris. Si vous
+					<strong><span>Attention ! Le kamenews complet sera supprimé, articles compris. Si vous
 						souhaitez retirer un ou plusieurs articles veuillez passer par l'édition du kamenews</span></strong>
 				</div>
-				<form method="post" action="" enctype="multipart/form-data">
+				<form method="post" action="{{ url_for('delete-kamenews') }}" enctype="multipart/form-data">
 					<input id="kamenewsId" name="ID" type="text" hidden="hidden">
 
 					<div class="body-opaque modal-footer">
@@ -75,6 +75,10 @@
 	<script src="/public/js/fetchURLFor.js"></script>
 	<script src="/public/js/kamenews.js"></script>
 	<script>
+		function getDeleteUserInfos(id){
+			document.getElementById('kamenewsId').value = id;
+		}
+
 		window.addEventListener('load', () => {
 			const btns = document.querySelectorAll('.read-kamenews');
 			btns.forEach(btn => {
