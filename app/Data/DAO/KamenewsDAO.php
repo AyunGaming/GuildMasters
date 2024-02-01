@@ -61,4 +61,16 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 			return [];
 		}
 	}
+
+	public function delete(int $id): void {
+		try{
+			$req = $this->database->prepare('DELETE FROM kamenews WHERE id = ?');
+
+			$req->bindParam(1, $id);
+			$req->execute();
+		} catch (PDOException) {
+			var_dump('error');
+			die();
+		}
+	}
 }

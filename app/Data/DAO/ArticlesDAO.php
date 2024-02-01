@@ -28,4 +28,16 @@ class ArticlesDAO extends BaseDAO implements IArticlesDAO {
 			return null;
 		}
 	}
+
+	public function delete(int $id): void {
+		try{
+			$req = $this->database->prepare('DELETE FROM articles WHERE id = ?');
+
+			$req->bindParam(1, $id);
+			$req->execute();
+		} catch (PDOException) {
+			var_dump('error');
+			die();
+		}
+	}
 }
