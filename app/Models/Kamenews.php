@@ -5,19 +5,18 @@ namespace division\Models;
 class Kamenews {
 	private int $id;
 
-	private string $titre;
+	private string $title;
 
 	private string $date;
 
 	private string $desc;
 
 	/**
-	 * @var array Key-value array (article => position in Kamenews)
+	 * @var array<Article>
 	 */
-	private array $articles;
+	private array $articles = [];
 
 	private User $writer;
-
 
 	public function hydrate(array $data) {
 		if (array_key_exists('id', $data)) {
@@ -25,7 +24,7 @@ class Kamenews {
 		}
 
 		if (array_key_exists('titre', $data)) {
-			$this->titre = $data['titre'];
+			$this->title = $data['titre'];
 		}
 
 		if (array_key_exists('date', $data)) {
@@ -36,21 +35,21 @@ class Kamenews {
 			$this->desc = $data['description'];
 		}
 
-		if (array_key_exists('articles', $data)) {
-			$this->articles = $data['articles'];
-		}
-
 		if (array_key_exists('writer', $data)) {
-			$this->writer = $data['write'];
+			$this->writer = $data['writer'];
 		}
+	}
+
+	public function addArticle(Article $article): void {
+		$this->articles[] = $article;
 	}
 
 	public function getId(): int {
 		return $this->id;
 	}
 
-	public function getTitre(): string {
-		return $this->titre;
+	public function getTitle(): string {
+		return $this->title;
 	}
 
 	public function getDate(): string {
@@ -59,5 +58,9 @@ class Kamenews {
 
 	public function getDesc(): string {
 		return $this->desc;
+	}
+
+	public function getArticles(): array {
+		return $this->articles;
 	}
 }

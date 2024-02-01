@@ -10,19 +10,14 @@ use division\Models\Article;
 use PDOException;
 
 class KamenewsArticlesDAO extends BaseDAO implements IKamenewsArticlesDAO {
-	private IKamenewsDAO $kamenewsDAO;
 
-	private IArticlesDAO $articlesDAO;
-
-	public function __construct(Database $database, IKamenewsDAO $kamenewsDAO, IArticlesDAO $articlesDAO) {
+	public function __construct(Database $database) {
 		parent::__construct($database);
-		$this->kamenewsDAO = $kamenewsDAO;
-		$this->articlesDAO = $articlesDAO;
 	}
 
 	public function getByKamenews(int $kamenewsId): array {
 		try {
-			$req = $this->database->prepare('SELECT * FROM kamenewsarticles WHERE kamenewsId = ?');
+			$req = $this->database->prepare('SELECT * FROM kamenews_articles WHERE kamenewsId = ?');
 
 			$req->bindParam(1, $kamenewsId);
 			$req->execute();
@@ -30,10 +25,12 @@ class KamenewsArticlesDAO extends BaseDAO implements IKamenewsArticlesDAO {
 			$data = $req->fetchAll();
 
 			$articles = [];
-			if ($data !== null) {
-				foreach ($data['articleId'] as $articleData) {
+			if ($data !== []) {
+				foreach ($data as $articleData){
+					$d['id'] = $articleData['articleId'];
+
 					$article = new Article();
-					$article->hydrate($articleData);
+					$article->hydrate($d);
 					$articles[] = $article;
 				}
 			}

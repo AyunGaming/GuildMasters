@@ -15,7 +15,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteCollectorProxy;
 use Slim\Views\Twig;
-use \Slim\Views\TwigMiddleware;
+use Slim\Views\TwigMiddleware;
+
+require_once __DIR__ . '/../app/Models/User.php';
+require_once __DIR__ . '/../app/Models/Kamenews.php';
+require_once __DIR__ . '/../app/Models/Article.php';
+require_once __DIR__ . '/../app/Models/Enums/Role.php';
 
 session_start();
 
@@ -47,11 +52,20 @@ $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
 $app->get('/characters', CharacterController::class)->setName('character-list');
 
-$app->get('/kamenews', KamenewsController::class)->setName('kamenews');
+$app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
+	$kamenews->group('/list', static function (RouteCollectorProxy $list) {
+		$list->get('', [KamenewsController::class, 'displayAllKamenews'])->setName('kamenews');
+	});
+
+	$kamenews->group('/read', static function (RouteCollectorProxy $read) {
+		$read->post('/get/{id:[1-9][0-9]*}', [KamenewsController::class, 'postGetKamenews'])->setName('read-kamenews');
+		$read->get('', [KamenewsController::class, 'readKamenews'])->setName('display-kamenews');
+	});
+});
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
 	$user = $request->getAttribute(User::class);
-	return $twig->render($response, 'kamenewsAdmin.twig', [
+	return $twig->render($response, 'main.twig', [
 		'user_id' => @$_SESSION['a2v_user'],
 		'user' => $user
 	]);

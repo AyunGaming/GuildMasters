@@ -21,15 +21,30 @@
 		<div class="row mt-5 justify-content-center">
 			{% for k in kamenews %}
 				<div class="col-sm-6 col-md-4 col-lg-3 me-3">
-					<a href="#" class="btn btn-link">
+					<button id="{{ k.getId() }}" class="kamenews-read btn">
 						<div class="card">
-							<img class="card-img-top" src="/public/images/db_2star.png"width="150">
+							<img alt="Illustration de l'article" class="card-img-top" src="/public/images/db_2star.png" width="150">
 							<h2>Kamenews n°{{ k.getId() }}</h2>
 							<p class="fs-6 fst-italic">{{ k.getDate() }}</p>
 							<p>{{ k.getDesc() }}</p>
 						</div>
-					</a>
+					</button>
 				</div>
 			{% endfor %}
 		</div>
+{% endblock %}
+
+{% block script %}
+	<script src="/public/js/fetchURLFor.js"></script>
+	<script src="/public/js/kamenews.js"></script>
+	<script>
+		window.addEventListener('load', () => {
+			const btns = document.querySelectorAll('.kamenews-read');
+			btns.forEach(btn => {
+				btn.addEventListener('click', async () => {
+					await readKamenews('{{ read_kamenews_url }}',btn.id)
+				})
+			})
+		})
+	</script>
 {% endblock %}

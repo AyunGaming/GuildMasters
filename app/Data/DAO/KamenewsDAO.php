@@ -2,11 +2,19 @@
 
 namespace division\Data\DAO;
 
+use division\Data\DAO\Interfaces\IUserDAO;
 use division\Data\DAO\Interfaces\kamenews\IKamenewsDAO;
+use division\Data\Database;
 use division\Models\Kamenews;
 use PDOException;
 
 class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
+	private IUserDAO $userDAO;
+
+	public function __construct(Database $database,IUserDAO $userDAO) {
+		parent::__construct($database);
+		$this->userDAO = $userDAO;
+	}
 
 	public function getById(int $id): ?Kamenews {
 		try {
@@ -18,6 +26,7 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 			$data = $req->fetch();
 
 			if ($data !== false) {
+				$data['writer'] = $this->userDAO->getById($data['user']);
 				$kamenews = new Kamenews();
 				$kamenews->hydrate($data);
 
@@ -40,6 +49,7 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 			$kamenewsList = [];
 			if ($data !== null) {
 				foreach ($data as $datum) {
+					$datum['writer'] = $this->userDAO->getById($datum['user']);
 					$kamenews = new Kamenews();
 					$kamenews->hydrate($datum);
 					$kamenewsList[] = $kamenews;

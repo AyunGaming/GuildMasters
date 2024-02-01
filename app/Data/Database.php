@@ -8,7 +8,7 @@ use PDO;
 class Database extends \PDO {
 
 	public function __construct(DatabaseConfig $config) {
-		$dsn = sprintf('mysql:host=%s;port=%d;dbname=divisionnet;charset=%s', $config->getHostName(), $config->getPort(),
+		$dsn = sprintf('mysql:host=%s;port=%d;dbname=division;charset=%s', $config->getHostName(), $config->getPort(),
 			 $config->getCharset()
 		);
 		parent::__construct($dsn, $config->getUserLogin(), $config->getUserPassword());

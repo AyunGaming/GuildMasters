@@ -9,7 +9,8 @@
 }
 
 .article {
-	width: 1350px;
+	width: 1700px;
+	word-wrap: break-word;
 }
 
 .kamenews_illustration {

@@ -7,30 +7,36 @@
 {% endblock %}
 
 {% block body %}
-	<div class="container-fluid">
-		<div class="row justify-content-center mt-3">
-			<img draggable="false" class="newspaper_image" src="/public/images/kamenews/kamenewspaper.png">
+	{% if kamenews is not null %}
+		<div class="container-fluid">
+			<div class="row justify-content-center mt-3">
+				<img alt="Illustration d'un journal" draggable="false" class="newspaper_image" src="/public/images/kamenews/kamenewspaper.png">
+			</div>
+			<div class="row">
+				<div class="col mt-5 fs-3 fw-bold">
+					<span>Kamenews n°{{ kamenews.getId() }} - {{ kamenews.getTitle() }}</span>
+				</div>
+				<div class="col mt-5 fs-6 fst-italic">
+					<span class="publisher me-5">Published by {{ kamenews.getWriter() }} the {{ kamenews.getDate() }}</span>
+				</div>
+			</div>
+			{% for article in kamenews.getArticles() %}
+				<div class="article">
+					<div class="row pt-5 mt-5">
+						<span class="ms-3 ps-5 fs-3 fw-bold">{{ article.getTitle() }}</span>
+					</div>
+						<div class="article row mt-5">
+							<span class="ms-5 ps-5 fs-5 text-wrap">
+								{% autoescape %}
+								{{ article.getText() }}
+								{% endautoescape %}
+							</span>
+						</div>
+					<div class="mt-5 kamenews_illustration">
+						<img alt="Illustration de la partie de l'article" draggable="false" src="/public/images/kamenews/{{ article.getImage() }}" width="800">
+					</div>
+				</div>
+			{% endfor %}
 		</div>
-		<div class="row">
-			<div class="col mt-5 fs-3 fw-bold">
-				<span>Kamenews n°XX</span>
-			</div>
-			<div class="col mt-5 fs-6 fst-italic">
-				<span class="publisher me-5">Published by X the XX/XX/XXXX</span>
-			</div>
-		</div>
-		<div id="article_1">
-			<div class="row pt-5 mt-5">
-				<span class="ms-3 ps-5 fs-3 fw-bold">Arrivée d'un nouveau personnage !</span>
-			</div>
-			<div class="article row mt-5">
-				<span class="ms-5 ps-5 fs-5 text-wrap">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium architecto consectetur distinctio enim esse excepturi exercitationem facilis fugiat neque provident, rem sequi tempora ut vero voluptate. A autem consequuntur fugiat id magnam minus nobis, pariatur provident quidem quis quo repellat repellendus sapiente temporibus, tenetur! Alias delectus dolor dolores error facere fuga in laborum, nobis nostrum quam reiciendis, rem ut voluptate. Adipisci aliquam asperiores aspernatur beatae consequuntur cum dicta distinctio, dolore ea eaque eligendi est eum ex, ipsam iste itaque laudantium magnam nesciunt nulla obcaecati odit perferendis quam quas quasi quia repellat sapiente sequi vel voluptas voluptatibus! Beatae laborum, libero modi non obcaecati odit optio porro quae quo quod. Expedita, fuga, reprehenderit. Accusantium animi doloribus ea eaque, est explicabo itaque laborum odit quaerat qui quia ratione rem ullam unde velit vero voluptate voluptates! Ad, aliquam asperiores dolores eius enim error id illo molestiae nam neque, odit officia quos rerum sequi suscipit voluptatibus voluptatum. Deleniti dolore fugit illo impedit natus sequi tenetur. Animi at consectetur dicta expedita ipsam, neque officia possimus quas qui rem saepe tempore velit voluptas. Amet eaque error exercitationem id, itaque nam neque nesciunt nobis repudiandae similique soluta vitae voluptas. Distinctio eligendi ipsa iure laborum nam quas quasi voluptatum.
-				</span>
-			</div>
-			<div class="mt-5 kamenews_illustration">
-				<img draggable="false" src="/public/images/kamenews/ultra_vb.webp" width="800">
-			</div>
-		</div>
-	</div>
+	{% endif %}
 {% endblock %}
