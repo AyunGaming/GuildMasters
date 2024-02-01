@@ -46,4 +46,13 @@ class KamenewsManager {
 
 		return $res;
 	}
+
+	public function deleteKamenews(int $id): void {
+		$articles = $this->kamenewsArticlesDAO->getByKamenews($id);
+		$this->kamenewsArticlesDAO->deleteByKamenews($id);
+		foreach ($articles as $a) {
+			$this->articlesDAO->delete($a->getId());
+		}
+		$this->kamenewsDAO->delete($id);
+	}
 }
