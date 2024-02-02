@@ -14,6 +14,7 @@ class UserManager {
 
 	public function checkLogin(string $login, string $mdp): ?User {
 		$user = $this->userDAO->getByLogin($login);
+		
 		if($user !== null && $this->checkPassword($mdp,$user)){
 			return $user;
 		}
