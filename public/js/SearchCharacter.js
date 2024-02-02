@@ -92,9 +92,19 @@ function search() {
 
 		let cells = row.cells;
 
-		let rarCell = cells[2].children[0].src.slice(47, -4);
-		let lfCell = cells[3].children[0].src.slice(41, -4);
-		let colCell = cells[5].children[0].src.slice(45, -4);
+		let rarCell = cells[2].children[0].src.slice(52, -4);
+		if(rarCell == ""){
+			rarCell = cells[2].children[0].src.slice(47, -4);
+		}
+		let lfCell = cells[3].children[0].src.slice(46, -4);
+		if(lfCell == ""){
+			lfCell = cells[3].children[0].src.slice(41, -4);
+		}
+		let colCell = cells[5].children[0].src.slice(50, -4);
+		if(colCell == ""){
+			colCell = cells[5].children[0].src.slice(45, -4);
+		}
+		
 		let tagsCell = cells[6].innerHTML;
 
 		let searchCell = cells[dict[category.value]];
