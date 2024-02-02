@@ -26,12 +26,13 @@ class UserController extends AbstractController {
 
 			$parser = RouteContext::fromRequest($request)->getRouteParser();
 			$user = $manager->checkLogin($login, $passwd);
+			
 			if ($user !== null) {
 				$_SESSION['user_id'] = $user->getId();
 				return $response->withStatus(StatusCodeInterface::STATUS_FOUND)
 					->withHeader('Location', $parser->urlFor('home'));
 			}
-
+			
 			// Invalid login or credentials, alert the user
 			Flashes::add(FlashMessage::danger('Login ou mot de passe incorrects !'));
 			return $response->withStatus(StatusCodeInterface::STATUS_FOUND)
