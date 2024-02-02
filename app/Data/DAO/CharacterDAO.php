@@ -75,7 +75,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
 			$req->bindValue(1, $character->getImage());
 			$req->bindValue(2, $character->getRarity()->value);
-			$req->bindValue(3, $character->isLF());
+			$req->bindValue(3, $character->isLF() ? 1 : 0);
 			$req->bindValue(4, $character->getName());
 			$req->bindValue(5, $character->getColor()->value);
 			$req->bindValue(6, $oldId);
