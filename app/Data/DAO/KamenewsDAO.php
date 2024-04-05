@@ -69,8 +69,21 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 			$req->bindParam(1, $id);
 			$req->execute();
 		} catch (PDOException) {
-			var_dump('error');
-			die();
+
+		}
+	}
+
+	public function update(Kamenews $kamenews): void {
+		try{
+			$req = $this->database->prepare('UPDATE kamenews SET titre = ?, description = ? WHERE id = ?');
+
+			$req->bindValue(1, $kamenews->getTitle());
+			$req->bindValue(2, $kamenews->getDesc());
+			$req->bindValue(3, $kamenews->getId());
+
+			$req->execute();
+		} catch (PDOException $e) {
+
 		}
 	}
 }

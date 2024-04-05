@@ -74,9 +74,5 @@ window.addEventListener('load',() => {
 			updateButtons(moved.id,`up-${moved.id}`,`down-${moved.id}`)
 		});
 	});
-	/*
-	document.getElementById("updateKamenewsBtn").addEventListener("click", async () => {
-		await updateArticle();
-	})*/
 })
 

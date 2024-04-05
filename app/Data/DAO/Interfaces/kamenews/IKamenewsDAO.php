@@ -11,4 +11,6 @@ interface IKamenewsDAO {
 	public function getById(int $id): ?Kamenews;
 
 	public function delete(int $id): void;
+
+	public function update(Kamenews $kamenews): void;
 }

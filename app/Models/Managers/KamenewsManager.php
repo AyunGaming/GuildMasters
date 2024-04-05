@@ -73,4 +73,15 @@ class KamenewsManager {
 			throw new Exception("Article not found: $e->getMessage()");
 		}
 	}
+
+	public function updateKamenews(array $data): void {
+		try{
+			$kamenews = new Kamenews();
+			$kamenews->hydrate($data);
+
+			$this->kamenewsDAO->update($kamenews);
+		} catch (Exception $e) {
+			throw new Exception("Kamenews not found: $e->getMessage()");
+		}
+	}
 }
