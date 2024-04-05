@@ -11,9 +11,11 @@ use division\HTTP\Routing\KamenewsController;
 use division\HTTP\Routing\UserController;
 use division\Models\Managers\UserManager;
 use division\Models\User;
+use division\Utils\Flashes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteCollectorProxy;
+use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 
@@ -66,11 +68,20 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 		$admin->post('/delete-kamenews', [KamenewsController::class, 'deleteKamenews'])->setName('delete-kamenews');
 		$admin->get('', [KamenewsController::class, 'displayAdminKamenews'])->setName('admin-kamenews');
 	});
+
+	$kamenews->group('/edit', static function (RouteCollectorProxy $edit){
+		$edit->post('/get/{id:[1-9][0-9]*}', [KamenewsController::class, 'postEditKamenews'])->setName('get-edit-kamenews');
+		$edit->post('/save', [KamenewsController::class, 'editKamenews'])->setName('post-edit-kamenews');
+		$edit->get('', [KamenewsController::class, 'displayEditKamenews'])->setName('edit-kamenews');
+	});
 });
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
 	$user = $request->getAttribute(User::class);
+	$parser = RouteContext::fromRequest($request)->getRouteParser();
+
 	return $twig->render($response, 'main.twig', [
+		'flashes' => Flashes::all(),
 		'user_id' => @$_SESSION['a2v_user'],
 		'user' => $user
 	]);

@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '6d1b787a3f2284e87b7dda851ee8ff1870763fd3',
+        'reference' => 'c1f07ea8c10e1220a9a36bdbb0bc3e2e39c9698a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '6d1b787a3f2284e87b7dda851ee8ff1870763fd3',
+            'reference' => 'c1f07ea8c10e1220a9a36bdbb0bc3e2e39c9698a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -461,6 +461,15 @@
             'install_path' => __DIR__ . '/../theseer/tokenizer',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'tinymce/tinymce' => array(
+            'pretty_version' => '7.0.0',
+            'version' => '7.0.0.0',
+            'reference' => 'c011b5164178ac5224e658bf2aed713479fc78ae',
+            'type' => 'component',
+            'install_path' => __DIR__ . '/../tinymce/tinymce',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'twig/twig' => array(
             'pretty_version' => 'v3.7.1',

@@ -8,5 +8,7 @@ interface IArticlesDAO {
 
 	public function getById(int $id): ?Article;
 
+	public function update(Article $article): void;
+
 	public function delete(int $id): void;
 }

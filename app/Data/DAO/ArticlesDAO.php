@@ -40,4 +40,20 @@ class ArticlesDAO extends BaseDAO implements IArticlesDAO {
 			die();
 		}
 	}
+
+	public function update(Article $article): void {
+		try{
+			$req = $this->database->prepare('UPDATE articles SET title = ?, text = ?, image = ? WHERE id = ?');
+
+			$req->bindValue(1, $article->getTitle());
+			$req->bindValue(2, $article->getText());
+			$req->bindValue(3, $article->getImage());
+			$req->bindValue(4, $article->getId());
+
+			$req->execute();
+		} catch (PDOException $e) {
+			var_dump($e->getMessage());
+			die();
+		}
+	}
 }

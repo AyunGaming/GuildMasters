@@ -7,6 +7,8 @@
 {% endblock %}
 
 {% block body %}
+	{{ parent() }}
+
 	{% if kamenews is not null %}
 		<div class="container-fluid">
 			<div class="row justify-content-center mt-3">
@@ -22,7 +24,7 @@
 			</div>
 			{% for article in kamenews.getArticles() %}
 				<div class="article">
-					<div class="row pt-5 mt-5">
+					<div class="row pt-5 mt-3">
 						<span class="ms-3 ps-5 fs-3 fw-bold">{{ article.getTitle() }}</span>
 					</div>
 						<div class="article row mt-5">
@@ -33,7 +35,9 @@
 							</span>
 						</div>
 					<div class="mt-5 kamenews_illustration">
-						<img alt="Illustration de la partie de l'article" draggable="false" src="/public/images/kamenews/{{ article.getImage() }}" width="800">
+						{% if article.getImage() != "" %}
+							<img alt="Illustration de la partie de l'article" draggable="false" src="/public/images/kamenews/{{ article.getImage() }}" width="800">
+						{% endif %}
 					</div>
 				</div>
 			{% endfor %}

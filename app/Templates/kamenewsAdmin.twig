@@ -7,6 +7,8 @@
 {% endblock %}
 
 {% block body %}
+	{{ parent() }}
+
 	<h1 class="mt-3 ms-3">Gestion des kamenews</h1>
 	<div class="container">
 		<div class="table-responsive mt-5">
@@ -28,10 +30,9 @@
 							<button id="{{ k.getId() }}" type="button" class="read-kamenews btn btn-primary btn-sm px-3">
 								<i class="bi-eye-fill"></i>
 							</button>
-							<a href="#" type="button" class="btn btn-primary btn-sm px-3" data-bs-toggle="modal"
-								data-bs-target="#editKamenewsModal">
+							<button id="{{ k.getId() }}-edit" type="button" class="edit-kamenews btn btn-primary btn-sm px-3">
 								<i class="bi-pencil"></i>
-							</a>
+							</button>
 							<a href="#" type="button" class="btn btn-primary btn-sm px-3" data-bs-toggle="modal"
 								data-bs-target="#deleteKamenewsModal" onclick="getDeleteUserInfos('{{ k.getId() }}')">
 								<i class="bi-trash"></i>
@@ -84,6 +85,14 @@
 			btns.forEach(btn => {
 				btn.addEventListener('click', async () => {
 					await readKamenews('{{ read_kamenews_url }}', btn.id)
+				})
+			})
+
+			const editBtns = document.querySelectorAll('.edit-kamenews');
+			editBtns.forEach(btn => {
+				btn.addEventListener('click', async () => {
+					let id = btn.id.split('-')[0]
+					await editKamenews('{{ display_edit_kamenews_url }}', id)
 				})
 			})
 		})

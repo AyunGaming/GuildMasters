@@ -6,7 +6,9 @@ use division\Data\DAO\Interfaces\IUserDAO;
 use division\Data\DAO\Interfaces\kamenews\IArticlesDAO;
 use division\Data\DAO\Interfaces\kamenews\IKamenewsArticlesDAO;
 use division\Data\DAO\Interfaces\kamenews\IKamenewsDAO;
+use division\Models\Article;
 use division\Models\Kamenews;
+use Exception;
 
 class KamenewsManager {
 	private IKamenewsDAO $kamenewsDAO;
@@ -54,5 +56,21 @@ class KamenewsManager {
 			$this->articlesDAO->delete($a->getId());
 		}
 		$this->kamenewsDAO->delete($id);
+	}
+
+	//TODO: Finish the kamenews update manager method
+
+	/**
+	 * @throws Exception
+	 */
+	public function updateArticle(array $data): void {
+		try{
+			$article = new Article();
+			$article->hydrate($data);
+
+			$this->articlesDAO->update($article);
+		} catch (Exception $e) {
+			throw new Exception("Article not found: $e->getMessage()");
+		}
 	}
 }

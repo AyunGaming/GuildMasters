@@ -84,6 +84,17 @@
 </header>
 
 <body>
-{% block body %} {% endblock %}
+	{% block body %}
+		{% if flashes is defined %}
+			{% for flash in flashes %}
+				<div class="alert alert-{{ flash.type }} alert-dismissible fade show" role="alert">
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					<div class="text-center">
+						{{ flash.message|raw }}
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+	{% endblock %}
 </body>
 </html>
