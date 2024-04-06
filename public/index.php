@@ -1,5 +1,4 @@
 <?php
-
 use DI\Bridge\Slim\Bridge;
 use DI\Container;
 use division\Configs\DatabaseConfig;
@@ -38,21 +37,31 @@ try {
 
 $container->set(Database::class, $database);
 
-$twig = Twig::create(__DIR__ . '/../app/templates');
+$twig = Twig::create(__DIR__ . '/../app/Templates');
 $container->set(Twig::class, $twig);
 
 $app = Bridge::create($container);
 $app->add(TwigMiddleware::createFromContainer($app, Twig::class));
 
-
-$app->group('/signin', static function(RouteCollectorProxy $signIn){
+$app->group('/signin', static function (RouteCollectorProxy $signIn) {
 	$signIn->post('', [UserController::class, 'login']);
 	$signIn->get('', UserController::class)->setName('sign-in');
 });
 
 $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
-$app->get('/characters', CharacterController::class)->setName('character-list');
+$app->group('/admin', static function (RouteCollectorProxy $admin) {
+	$admin->group('/characters', static function (RouteCollectorProxy $characters) {
+		$characters->group('/create', static function (RouteCollectorProxy $create) {
+			$create->post('', [CharacterController::class, 'postCreateCharacter']);
+			$create->get('', [CharacterController::class, 'viewCreateCharacter'])->setName('character-create');
+		});
+
+		$characters->post('/update-character', [CharacterController::class, 'postUpdateCharacter'])->setName('character-update');
+		$characters->post('/delete-character', [CharacterController::class, 'postDeleteCharacter'])->setName('delete-character');
+		$characters->get('/list-characters', [CharacterController::class, 'viewListCharacters'])->setName('character-list');
+	});
+});
 
 $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 	$kamenews->group('/list', static function (RouteCollectorProxy $list) {

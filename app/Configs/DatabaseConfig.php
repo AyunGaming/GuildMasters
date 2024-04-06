@@ -27,10 +27,10 @@ readonly class DatabaseConfig {
 	}
 
 	public function getDatabaseName(): string{
-		if(!array_key_exists('server', $this->data)){
+		if(!array_key_exists('dbname', $this->data)){
 			return '';
 		}
-		return array_key_exists('dbname',$this->data['server']) ? $this->data['server']['dbname'] : '';
+		return array_key_exists('dbname',$this->data) ? $this->data['dbname'] : '';
 	}
 
 	public function getCharset(): string{
@@ -41,17 +41,17 @@ readonly class DatabaseConfig {
 	}
 
 	public function getUserLogin(): string{
-		if(!array_key_exists('server',$this->data)){
+		if(!array_key_exists('login',$this->data)){
 			return 'root';
 		}
-		return array_key_exists('login',$this->data['server']) ? $this->data['server']['login'] : 'root';
+		return array_key_exists('login',$this->data) ? $this->data['login'] : 'root';
 	}
 
 	public function getUserPassword(): string{
-		if(!array_key_exists('server',$this->data)){
+		if(!array_key_exists('passwd',$this->data)){
 			return '';
 		}
-		return array_key_exists('passwd',$this->data['server']) ? $this->data['server']['passwd'] : '';
+		return array_key_exists('passwd',$this->data) ? $this->data['passwd'] : '';
 	}
 
 	public static function load(): static{

@@ -10,34 +10,61 @@ use PDOException;
 
 class CharacterTagDAO extends BaseDAO implements ICharacterTagDAO {
 
-	public function getByCharacter(string $image): ?Character {
-		try{
+	public function getByCharacter(string $image): array {
+		try {
 			$req = $this->database->prepare('SELECT * FROM charactertags WHERE idCharacter = ?');
 
-			$req->bindParam(1,$image);
+			$req->bindParam(1, $image);
 			$req->execute();
-			$data = $req->fetch();
+			$data = $req->fetchAll();
 
+			if ($data !== false) {
+				$tagDAO = new TagDAO($this->database);
 
-			if($data !== false){
-				$characterDAO = new CharacterDAO($this->database);
-				$character = $characterDAO->getByImage($data['idCharacter']);
 				$tags = [];
-				if($character !== null){
-					foreach ($data['idTag'] as $tagData){
-						$tag = new Tag();
-						$tag->hydrate($tagData);
-						$tags[] = $tag;
-					}
-					$tagData['tags'] = $tags;
-					$character->hydrate($tagData);
-					return $character;
+				foreach ($data as $characterData) {
+					$tag = $tagDAO->getById($characterData['idTag']);
+
+					$tags[] = $tag;
 				}
-				return null;
+
+				return $tags;
 			}
-			return null;
-		} catch (PDOException){
-			return null;
+			return [];
+		} catch (PDOException) {
+			return [];
+		}
+	}
+
+	public function create(Character $character, Tag $tag): array {
+		$req = $this->database->prepare('INSERT INTO charactertags VALUES (?,?)');
+
+		$req->bindValue(1, $character->getImage());
+		$req->bindValue(2, $tag->getId());
+
+		try {
+			if ($req->execute() !== false) {
+				return [$character, $tag];
+			}
+			return [];
+		} catch (PDOException) {
+			return [];
+		}
+	}
+
+	public function delete(Character $character, Tag $tag): array {
+		$req = $this->database->prepare('DELETE FROM charactertags WHERE idCharacter = ? AND idTag = ?');
+
+		$req->bindValue(1, $character->getImage());
+		$req->bindValue(2, $tag->getId());
+
+		try {
+			if ($req->execute() !== false) {
+				return [$character, $tag];
+			}
+			return [];
+		} catch (PDOException) {
+			return [];
 		}
 	}
 }

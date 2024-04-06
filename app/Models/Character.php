@@ -5,8 +5,9 @@ namespace division\Models;
 use division\Exceptions\InvalidEnumException;
 use division\Models\Enums\Color;
 use division\Models\Enums\Rarity;
+use JsonSerializable;
 
-class Character {
+class Character implements JsonSerializable {
 	private string $image;
 	private Rarity $rarity;
 	private bool $isLF;
@@ -22,17 +23,11 @@ class Character {
 		return $this->rarity;
 	}
 
-	public function setRarity(Rarity $rarity): void {
-		$this->rarity = $rarity;
-	}
 
 	public function isLF(): bool {
 		return $this->isLF;
 	}
 
-	public function setIsLF(bool $isLF): void {
-		$this->isLF = $isLF;
-	}
 
 	public function getName(): string {
 		return $this->name;
@@ -46,23 +41,24 @@ class Character {
 		return $this->color;
 	}
 
-	public function setColor(Color $color): void {
-		$this->color = $color;
-	}
-
-	public function getTags(): array {
-		return $this->tags;
-	}
-
-	public function setTags(array $tags): void {
-		$this->tags = $tags;
-	}
-
 	public function getTagString(): string {
-		return implode(', ', $this->tags);
+		$string = "";
+		for ($i = 0; $i <= count($this->tags) - 1; $i++) {
+			if ($i === count($this->tags) - 1) {
+				$string .= $this->tags[$i]->getName();
+			} else {
+				$string .= $this->tags[$i]->getName() . ', ';
+			}
+		}
+
+		return $string;
 	}
 
 	public function hydrate(array $data): void {
+		if (array_key_exists('Id', $data)) {
+			$this->image = $data['Id'];
+		}
+
 		if (array_key_exists('Image', $data)) {
 			$this->image = $data['Image'];
 		}
@@ -95,14 +91,17 @@ class Character {
 			$this->color = $color;
 		}
 
-		if (array_key_exists('Tags', $data)) {
-			$tagString = explode(',', $data['Tags']);
-			$tags = [];
-			foreach ($tagString as $tagData) {
-				$this->tags[] = $tagData;
+		if (array_key_exists('Tags', $data) && is_array($data['Tags'])) {
+			$this->tags = [];
+			foreach ($data['Tags'] as $tagData) {
+				$tag = new Tag();
+				$tag->hydrate($tagData);
+				$this->tags[] = $tag;
 			}
-			$tag = new Tag();
-			$tag->hydrate($tags);
 		}
+	}
+
+	public function jsonSerialize(): mixed {
+		return ['image' => $this->image,'rarity' => $this->rarity,'isLF' => $this->isLF,'name' => $this->name,'color' => $this->color,'tags' => $this->tags];
 	}
 }
