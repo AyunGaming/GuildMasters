@@ -2,10 +2,9 @@
 
 namespace division\HTTP\Routing;
 
-
-use division\Data\DAO\CharacterDAO;
-use division\Data\DAO\CharacterTagDAO;
-use division\Data\DAO\TagDAO;
+use division\Data\DAO\character\CharacterDAO;
+use division\Data\DAO\character\CharacterTagDAO;
+use division\Data\DAO\character\TagDAO;
 use division\Data\Database;
 use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
@@ -20,7 +19,6 @@ use Fig\Http\Message\StatusCodeInterface;
 use PDOException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 
 class CharacterController extends AbstractController {

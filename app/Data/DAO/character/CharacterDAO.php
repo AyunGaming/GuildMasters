@@ -1,14 +1,15 @@
 <?php
 
-namespace division\Data\DAO;
+namespace division\Data\DAO\character;
 
-use division\Data\DAO\Interfaces\ICharacterDAO;
+
+use division\Data\DAO\BaseDAO;
+use division\Data\DAO\Interfaces\characters\ICharacterDAO;
 use division\Exceptions\CannotCreateCharacterException;
 use division\Exceptions\CannotDeleteCharacterException;
 use division\Exceptions\CannotGetCharacterException;
 use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
-use JsonSerializable;
 use PDOException;
 
 class CharacterDAO extends BaseDAO implements ICharacterDAO {

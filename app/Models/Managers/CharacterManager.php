@@ -2,9 +2,10 @@
 
 namespace division\Models\Managers;
 
-use division\Data\DAO\CharacterTagDAO;
-use division\Data\DAO\Interfaces\ICharacterDAO;
-use division\Data\DAO\Interfaces\ICharacterTagDAO;
+
+use division\Data\DAO\Interfaces\characters\ICharacterDAO;
+use division\Data\DAO\character\CharacterTagDAO;
+use division\Data\DAO\Interfaces\characters\ICharacterTagDAO;
 use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
 use Exception;

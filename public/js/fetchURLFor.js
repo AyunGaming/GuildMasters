@@ -2,16 +2,16 @@
  * Handles the `fetch` response.
  *
  * @param {Response} response Response data.
- * @param {number} expectedCode Expected response code.
+ * @param {number} expectedCodes Expected response codes.
  * @return {Promise<void>} Promise that holds nothing.
  * @private
  */
-const _handleResponse = async (response, expectedCode) => {
-	if (response.status !== expectedCode) {
+const _handleResponse = async (response, expectedCodes) => {
+	if (response.status in expectedCodes) {
 		const json = await response.json()
 		alert(`Erreur: ${json.error}`)
 	}
-	location.reload()
+	window.location = response.url
 }
 
 /**
@@ -39,7 +39,7 @@ const _prepareUrl = (url, mapUrlParams) => {
  */
 const fetchURLFor = async (url, mapUrlParams) => {
 	const resp = await fetch(_prepareUrl(url, mapUrlParams), {method: 'POST'})
-	await _handleResponse(resp, 204)
+	await _handleResponse(resp, [204,200,302])
 }
 
 /**

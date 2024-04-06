@@ -1,0 +1,19 @@
+.newspaper_image {
+	height: 350px;
+	width: auto;
+}
+
+.publisher {
+	display: flex;
+	justify-content: end;
+}
+
+.article {
+	width: 1700px;
+	word-wrap: break-word;
+}
+
+.kamenews_illustration {
+	display: flex;
+	justify-content: center;
+}
