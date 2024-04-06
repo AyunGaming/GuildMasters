@@ -13,4 +13,8 @@ interface IKamenewsDAO {
 	public function delete(int $id): void;
 
 	public function update(Kamenews $kamenews): void;
+
+	public function create(Kamenews $kamenews): void;
+
+	public function getLastInserted(int $n): array;
 }

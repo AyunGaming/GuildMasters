@@ -11,4 +11,8 @@ interface IArticlesDAO {
 	public function update(Article $article): void;
 
 	public function delete(int $id): void;
+
+	public function create(Article $article): void;
+
+	public function getLastInserted(int $n): array;
 }

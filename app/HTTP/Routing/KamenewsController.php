@@ -25,12 +25,14 @@ class KamenewsController extends AbstractController {
 		parent::__construct($database);
 		$kamenewsDAO = new KamenewsDAO($this->database, new UserDAO($this->database));
 		$articlesDAO = new ArticlesDAO($this->database);
-		$this->kamenewsManager = new KamenewsManager($kamenewsDAO, $articlesDAO, new KamenewsArticlesDAO($this->database, $kamenewsDAO, $articlesDAO));
+		$userDAO = new UserDAO($this->database);
+		$this->kamenewsManager = new KamenewsManager($kamenewsDAO, $articlesDAO, new KamenewsArticlesDAO($this->database, $kamenewsDAO, $articlesDAO), $userDAO);
 	}
 
-	public function editArticle(Request $request, Response $response): Response {
+	public function postEditArticle(Request $request, Response $response): Response {
 		$post = $request->getParsedBody();
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
+		$post["id"] = (int)$post["id"];
 
 		try {
 			$this->kamenewsManager->updateArticle($post);
@@ -48,12 +50,42 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->updateKamenews($post);
-			Flashes::add(FlashMessage::success("Le kamenews n°{$post['id']} a bien été modifié"));
+			Flashes::add(FlashMessage::success("L'article a bien été modifié"));
 		} catch (\Exception) {
-			Flashes::add(FlashMessage::danger("Le kamenews n°{$post['id']} n'a pas pu être modifié"));
+			Flashes::add(FlashMessage::danger("L'article n'a pas pu être modifié"));
 		}
 
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('admin-kamenews'));
+	}
+
+	public function deleteArticle(Request $request, Response $response): Response {
+		$post = $request->getParsedBody();
+
+		try {
+			$this->kamenewsManager->deleteArticle($post['id']);
+			Flashes::add(FlashMessage::success("L'article n°{$post['id']} a bien été supprimé"));
+		} catch (\Exception) {
+			Flashes::add(FlashMessage::danger("L'article n°{$post['id']} n'a pas pu être supprimé"));
+		}
+
+		$parser = RouteContext::fromRequest($request)->getRouteParser();
+		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('new-kamenews'));
+	}
+
+	public function createKamenews(Request $request, Response $response): Response {
+		$post = $request->getParsedBody();
+
+		$parser = RouteContext::fromRequest($request)->getRouteParser();
+
+		try {
+			$this->kamenewsManager->addKamenews($post);
+			Flashes::add(FlashMessage::success("Le kamenews a bien été créé"));
+		} catch (\Exception) {
+			Flashes::add(FlashMessage::danger("Le kamenews n'a pas pu être créé"));
+		}
+
+		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('kamenews'));
+
 	}
 
 	public function getAllKamenews(): array {
@@ -88,6 +120,44 @@ class KamenewsController extends AbstractController {
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('edit-kamenews'));
 	}
 
+	private function saveImage($file, array $post): string {
+		$image = '';
+		if ($file->getClientFileName() !== '') {
+			$filename = $file->getClientFileName();
+			$filename = explode('.', $filename);
+			$extension = array_pop($filename);
+			$filename = implode('.', $filename) . '.' . $extension;
+			$title = str_replace(' ', '_',$post['title']);
+
+			if (strtolower($extension) == 'png') {
+				$image = $title . '.' . $extension;
+				file_exists(__DIR__ . '/../../../public/images/kamenews/' . $image) && unlink(__DIR__ . '/../../../public/images/kamenews/' . $image);
+				$file->moveTo(__DIR__ . '/../../../public/images/kamenews/' . $image);
+			}
+		}
+
+		return $image;
+	}
+
+	public function createArticle(Request $request, Response $response): Response {
+		$post = $request->getParsedBody();
+		$file = $request->getUploadedFiles()['image'];
+		$image = $this->saveImage($file, $post);
+		$post['image'] = $image;
+
+		$parser = RouteContext::fromRequest($request)->getRouteParser();
+
+		try {
+			$this->kamenewsManager->addArticle($post);
+			Flashes::add(FlashMessage::success("L'article a bien été créé"));
+		} catch (\Exception) {
+			Flashes::add(FlashMessage::danger("L'article n'a pas pu être créé"));
+		}
+
+		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('new-kamenews'));
+	}
+
+	//region Display
 	public function readKamenews(Request $request, Response $response, Twig $twig): Response {
 		$user = $request->getAttribute(User::class);
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
@@ -139,15 +209,23 @@ class KamenewsController extends AbstractController {
 
 	public function displayEditKamenews(Request $request, Response $response, Twig $twig): Response {
 		$user = $request->getAttribute(User::class);
-		$parser = RouteContext::fromRequest($request)->getRouteParser();
 
 		return $twig->render($response, 'kamenewsEdit.twig', [
 			'flashes' => Flashes::all(),
-			'edit_kamenews_url' => $parser->urlFor('post-edit-article'),
-
 			'kamenews' => @$_SESSION['display_kamenews'],
 			'user_id' => @$_SESSION['a2v_user'],
 			'user' => $user
 		]);
 	}
+
+	public function displayCreateKamenews(Request $request, Response $response, Twig $twig): Response {
+		$user = $request->getAttribute(User::class);
+
+		return $twig->render($response, 'kamenewsCreate.twig', [
+			'flashes' => Flashes::all(),
+			'user_id' => @$_SESSION['a2v_user'],
+			'user' => $user
+		]);
+	}
+	//endregion
 }

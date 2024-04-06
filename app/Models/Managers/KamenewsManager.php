@@ -8,17 +8,20 @@ use division\Data\DAO\Interfaces\kamenews\IKamenewsArticlesDAO;
 use division\Data\DAO\Interfaces\kamenews\IKamenewsDAO;
 use division\Models\Article;
 use division\Models\Kamenews;
+use division\Utils\Cookie;
 use Exception;
 
 class KamenewsManager {
 	private IKamenewsDAO $kamenewsDAO;
 	private IKamenewsArticlesDAO $kamenewsArticlesDAO;
 	private IArticlesDAO $articlesDAO;
+	private IUserDAO $userDAO;
 
-	public function __construct(IKamenewsDAO $kamenewsDAO, IArticlesDAO $articlesDAO, IKamenewsArticlesDAO $kamenewsArticlesDAO) {
+	public function __construct(IKamenewsDAO $kamenewsDAO, IArticlesDAO $articlesDAO, IKamenewsArticlesDAO $kamenewsArticlesDAO, IUserDAO $userDAO) {
 		$this->kamenewsDAO = $kamenewsDAO;
 		$this->articlesDAO = $articlesDAO;
 		$this->kamenewsArticlesDAO = $kamenewsArticlesDAO;
+		$this->userDAO = $userDAO;
 	}
 
 	public function getAllKamenews(): array {
@@ -58,8 +61,6 @@ class KamenewsManager {
 		$this->kamenewsDAO->delete($id);
 	}
 
-	//TODO: Finish the kamenews update manager method
-
 	/**
 	 * @throws Exception
 	 */
@@ -74,6 +75,9 @@ class KamenewsManager {
 		}
 	}
 
+	/**
+	 * @throws Exception
+	 */
 	public function updateKamenews(array $data): void {
 		try{
 			$kamenews = new Kamenews();
@@ -83,5 +87,35 @@ class KamenewsManager {
 		} catch (Exception $e) {
 			throw new Exception("Kamenews not found: $e->getMessage()");
 		}
+	}
+
+	public function addKamenews(array $data): void {
+		$data['writer'] = $this->userDAO->getByLogin($data['writer']);
+		$kamenews = new Kamenews();
+		$kamenews->hydrate($data);
+		$this->kamenewsDAO->create($kamenews);
+
+		$kamenews = $this->kamenewsDAO->getLastInserted(1);
+
+		$articles = $this->articlesDAO->getLastInserted($data['nbArticles']);
+		$pos = 0;
+		foreach ($articles as $article) {
+			$this->addArticleToKamenews($kamenews[0]->getId(), $article->getId(), $pos++);
+		}
+	}
+
+	public function addArticle(array $data): void {
+		$article = new Article();
+		$article->hydrate($data);
+
+		$this->articlesDAO->create($article);
+	}
+
+	public function addArticleToKamenews(int $kamenewsId, int $articleId, int $position): void {
+		$this->kamenewsArticlesDAO->create($kamenewsId, $articleId, $position);
+	}
+
+	public function deleteArticle(int $id): void {
+		$this->articlesDAO->delete($id);
 	}
 }

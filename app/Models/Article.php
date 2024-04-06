@@ -53,4 +53,12 @@ class Article {
 	public function getId(): int {
 		return $this->id;
 	}
+
+	public function getNumber(): int {
+		return $this->number;
+	}
+
+	public function setNumber(int $number): void {
+		$this->number = $number;
+	}
 }

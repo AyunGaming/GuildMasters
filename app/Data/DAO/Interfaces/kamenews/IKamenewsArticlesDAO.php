@@ -7,4 +7,6 @@ interface IKamenewsArticlesDAO {
 	public function getByKamenews(int $kamenewsId): array;
 
 	public function deleteByKamenews(int $kamenewsId): void;
+
+	public function create(int $kamenewsId, int $articleId, int $position): void;
 }

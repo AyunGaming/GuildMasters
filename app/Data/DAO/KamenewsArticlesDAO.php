@@ -52,4 +52,19 @@ class KamenewsArticlesDAO extends BaseDAO implements IKamenewsArticlesDAO {
 			die();
 		}
 	}
+
+	public function create(int $kamenewsId, int $articleId, int $position): void {
+		try{
+			$req = $this->database->prepare('INSERT INTO kamenews_articles (kamenewsId, articleId, position) VALUES (?, ?, ?)');
+
+			$req->bindParam(1, $kamenewsId);
+			$req->bindParam(2, $articleId);
+			$req->bindParam(3, $position);
+
+			$req->execute();
+		} catch (PDOException $e) {
+			var_dump($e->getMessage());
+			die();
+		}
+	}
 }

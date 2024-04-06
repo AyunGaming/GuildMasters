@@ -36,8 +36,7 @@ class ArticlesDAO extends BaseDAO implements IArticlesDAO {
 			$req->bindParam(1, $id);
 			$req->execute();
 		} catch (PDOException) {
-			var_dump('error');
-			die();
+
 		}
 	}
 
@@ -52,8 +51,46 @@ class ArticlesDAO extends BaseDAO implements IArticlesDAO {
 
 			$req->execute();
 		} catch (PDOException $e) {
-			var_dump($e->getMessage());
-			die();
+
+		}
+	}
+
+	public function create(Article $article): void {
+		try{
+			$req = $this->database->prepare('INSERT INTO articles (title, text, image) VALUES (?, ?, ?)');
+
+			$req->bindValue(1, $article->getTitle());
+			$req->bindValue(2, $article->getText());
+			$req->bindValue(3, $article->getImage());
+
+			$req->execute();
+		} catch (PDOException $e) {
+
+		}
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function getLastInserted(int $n): array {
+		try{
+			$req = $this->database->prepare('SELECT * FROM articles ORDER BY id DESC LIMIT ?');
+			$req->bindParam(1, $n);
+
+			$req->execute();
+
+			$data = $req->fetchAll();
+
+			$articles = [];
+			foreach ($data as $datum) {
+				$article = new Article();
+				$article->hydrate($datum);
+				$articles[] = $article;
+			}
+
+			return $articles;
+		} catch (PDOException $e) {
+			throw new \Exception();
 		}
 	}
 }
