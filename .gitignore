@@ -126,3 +126,5 @@ modules.xml
 
 .phpunit.result.cache
 
+/public/images/kamenews/*
+/config/database.ini
