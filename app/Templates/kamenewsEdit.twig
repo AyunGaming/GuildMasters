@@ -64,7 +64,7 @@
 									<button class="btn edit-article" id="edit-article-{{ loop.index }}" data-bs-toggle="modal" data-bs-target="#editArticleModal" onclick="getArticleInfos({{ loop.index }})">
 										<i class="bi bi-pencil"></i>
 									</button>
-									<button class="btn delete-article" id="delete-article-{{ loop.index }}">
+									<button type="button" class="btn delete-article" id="delete-article-{{ loop.index }}" data-bs-toggle="modal" data-bs-target="#deleteArticleModal" onclick="initDeleteModal({{ loop.index }})">
 										<i class="bi bi-trash"></i>
 									</button>
 								</div>
@@ -121,10 +121,14 @@
 				</div>
 				<div class="modal-body">
 					<p>Êtes-vous sûr de vouloir supprimer cet article ?</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-					<button type="button" class="btn btn-danger">Supprimer</button>
+					<form method="post" action="{{ url_for("remove-article") }}" enctype="multipart/form-data">
+						<input id="articleId" name="id" type="text" hidden="hidden">
+
+						<div class="body-opaque modal-footer">
+							<button type="submit" class="btn btn-danger">Supprimer</button>
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>

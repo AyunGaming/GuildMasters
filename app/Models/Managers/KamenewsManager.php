@@ -116,6 +116,7 @@ class KamenewsManager {
 	}
 
 	public function deleteArticle(int $id): void {
+		$this->kamenewsArticlesDAO->deleteByArticle($id);
 		$this->articlesDAO->delete($id);
 	}
 }

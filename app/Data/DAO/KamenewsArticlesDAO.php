@@ -48,8 +48,6 @@ class KamenewsArticlesDAO extends BaseDAO implements IKamenewsArticlesDAO {
 			$req->bindParam(1, $kamenewsId);;
 			$req->execute();
 		} catch (PDOException) {
-			var_dump('error');
-			die();
 		}
 	}
 
@@ -63,8 +61,16 @@ class KamenewsArticlesDAO extends BaseDAO implements IKamenewsArticlesDAO {
 
 			$req->execute();
 		} catch (PDOException $e) {
-			var_dump($e->getMessage());
-			die();
+		}
+	}
+
+	public function deleteByArticle(int $articleId): void {
+		try{
+			$req = $this->database->prepare('DELETE FROM kamenews_articles WHERE articleId = ?');
+
+			$req->bindParam(1, $articleId);
+			$req->execute();
+		} catch (PDOException) {
 		}
 	}
 }

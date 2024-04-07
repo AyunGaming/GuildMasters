@@ -38,14 +38,19 @@ function getArticleInfos(id) {
 		content: document.getElementById(`text-${id}`).innerText,
 	}
 	document.getElementById("updateArticleId").value = article.id;
-	initModal(article)
+	initEditModal(article)
 }
 
-function initModal(article){
+function initEditModal(article){
 	document.getElementById("updateArticleId").value = article.id;
 	document.getElementById("updateArticleTitle").value = article.title;
 	document.getElementById("updateArticleText").value = article.content;
 }
+
+function initDeleteModal(id){
+	document.getElementById("articleId").value = id;
+}
+
 
 //endregion
 

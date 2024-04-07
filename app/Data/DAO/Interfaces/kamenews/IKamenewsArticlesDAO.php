@@ -8,5 +8,7 @@ interface IKamenewsArticlesDAO {
 
 	public function deleteByKamenews(int $kamenewsId): void;
 
+	public function deleteByArticle(int $articleId): void;
+
 	public function create(int $kamenewsId, int $articleId, int $position): void;
 }

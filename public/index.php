@@ -82,6 +82,7 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 		$edit->post('/get/{id:[1-9][0-9]*}', [KamenewsController::class, 'postEditKamenews'])->setName('get-edit-kamenews');
 		$edit->post('/article', [KamenewsController::class, 'postEditArticle'])->setName('post-edit-article');
 		$edit->post('/kamenews', [KamenewsController::class, 'editKamenews'])->setName('post-edit-kamenews');
+		$edit->post('/remove-article', [KamenewsController::class, 'removeArticle'])->setName('remove-article');
 		$edit->get('', [KamenewsController::class, 'displayEditKamenews'])->setName('edit-kamenews');
 	});
 

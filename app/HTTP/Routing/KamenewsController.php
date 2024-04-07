@@ -72,6 +72,20 @@ class KamenewsController extends AbstractController {
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('new-kamenews'));
 	}
 
+	public function removeArticle(Request $request, Response $response): Response {
+		$post = $request->getParsedBody();
+
+		try {
+			$this->kamenewsManager->deleteArticle($post['id']);
+			Flashes::add(FlashMessage::success("L'article n°{$post['id']} a bien été supprimé"));
+		} catch (\Exception) {
+			Flashes::add(FlashMessage::danger("L'article n°{$post['id']} n'a pas pu être supprimé"));
+		}
+
+		$parser = RouteContext::fromRequest($request)->getRouteParser();
+		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('edit-kamenews'));
+	}
+
 	public function createKamenews(Request $request, Response $response): Response {
 		$post = $request->getParsedBody();
 
@@ -129,11 +143,10 @@ class KamenewsController extends AbstractController {
 			$filename = implode('.', $filename) . '.' . $extension;
 			$title = str_replace(' ', '_',$post['title']);
 
-			if (strtolower($extension) == 'png') {
-				$image = $title . '.' . $extension;
-				file_exists(__DIR__ . '/../../../public/images/kamenews/' . $image) && unlink(__DIR__ . '/../../../public/images/kamenews/' . $image);
-				$file->moveTo(__DIR__ . '/../../../public/images/kamenews/' . $image);
-			}
+
+			$image = $title . '.' . $extension;
+			file_exists(__DIR__ . '/../../../public/images/kamenews/' . $image) && unlink(__DIR__ . '/../../../public/images/kamenews/' . $image);
+			$file->moveTo(__DIR__ . '/../../../public/images/kamenews/' . $image);
 		}
 
 		return $image;
