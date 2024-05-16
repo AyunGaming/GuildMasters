@@ -19,9 +19,15 @@ class CharacterManager {
 		$this->characterTagDAO = $characterTagDAO;
 	}
 
-	public function getAllCharacters(): ?array {
+	public function getPagedCharacters(int $page): ?array {
 		$characters = $this->characterDAO->getAll();
-
+		if($page == 1){
+			$start = 0;
+		}
+		else{
+			$start = ($page - 1) * 50;
+		}
+		$displayed = array_slice($characters, $start, 50);
 		foreach ($characters as $character) {
 			$data['Tags'] = [];
 			$characterTags = $this->characterTagDAO->getByCharacter($character->getImage());
@@ -35,7 +41,12 @@ class CharacterManager {
 
 		}
 
-		return $characters;
+		return $displayed;
+	}
+
+	public function getCharacterNumber(): int {
+		$characters = $this->characterDAO->getAll();
+		return count($characters);
 	}
 
 	public function getByImage(string $image): Character {

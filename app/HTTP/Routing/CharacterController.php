@@ -19,6 +19,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use PDOException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 
 class CharacterController extends AbstractController {
@@ -34,8 +35,8 @@ class CharacterController extends AbstractController {
 		$this->characterTagDAO = new CharacterTagDAO($this->database);
 	}
 
-	private function getCharacterList(): array {
-		return $this->characterManager->getAllCharacters();
+	private function getCharacterList(int $page): array {
+		return $this->characterManager->getPagedCharacters($page);
 	}
 
 	private function saveImage($file, array $post): array {
@@ -186,17 +187,25 @@ class CharacterController extends AbstractController {
 		return $res;
 	}
 
-	public function viewListCharacters(Request $request, Response $response, Twig $twig): Response {
+	public function getCharacterNumber(): int {
+		return $this->characterManager->getCharacterNumber();
+	}
+
+	public function viewPagedListCharacters(Request $request, Response $response, Twig $twig, int $page): Response {
+		$page = $request->getAttribute('page');
 		$tags = $this->tagManager->getAllTags();
-		$characters = $this->getCharacterList();
+		$displayed = $this->getCharacterList($page);
+		$characterNumber = $this->getCharacterNumber();
 		$user = $request->getAttribute(User::class);
 		return $twig->render($response, 'characters.twig', [
 			'flashes' => Flashes::all(),
 			'user' => $user,
-			'characters' => $characters,
+			'displayed' => $displayed,
+			'characters' => $characterNumber,
 			'rarities' => Rarity::cases(),
 			'colors' => Color::cases(),
-			'tags' => $tags
+			'tags' => $tags,
+			'currentPage' => $page
 		]);
 	}
 

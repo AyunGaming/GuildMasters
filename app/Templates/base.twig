@@ -69,8 +69,18 @@
 							{{ user.getLogin() }}
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-							<li><a class="dropdown-item" href="{{ url_for('character-list') }}">Gestion personnages</a></li>
+							<li><a class="dropdown-item" href="{{ url_for('character-list', {'page':1}) }}">Gestion personnages</a></li>
 							<li><a class="dropdown-item" href="{{ url_for('admin-kamenews') }}">Gestion kamenews</a></li>
+						</ul>
+					</li>
+				{% elseif user is not null and user.getRole() is constant('division\\Models\\Enums\\Role::MEMBER') %}
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+						   data-bs-toggle="dropdown" aria-expanded="false">
+							{{ user.getLogin() }}
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+							<li><a class="dropdown-item" href="#">Mon profil</a></li>
 						</ul>
 					</li>
 				{% endif %}

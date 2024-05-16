@@ -37,7 +37,13 @@ try {
 
 $container->set(Database::class, $database);
 
-$twig = Twig::create(__DIR__ . '/../app/Templates');
+$twig = Twig::create(__DIR__ . '/../app/Templates', [
+	'debug' => true,
+]);
+
+$twig->getEnvironment()->addExtension(new \Twig\Extension\DebugExtension());
+
+
 $container->set(Twig::class, $twig);
 
 $app = Bridge::create($container);
@@ -59,7 +65,7 @@ $app->group('/admin', static function (RouteCollectorProxy $admin) {
 
 		$characters->post('/update-character', [CharacterController::class, 'postUpdateCharacter'])->setName('character-update');
 		$characters->post('/delete-character', [CharacterController::class, 'postDeleteCharacter'])->setName('delete-character');
-		$characters->get('/list-characters', [CharacterController::class, 'viewListCharacters'])->setName('character-list');
+		$characters->get('/list-characters/{page}', [CharacterController::class, 'viewPagedListCharacters'])->setName('character-list');
 	});
 });
 

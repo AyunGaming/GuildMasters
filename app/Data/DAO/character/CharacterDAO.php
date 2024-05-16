@@ -10,6 +10,7 @@ use division\Exceptions\CannotDeleteCharacterException;
 use division\Exceptions\CannotGetCharacterException;
 use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
+use PDO;
 use PDOException;
 
 class CharacterDAO extends BaseDAO implements ICharacterDAO {
@@ -17,13 +18,13 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 	public function create(Character $character): void {
 		$statement = $this->database->prepare("INSERT INTO dbl_characters (Image,Rarity,IsLF,Name,Color) VALUES (?,?,?,?,?);");
 
-		$statement->bindValue(1,$character->getImage());
-		$statement->bindValue(2,$character->getRarity()->value);
-		$statement->bindValue(3,$character->isLF());
-		$statement->bindValue(4,$character->getName());
-		$statement->bindValue(5,$character->getColor()->value);
+		$statement->bindValue(1, $character->getImage());
+		$statement->bindValue(2, $character->getRarity()->value);
+		$statement->bindValue(3, $character->isLF());
+		$statement->bindValue(4, $character->getName());
+		$statement->bindValue(5, $character->getColor()->value);
 
-		try{
+		try {
 			$statement->execute();
 		} catch (PDOException) {
 			throw new CannotCreateCharacterException("Impossible de créer le personnage: " . $character->getImage());
@@ -32,18 +33,17 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
 	public function getAll(): array {
 		try {
-			$statement = $this->database->prepare('SELECT * FROM dbl_characters');
+			$statement = $this->database->prepare("SELECT * FROM dbl_characters");
+			$statement->execute();
 
-			if($statement->execute() !== false){
-				$characters = [];
-				foreach (($statement->fetchAll() ?? []) as $datum) {
-					$character = new Character();
-					$character->hydrate($datum);
-					$characters[] = $character;
-				}
-				return $characters;
+			$characters = [];
+			$data = $statement->fetchAll();
+			foreach ($data as $datum) {
+				$character = new Character();
+				$character->hydrate($datum);
+				$characters[] = $character;
 			}
-			throw new CannotGetCharacterException("Impossible de récupérer les personnages");
+			return $characters;
 		} catch (PDOException $PDOException) {
 			throw new CannotGetCharacterException($PDOException->getMessage());
 		}
