@@ -126,4 +126,5 @@ modules.xml
 
 .phpunit.result.cache
 
-database.ini
+/public/images/kamenews/*
+/config/database.ini

@@ -1,0 +1,53 @@
+{% extends "base.twig" %}
+
+{% block title %} Kamenews {% endblock %}
+
+{% block styles %}
+	<link rel="stylesheet" href="/public/css/kamenewsAdmin.css">
+{% endblock %}
+
+{% block body %}
+	<div class="container-fluid">
+		<h1>Kamenews</h1>
+		{% if user is not null and user.getRole() is constant('division\\Models\\Enums\\Role::ADMIN') %}
+			<div class="row justify-content-end">
+				<div class="col-2 me-3 me-sm-0">
+					<a href="{{ url_for('new-kamenews') }}" class="btn btn-sm btn-success">
+						Créer un nouveau kamenews
+					</a>
+					<a href="{{ url_for('admin-kamenews') }}" class="btn btn-sm btn-success mt-2">
+						Gérer les kamenews
+					</a>
+				</div>
+			</div>
+		{% endif %}
+		<div class="row mt-5 justify-content-center">
+			{% for k in kamenews %}
+				<div class="col-sm-6 col-md-4 col-lg-3 me-3">
+					<button id="{{ k.getId() }}" class="kamenews-read btn">
+						<div class="card">
+							<img alt="Illustration de l'article" class="card-img-top" src="/public/images/db_2star.png" width="150">
+							<h2>Kamenews n°{{ k.getId() }}</h2>
+							<p class="fs-6 fst-italic">{{ k.getDate() }}</p>
+							<p>{{ k.getDesc() }}</p>
+						</div>
+					</button>
+				</div>
+			{% endfor %}
+		</div>
+{% endblock %}
+
+{% block script %}
+	<script src="/public/js/fetchURLFor.js"></script>
+	<script src="/public/js/kamenews.js"></script>
+	<script>
+		window.addEventListener('load', () => {
+			const btns = document.querySelectorAll('.kamenews-read');
+			btns.forEach(btn => {
+				btn.addEventListener('click', async () => {
+					await readKamenews('{{ read_kamenews_url }}',btn.id)
+				})
+			})
+		})
+	</script>
+{% endblock %}

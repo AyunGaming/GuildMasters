@@ -1,13 +1,16 @@
 <?php
 
-namespace division\Data\DAO;
+namespace division\Data\DAO\character;
 
-use division\Data\DAO\Interfaces\ICharacterDAO;
+
+use division\Data\DAO\BaseDAO;
+use division\Data\DAO\Interfaces\characters\ICharacterDAO;
 use division\Exceptions\CannotCreateCharacterException;
 use division\Exceptions\CannotDeleteCharacterException;
 use division\Exceptions\CannotGetCharacterException;
 use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
+use PDO;
 use PDOException;
 
 class CharacterDAO extends BaseDAO implements ICharacterDAO {
@@ -32,16 +35,14 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 		try {
 			$statement = $this->database->prepare("SELECT * FROM dbl_characters ORDER BY Image ASC");
 
-			if($statement->execute() !== false){
-				$characters = [];
-				foreach (($statement->fetchAll() ?? []) as $datum) {
-					$character = new Character();
-					$character->hydrate($datum);
-					$characters[] = $character;
-				}
-				return $characters;
+			$characters = [];
+			$data = $statement->fetchAll();
+			foreach ($data as $datum) {
+				$character = new Character();
+				$character->hydrate($datum);
+				$characters[] = $character;
 			}
-			throw new CannotGetCharacterException("Impossible de récupérer les personnages");
+			return $characters;
 		} catch (PDOException $PDOException) {
 			throw new CannotGetCharacterException($PDOException->getMessage());
 		}
