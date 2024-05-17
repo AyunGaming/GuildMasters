@@ -41,5 +41,6 @@ $('#filterTags').select2({
 	language: {
 		noResults: () => 'Aucun tag trouvé'
 	},
+	allowClear: true,
 	closeOnSelect: false,
 });

@@ -18,23 +18,22 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 	public function create(Character $character): void {
 		$statement = $this->database->prepare("INSERT INTO dbl_characters (Image,Rarity,IsLF,Name,Color) VALUES (?,?,?,?,?);");
 
-		$statement->bindValue(1, $character->getImage());
-		$statement->bindValue(2, $character->getRarity()->value);
-		$statement->bindValue(3, $character->isLF());
-		$statement->bindValue(4, $character->getName());
-		$statement->bindValue(5, $character->getColor()->value);
-
-		try {
+		$statement->bindValue(1,$character->getImage());
+		$statement->bindValue(2,$character->getRarity()->value);
+		$statement->bindValue(3,$character->isLF() ? 1 : 0);
+		$statement->bindValue(4,$character->getName());
+		$statement->bindValue(5,$character->getColor()->value);
+		
+		try{
 			$statement->execute();
-		} catch (PDOException) {
+		} catch (PDOException $e) {
 			throw new CannotCreateCharacterException("Impossible de créer le personnage: " . $character->getImage());
 		}
 	}
 
 	public function getAll(): array {
 		try {
-			$statement = $this->database->prepare("SELECT * FROM dbl_characters");
-			$statement->execute();
+			$statement = $this->database->prepare("SELECT * FROM dbl_characters ORDER BY Image ASC");
 
 			$characters = [];
 			$data = $statement->fetchAll();
@@ -77,7 +76,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
 			$req->bindValue(1, $character->getImage());
 			$req->bindValue(2, $character->getRarity()->value);
-			$req->bindValue(3, $character->isLF());
+			$req->bindValue(3, $character->isLF() ? 1 : 0);
 			$req->bindValue(4, $character->getName());
 			$req->bindValue(5, $character->getColor()->value);
 			$req->bindValue(6, $oldId);
