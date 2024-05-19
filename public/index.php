@@ -24,6 +24,7 @@ require_once __DIR__ . '/../app/Models/Article.php';
 require_once __DIR__ . '/../app/Models/Enums/Role.php';
 
 session_start();
+ini_set('display_errors',1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
