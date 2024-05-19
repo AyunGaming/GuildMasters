@@ -77,7 +77,8 @@ function search() {
 	}
 
 	let dict = {
-		"name": 3,
+		"name": 4,
+		"id": 0,
 	}
 
 	let rows = table.rows;
@@ -92,7 +93,6 @@ function search() {
 		let lfCell = cells[3].children[0].src.slice(41, -4);
 		let colCell = cells[5].children[0].src.slice(45, -4);
 		let tagsCell = cells[6].innerHTML;
-
 		let searchCell = cells[dict[category.value]];
 
 		let sfil = search_filter(rarity, lf, color, selectedValues);

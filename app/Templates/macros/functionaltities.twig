@@ -1,0 +1,50 @@
+{% macro displayFunctionalities(role) %}
+
+	{% if role is not null and (role is constant('division\\Models\\Enums\\Role::ADMIN') or role is constant('division\\Models\\Enums\\Role::MASTER')) %}
+		<div class="mt-4 card col-sm-5 col-md-3 col-lg-2 me-5">
+			<div class="card-body">
+				<h5 class="card-title">Gestion de guilde</h5>
+				<p class="card-text">Ajoutez, supprimez et modifiez les membres de votre guilde afin de garder une trace de tout vos membres. De plus, une section "Annonce de guilde" est disponible !</p>
+				<img src="" alt="image de gestion de guilde">
+			</div>
+		</div>
+		<div class="mt-4 card col-sm-5 col-md-3 col-lg-2 me-5">
+			<div class="card-body">
+				<h5 class="card-title">Gestion de tournoi</h5>
+				<p class="card-text">Créez et organisez des tournois au sein de votre guilde simplement avec l'outil "Tournoi" de GuildMasters.</p>
+				<img src="" alt="image de gestion de tournoi">
+			</div>
+		</div>
+		<div class="mt-4 card col-sm-5 col-md-3 col-lg-2 me-5">
+			<div class="card-body">
+				<h5 class="card-title"><a href="{{ url_for("admin-kamenews") }}">Gestion des kamenews</a></h5>
+				<p class="card-text">Tenez vos membres à jour sur les nouveautés du jeu avec le kamenews ! Propre à chaque guilde le kamenews permet de partager les nouveautés à tout vos membres.</p>
+				<img src="" alt="image de gestion du kamenews">
+			</div>
+		</div>
+	{% else %}
+		<div class="mt-4 card col-sm-5 col-md-3 col-lg-2 me-5">
+			<div class="card-body">
+				<h5 class="card-title">Annonce de guilde</h5>
+				<p class="card-text">Tu auras la possibilité de consulter les annonces de ta guilde rédigés avec soin par ton chef de guilde.</p>
+				<img src="" alt="image de visualisation des annonces">
+			</div>
+		</div>
+		<div class="mt-4 card col-sm-5 col-md-3 col-lg-2 me-5">
+			<div class="card-body">
+				<h5 class="card-title">Tournois</h5>
+				<p class="card-text">Avec l'outil "Tournoi" de GuildMasters tu pourras participer aisément à des tournois avec un arbre auto-généré et la possibilité de rentrer tes teams à chaque combat.</p>
+				<img src="" alt="image de visualisation des tournois">
+			</div>
+		</div>
+		<div class="mt-4 card col-sm-5 col-md-3 col-lg-2 me-5">
+			<div class="card-body">
+				<h5 class="card-title">Consultation des kamenews</h5>
+				<p class="card-text">Tiens toi à jour sur les nouveautés du jeu avec le kamenews ! Propre à chaque guilde le kamenews permet de partager les nouveautés à l'ensemble de la guilde.</p>
+				<img src="" alt="image de visualisation du kamenews">
+			</div>
+		</div>
+	{% endif %}
+
+{% endmacro %}
+

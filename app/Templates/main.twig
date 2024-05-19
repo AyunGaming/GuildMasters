@@ -1,5 +1,7 @@
 {% extends 'base.twig' %}
 
+{% import "./macros/functionaltities.twig" as adminFunc %}
+
 {% block title %} Division Z {% endblock %}
 
 {% block styles %}
@@ -10,43 +12,49 @@
 	<div id="titles" class="container">
 		<div class="d-flex justify-content-center">
 			<div>
-				<h1>Bienvenue chez la Division Z !</h1>
-				<h2>Guilde française Db Legends</h2>
+				<h1>Bienvenue sur GuildMasters !</h1>
+				<h2>L'outil de gestion de guilde Dragon Ball Legends.</h2>
 			</div>
 		</div>
 	</div>
 
 	{{ parent() }}
 
-	<div id="kamenews">
-		<div class="justify-content-start">
-			<h3 class="text-start">Dernier kamenews</h3>
-			<div id="kamenewsCarousel" class="carousel slide" data-bs-ride="carousel">
-				<div class="carousel-indicators">
-					<button type="button" data-bs-target="#kamenewsCarousel" data-bs-slide-to="0" class="active pt-1" aria-current="true" aria-label="Slide 1"></button>
-					<button type="button" data-bs-target="#kamenewsCarousel" data-bs-slide-to="1" class="pt-1" aria-label="Slide 2"></button>
-					<button type="button" data-bs-target="#kamenewsCarousel" data-bs-slide-to="2" class="pt-1" aria-label="Slide 3"></button>
-				</div>
-				<div class="carousel-inner">
-					<div class="carousel-item active">
-						<img draggable="false" src="/public/images/kid_goku.png" class="d-block" alt="Image 1 du Kamenews">
-					</div>
-					<div class="carousel-item">
-						<img draggable="false" src="/public/images/kamesennin.png" class="d-block" alt="Image 2 du Kamenews">
-					</div>
-					<div class="carousel-item">
-						<img draggable="false" src="/public/images/gokuHi.png" class="d-block" alt="Image 3 du Kamenews">
-					</div>
-				</div>
-				<button class="carousel-control-prev" type="button" data-bs-target="#kamenewsCarousel" data-bs-slide="prev">
-					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">Previous</span>
-				</button>
-				<button class="carousel-control-next" type="button" data-bs-target="#kamenewsCarousel" data-bs-slide="next">
-					<span class="carousel-control-next-icon" aria-hidden="true"></span>
-					<span class="visually-hidden">Next</span>
-				</button>
-			</div>
+	<div class="justify-content-start ms-3 mt-5">
+		<h3 class="text-start">Présentation de GuildMasters</h3>
+		<div id="large-text" class="mt-4 ms-5">
+			<p class="text-start">GuildMasters est un outil de gestion de guilde pour le jeu mobile Dragon Ball Legends.
+				L'objectif de cet outil est d'améliorer l'expérience des guildes en proposant des fonctionnalités de gestion
+				et de communication.
+			</p>
+		</div>
+	</div>
+
+	<div class="row justify-content-start ms-3 mt-5">
+		<h3 class="text-start">Fonctionnalités</h3>
+		<div class="functionalities row justify-content-center">
+			{% if user is not null %}
+				{{ adminFunc.displayFunctionalities(user.getRole()) }}
+			{% else %}
+				{{ adminFunc.displayFunctionalities("MEMBER") }}
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="row justify-content-start mt-5 ms-3">
+		<h3>Contact</h3>
+		<div class="ms-5 mt-4">
+			<p class="text-start">
+				Veuillez noter que la création de guilde n'est pas disponible directement lors de l'inscription. Pour créer une guilde, veuillez suivre ces étapes :
+				<br>
+				<br>
+				- <strong>Envoyez une demande par e-mail à l'adresse suivante</strong> : guildmasters@guildmasters.go.yo.fr <br>
+				- <strong>Dans votre e-mail, veuillez spécifier le nom de la guilde que vous souhaitez créer.</strong><br>
+				- <strong>Joignez une capture d'écran prouvant votre appartenance à la guilde (si applicable).</strong><br>
+				- <strong>Incluez également le pseudo de votre compte sur notre site.</strong> <br><br>
+				Une fois que nous aurons reçu votre demande, notre équipe la traitera dans les plus brefs délais.
+				Nous vous remercions de votre compréhension et de votre coopération. <br>
+			</p>
 		</div>
 	</div>
 {% endblock %}

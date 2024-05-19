@@ -7,16 +7,13 @@ h2 {
 	text-align: center;
 }
 
-#kamenews {
-	background-color: rgba(77, 55, 29, 0.75);
+#large-text {
+	min-width: 900px;
+	max-width: 1000px;
 }
 
-.carousel-item img {
-	margin: auto;
-	width: auto;
-	height: 500px;
-}
-
-#kamenewsCarousel {
-	padding-top: 80px;
+.card {
+	min-width: 400px;
+	max-width: 500px;
+	color: #15110d;
 }
