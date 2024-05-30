@@ -16,6 +16,8 @@ class User {
 
 	private string $password;
 
+    private ?string $image;
+
 	public function getId(): int {
 		return $this->id;
 	}
@@ -78,5 +80,14 @@ class User {
 		if(array_key_exists('password',$data)){
 			$this->password = $data['password'];
 		}
+
+        if(array_key_exists('image',$data)){
+            $this->image = $data['image'];
+        }
 	}
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
 }

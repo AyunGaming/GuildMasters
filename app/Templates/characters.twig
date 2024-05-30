@@ -158,13 +158,13 @@
 									<a class="me-2" href="#">< Précédent</a>
 								{% endif %}
 								{% if pages > 10 %}
-										<a class="me-2" href="{{ url_for('character-list', {'page':1}) }}">1</a>
-										<a class="me-2" href="{{ url_for('character-list', {'page':2}) }}">2</a>
-										<a class="me-2" href="{{ url_for('character-list', {'page':3}) }}">3</a>
-										<a class="me-2" href="">...</a>
-										<a class="me-2" href="/{{ url_for('character-list', {'page': pages-2 }) }}">{{ pages - 2 }}</a>
-										<a class="me-2" href="{{ url_for('character-list', {'page':pages-1 }) }}">{{ pages - 1 }}</a>
-										<a class="me-2" href="{{ url_for('character-list', {'page':pages }) }}">{{ pages }}</a>
+									<a class="me-2" href="{{ url_for('character-list', {'page':1}) }}">1</a>
+									<a class="me-2" href="{{ url_for('character-list', {'page':2}) }}">2</a>
+									<a class="me-2" href="{{ url_for('character-list', {'page':3}) }}">3</a>
+									<a class="me-2" href="">...</a>
+									<a class="me-2" href="/{{ url_for('character-list', {'page': pages-2 }) }}">{{ pages - 2 }}</a>
+									<a class="me-2" href="{{ url_for('character-list', {'page':pages-1 }) }}">{{ pages - 1 }}</a>
+									<a class="me-2" href="{{ url_for('character-list', {'page':pages }) }}">{{ pages }}</a>
 								{% else %}
 									{% for i in 1..pages %}
 										<a class="me-2" href="{{ url_for('character-list', {'page': i }) }}">{{ i }}</a>
