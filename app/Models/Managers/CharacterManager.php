@@ -45,8 +45,7 @@ class CharacterManager {
 	}
 
 	public function getCharacterNumber(): int {
-		$characters = $this->characterDAO->getAll();
-		return count($characters);
+		return $this->characterDAO->count();
 	}
 
 	public function getByImage(string $image): Character {

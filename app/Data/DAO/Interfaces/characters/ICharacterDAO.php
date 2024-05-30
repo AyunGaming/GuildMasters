@@ -15,4 +15,6 @@ interface ICharacterDAO {
 	public function update(Character $character, string $oldId): void;
 
 	public function delete(Character $character): void;
+
+	public function count(): int;
 }
