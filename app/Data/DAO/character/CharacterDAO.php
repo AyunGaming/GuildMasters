@@ -104,4 +104,14 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 			throw new CannotDeleteCharacterException($PDOException->getMessage());
 		}
 	}
+
+    public function count(): int {
+        try{
+            $statement = $this->database->prepare("SELECT COUNT(*) FROM dbl_characters");
+            $statement->execute();
+            return $statement->fetchColumn();
+        } catch (PDOException $PDOException) {
+            throw new CannotGetCharacterException($PDOException->getMessage());
+        }
+    }
 }
