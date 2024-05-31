@@ -235,7 +235,7 @@ class CharacterController extends AbstractController
     public function viewCreateCharacter(Request $request, Response $response, Twig $twig): Response
     {
         $tags = $this->tagManager->getAllTags();
-        $characters = $this->getCharacterList();
+        $characters = $this->getCharacterList(1);
         $user = $request->getAttribute(User::class);
         return $twig->render($response, 'charactersCreate.twig', [
             'flashes' => Flashes::all(),
