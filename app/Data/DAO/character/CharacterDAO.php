@@ -2,6 +2,7 @@
 
 namespace division\Data\DAO\character;
 
+
 use division\Data\DAO\BaseDAO;
 use division\Data\DAO\Interfaces\characters\ICharacterDAO;
 use division\Exceptions\CannotCreateCharacterException;
@@ -9,6 +10,7 @@ use division\Exceptions\CannotDeleteCharacterException;
 use division\Exceptions\CannotGetCharacterException;
 use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
+use PDO;
 use PDOException;
 
 class CharacterDAO extends BaseDAO implements ICharacterDAO {
@@ -32,7 +34,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 	public function getAll(): array {
 		try {
 			$statement = $this->database->prepare("SELECT * FROM dbl_characters ORDER BY Image ASC");
-			$statement->execute();
+            $statement->execute();
 
 			$characters = [];
 			$data = $statement->fetchAll();
@@ -101,12 +103,5 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 		} catch (PDOException $PDOException) {
 			throw new CannotDeleteCharacterException($PDOException->getMessage());
 		}
-	}
-
-	public function count(): int {
-		$req = $this->database->prepare('SELECT COUNT(*) FROM dbl_characters');
-		$req->execute();
-
-		return $req->fetchColumn();
 	}
 }
