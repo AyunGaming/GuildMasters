@@ -35,6 +35,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 		try {
 			$statement = $this->database->prepare("SELECT * FROM dbl_characters ORDER BY Image ASC");
             $statement->execute();
+
 			$characters = [];
 			$data = $statement->fetchAll();
 			foreach ($data as $datum) {
@@ -42,6 +43,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 				$character->hydrate($datum);
 				$characters[] = $character;
 			}
+
 			return $characters;
 		} catch (PDOException $PDOException) {
 			throw new CannotGetCharacterException($PDOException->getMessage());
