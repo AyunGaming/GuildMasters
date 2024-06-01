@@ -80,36 +80,31 @@
                                 </select>
                             </div>
                             <div class="col-span-2">
-{#                                <label for="updateTags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>#}
-{#                                <select id="updateTags" multiple="" name="Tags[]">#}
-{#                                    {% for tag in tags %}#}
-{#                                        <option value="{{ tag.getName() }}">{{ tag.getName() }}</option>#}
-{#                                    {% endfor %}#}
-{#                                </select>#}
-
-                                <div class="py-4 px-4">
-                                    <div class="lg:max-w-[548px] w-full mx-auto bg-gray-200 relative">
-                                        <div class="flex items-center">
-                                            <input id="tag-search" type="text" class="border rounded p-2" placeholder="Enter tag">
-                                            <button id="add-tag" class="ml-2 p-2 bg-blue-500 text-white rounded">+</button>
-                                            <div id="dropdown" class="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md hidden">
-                                                <ul id="dropdown-list" class="py-1 text-base leading-6 rounded-md shadow-xs overflow-hidden">
-                                                    {% for tag in tags %}
-                                                        <span>{{ tag.getName }}</span>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="relative bg-white px-4 py-3 border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4"> <!--Tags selectionnés-->
-                                            <select id="tag-select" name="tags[]" class="border rounded p-2 w-full" multiple>
-                                                {% for tag in tags %}
-                                                    <option value="{{ tag.getName }}" class="tag-option hidden">{{ tag.getName }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                <label for="tag-search" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>
+                                <div class="lg:max-w-[548px] w-full mx-auto relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                    <div class="pb-1">
+                                        <input id="tag-search" type="text" class="flex-grow bg-gray-50 text-gray-900 text-sm border border-gray-300 rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un tag...">
+                                        <button id="add-tag" class="hidden ml-2 p-2 bg-blue-500 text-white rounded">+</button>
+                                    </div>
+                                    <div id="dropdown" class="absolute bottom-full left-0 w-full bg-white text-gray-900 border border-gray-300 rounded-md shadow-lg hidden z-10 mb-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        <ul id="dropdown-list" class="h-48 overflow-y-auto">
+                                            {% for tag in tags %}
+                                                <li>
+                                                    <span>{{ tag.getName }}</span>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"> <!--Tags selectionnés-->
+                                        <select id="updateTags" name="tags[]" class="p-2 w-full dark:bg-gray-600 dark:placeholder-gray-400 dark:text-white" multiple>
+                                            {% for tag in tags %}
+                                                <option value="{{ tag.getName }}" class="tag-option hidden bg-blue-600 text-xs text-white rounded-full px-2 py-1 mb-1">
+                                                    {{ tag.getName }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -117,27 +112,84 @@
                             Add new product
                         </button>
                         <script>
-                            document.getElementById('add-tag').addEventListener('click', function(event) {
-                                event.preventDefault();
-                                const searchValue = document.getElementById('tag-search').value.toString().toLowerCase();
-                                const options = document.querySelectorAll('#tag-select .tag-option');
+                            document.getElementById('tag-search').addEventListener('input', function() {
+                                const searchValue = this.value.toLowerCase();
+                                const dropdown = document.getElementById('dropdown');
+                                const dropdownList = document.getElementById('dropdown-list');
+                                const options = document.querySelectorAll('#updateTags .tag-option');
+
+                                dropdownList.innerHTML = '';
+                                let hasMatch = false;
 
                                 options.forEach(option => {
-                                    if (option.textContent.toString().toLowerCase() === searchValue) {
-                                        option.selected = true;
-                                        option.classList.remove('hidden');
+                                    if (option.textContent.toLowerCase().includes(searchValue)) {
+                                        const li = document.createElement('li');
+                                        li.textContent = option.textContent;
+                                        li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-500', 'text-white');
+                                        li.addEventListener('click', function() {
+                                            option.selected = true;
+                                            option.classList.remove('hidden');
+                                            option.classList.add('flex');
+                                            dropdown.classList.add('hidden');
+                                            document.getElementById('tag-search').value = '';
+                                        });
+                                        dropdownList.appendChild(li);
+                                        hasMatch = true;
                                     }
                                 });
 
-                                // Vider la searchbar après l'ajout
-                                document.getElementById('tag-search').value = '';
+                                if (hasMatch && searchValue) {
+                                    dropdown.classList.remove('hidden');
+                                } else {
+                                    dropdown.classList.add('hidden');
+                                }
                             });
 
-                            document.getElementById('tag-select').addEventListener('click', function(event) {
+                            document.getElementById('add-tag').addEventListener('click', function(event) {
+                                event.preventDefault();
+                                const searchValue = document.getElementById('tag-search').value.toLowerCase();
+                                const options = document.querySelectorAll('#updateTags .tag-option');
+
+                                let optionExists = false;
+
+                                options.forEach(option => {
+                                    if (option.textContent.toLowerCase() === searchValue) {
+                                        option.selected = true;
+                                        option.classList.remove('hidden');
+                                        optionExists = true;
+                                    }
+                                });
+
+                                if (!optionExists && searchValue) {
+                                    const newOption = document.createElement('option');
+                                    newOption.value = searchValue;
+                                    newOption.textContent = searchValue;
+                                    newOption.selected = true;
+                                    newOption.classList.add('tag-option');
+                                    document.getElementById('updateTags').appendChild(newOption);
+
+                                    const li = document.createElement('li');
+                                    li.textContent = searchValue;
+                                    li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-200');
+                                    li.addEventListener('click', function() {
+                                        newOption.selected = true;
+                                        newOption.classList.remove('hidden');
+                                        document.getElementById('dropdown').classList.add('hidden');
+                                        document.getElementById('tag-search').value = '';
+                                    });
+                                    document.getElementById('dropdown-list').appendChild(li);
+                                }
+
+                                document.getElementById('tag-search').value = '';
+                                document.getElementById('dropdown').classList.add('hidden');
+                            });
+
+                            document.getElementById('updateTags').addEventListener('click', function(event) {
                                 const option = event.target;
                                 if (option.tagName === 'OPTION' && option.selected) {
                                     option.selected = false;
                                     option.classList.add('hidden');
+                                    option.classList.remove('flex');
                                 }
                             });
                         </script>
@@ -287,7 +339,7 @@
                                     {{ character.getTagString() }}
                                 </td>
                                 <td class="px-6 py-4 flex-row items-center justify-center space-y-2">
-                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                    <a data-modal-target="crud-modal-update" data-modal-toggle="crud-modal-update" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                                        onclick="getUpdateUserInfos('{{ character.getImage() }}', '{{ character.getRarity().value }}', '{{ character.isLF() }}', '{{ character.getName() }}', '{{ character.getColor().value }}', '{{ character.getTagString() }}')">
                                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                              xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -297,7 +349,7 @@
                                                   clip-rule="evenodd"/>
                                         </svg>
                                     </a>
-                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                                        onclick="getDeleteUserInfos('{{ character.getImage() }}', '{{ character.getName() }}')">
                                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                              xmlns="http://www.w3.org/2000/svg" width="24" height="24"

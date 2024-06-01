@@ -5,24 +5,16 @@ function getUpdateUserInfos(image, rarity, lf, name, color, tags) {
 	document.getElementById('updateRarity').value = rarity;
 	document.getElementById('updateIsLfCheckbox').checked = lf === 1;
 	document.getElementById('updateColor').value = color;
-
-	let s2 = $('#updateTags').select2({
-		theme: "bootstrap-5",
-		placeholder: 'Sélectionner les tags',
-		language: {
-			noResults: () => 'Aucun tag trouvé'
-		},
-		closeOnSelect: false,
-	});
-
-	let tagArray = tags.split(', ');
-	tagArray.forEach(function (e){
-		if(!s2.find('option:contains('+ e +')').length){
-			s2.append($('<option>').text(e));
+	document.getElementById('updateTags').value = tags;
+	const tagsArray = tags.split(", ");
+	const select = document.getElementById('updateTags');
+	for (let i = 0; i < tagsArray.length; i++) {
+		for (let j=0; j < select.options.length; j++) {
+			if (tagsArray[i] === select.options[j].value) {
+				select.options[j].classList.remove('hidden');
+			}
 		}
-	})
-
-	s2.val(tagArray).trigger("change");
+	}
 }
 
 
