@@ -71,7 +71,11 @@ class CharacterController extends AbstractController
             $post['tags'] = [$post['tags']];
         }
         foreach ($post['tags'] as $tag) {
-            $tags[] = $this->tagManager->getByName($tag);
+			$t = $this->tagManager->getByName($tag);
+			if($t == null){
+				$t = $this->tagManager->createTag($tag);
+			 }
+			$tags[] = $t;
         }
 
         return $tags;

@@ -9,5 +9,7 @@ interface ITagDAO {
 
 	public function getByName(string $name): ?Tag;
 
+	public function createTag(string $name): ?Tag;
+
 	public function getAll(): array;
 }
