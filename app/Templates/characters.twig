@@ -76,10 +76,6 @@
                                         <option value="{{ color.value }}">{{ color.value|title }}</option>
                                     {% endfor %}
                                 </select>
-                                <!--
-
-                                console.log options.selected sous forme d'array en mode bouton tavu
-                                -->
                             </div>
                             <div class="col-span-2">
                                 <label for="updateTags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>
@@ -97,7 +93,7 @@
                                             {% endfor %}
                                         </ul>
                                     </div>
-                                    <div id="selected-tags" class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                    <div id="selected-tags" class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white h-24 overflow-y-scroll">
                                         <!-- Boutons des tags sélectionnés -->
                                     </div>
                                     <select id="updateTags" name="tags[]" class="hidden" multiple>

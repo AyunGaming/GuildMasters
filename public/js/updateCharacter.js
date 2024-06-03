@@ -61,13 +61,22 @@ document.getElementById('add-tag').addEventListener('click', function(event) {
 
 function addTagButton(tagName) {
 	const selectedTagsDiv = document.getElementById('selected-tags');
+
+	// Check if the tag is already added
+	const existingButtons = selectedTagsDiv.querySelectorAll('button');
+	for (const button of existingButtons) {
+		if (button.querySelector('span').textContent === tagName) {
+			return; // Do not add the tag if it already exists
+		}
+	}
+
 	const button = document.createElement('button');
 	button.innerHTML += `<span>${tagName}</span>`;
 	button.innerHTML += `<svg class="ml-2 w-3 h-3 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
                             </svg>
                                 `;
-	button.classList.add('bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1','inline-flex', 'items-center');
+	button.classList.add('h-8', 'bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1','inline-flex', 'items-center');
 	button.addEventListener('click', function() {
 		button.remove();
 		const option = document.querySelector(`#updateTags option[value="${tagName}"]`);
@@ -77,8 +86,6 @@ function addTagButton(tagName) {
 	});
 	selectedTagsDiv.appendChild(button);
 }
-
-
 
 function clearSelectedTags() {
 	document.getElementById('selected-tags').innerHTML = '';
