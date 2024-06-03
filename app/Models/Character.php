@@ -72,7 +72,9 @@ class Character implements JsonSerializable {
 		}
 
 		if (array_key_exists('IsLF', $data)) {
-
+            if($data['IsLF'] === true || $data['IsLF'] === false){
+                $this->isLF = $data['IsLF'];
+            }
 			if ($data['IsLF'] == 'on') {
 				$this->isLF = true;
 			} elseif (is_numeric($data['IsLF'])) {
