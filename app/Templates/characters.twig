@@ -19,12 +19,7 @@
 		</div>
     #}
     <section class="modals">
-        <!-- Modal toggle -->
-        <button data-modal-target="crud-modal-update" data-modal-toggle="crud-modal-update" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-            Éditer un personnage
-        </button>
-
-        <!-- Main modal -->
+        <!-- Update character modal -->
         <div id="crud-modal-update" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
             <div class="relative p-4 w-full max-w-md max-h-full">
                 <!-- Modal content -->
@@ -34,7 +29,7 @@
                         <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                             Éditer un personnage
                         </h3>
-                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal-update" id="close-update-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                             </svg>
@@ -43,8 +38,10 @@
                     </div>
                     <!-- Modal body -->
                     <form class="p-4 md:p-5" method="post" action="/admin/characters/update-character" enctype="multipart/form-data">
+                        <input type="text" hidden="hidden" id="page" name="page" value="{{ currentPage }}">
                         <div class="grid gap-4 mb-4 grid-cols-2">
                             <div class="col-span-2">
+                                <label for="oldId" class="hidden"></label>
                                 <input type="text" id="oldId" name="oldId" hidden="hidden">
                             </div>
                             <div class="col-span-2">
@@ -78,9 +75,13 @@
                                         <option value="{{ color.value }}">{{ color.value|title }}</option>
                                     {% endfor %}
                                 </select>
+                                <!--
+
+                                console.log options.selected sous forme d'array en mode bouton tavu
+                                -->
                             </div>
                             <div class="col-span-2">
-                                <label for="tag-search" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>
+                                <label for="updateTags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>
                                 <div class="lg:max-w-[548px] w-full mx-auto relative bg-white rounded-lg shadow dark:bg-gray-700">
                                     <div class="pb-1">
                                         <input id="tag-search" type="text" class="flex-grow bg-gray-50 text-gray-900 text-sm border border-gray-300 rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un tag...">
@@ -89,27 +90,30 @@
                                     <div id="dropdown" class="absolute bottom-full left-0 w-full bg-white text-gray-900 border border-gray-300 rounded-md shadow-lg hidden z-10 mb-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
                                         <ul id="dropdown-list" class="h-48 overflow-y-auto">
                                             {% for tag in tags %}
-                                                <li>
+                                                <li class="p-2 cursor-pointer hover:bg-gray-500 text-white">
                                                     <span>{{ tag.getName }}</span>
                                                 </li>
                                             {% endfor %}
                                         </ul>
                                     </div>
-                                    <div class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4  dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"> <!--Tags selectionnés-->
-                                        <select id="updateTags" name="tags[]" class="p-2 w-full dark:bg-gray-600 dark:placeholder-gray-400 dark:text-white" multiple>
-                                            {% for tag in tags %}
-                                                <option value="{{ tag.getName }}" class="tag-option hidden bg-blue-600 text-xs text-white rounded-full px-2 py-1 mb-1">
-                                                    {{ tag.getName }}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
+                                    <div id="selected-tags" class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                        <!-- Boutons des tags sélectionnés -->
                                     </div>
+                                    <select id="updateTags" name="tags[]" class="hidden" multiple>
+                                        {% for tag in tags %}
+                                            <option value="{{ tag.getName() }}" name="{{ tag.getName() }}" class="tag-option hidden">
+                                                {{ tag.getName() }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-                            Add new product
+                        <button id="update-form-sender" type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M5 8a4 4 0 1 1 7.796 1.263l-2.533 2.534A4 4 0 0 1 5 8Zm4.06 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h2.172a2.999 2.999 0 0 1-.114-1.588l.674-3.372a3 3 0 0 1 .82-1.533L9.06 13Zm9.032-5a2.907 2.907 0 0 0-2.056.852L9.967 14.92a1 1 0 0 0-.273.51l-.675 3.373a1 1 0 0 0 1.177 1.177l3.372-.675a1 1 0 0 0 .511-.273l6.07-6.07a2.91 2.91 0 0 0-.944-4.742A2.907 2.907 0 0 0 18.092 8Z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="px-1"> Modifier</span>
                         </button>
                         <script>
                             document.getElementById('tag-search').addEventListener('input', function() {
@@ -127,9 +131,8 @@
                                         li.textContent = option.textContent;
                                         li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-500', 'text-white');
                                         li.addEventListener('click', function() {
-                                            option.selected = true;
-                                            option.classList.remove('hidden');
-                                            option.classList.add('flex');
+                                            option.setAttribute('selected', 'true');
+                                            addTagButton(option.value);
                                             dropdown.classList.add('hidden');
                                             document.getElementById('tag-search').value = '';
                                         });
@@ -154,8 +157,8 @@
 
                                 options.forEach(option => {
                                     if (option.textContent.toLowerCase() === searchValue) {
-                                        option.selected = true;
-                                        option.classList.remove('hidden');
+                                        option.setAttribute('selected', 'true');
+                                        addTagButton(option.value);
                                         optionExists = true;
                                     }
                                 });
@@ -164,35 +167,73 @@
                                     const newOption = document.createElement('option');
                                     newOption.value = searchValue;
                                     newOption.textContent = searchValue;
-                                    newOption.selected = true;
+                                    newOption.setAttribute('selected', 'true');
                                     newOption.classList.add('tag-option');
                                     document.getElementById('updateTags').appendChild(newOption);
-
-                                    const li = document.createElement('li');
-                                    li.textContent = searchValue;
-                                    li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-200');
-                                    li.addEventListener('click', function() {
-                                        newOption.selected = true;
-                                        newOption.classList.remove('hidden');
-                                        document.getElementById('dropdown').classList.add('hidden');
-                                        document.getElementById('tag-search').value = '';
-                                    });
-                                    document.getElementById('dropdown-list').appendChild(li);
+                                    addTagButton(searchValue);
                                 }
 
                                 document.getElementById('tag-search').value = '';
                                 document.getElementById('dropdown').classList.add('hidden');
                             });
 
-                            document.getElementById('updateTags').addEventListener('click', function(event) {
-                                const option = event.target;
-                                if (option.tagName === 'OPTION' && option.selected) {
-                                    option.selected = false;
-                                    option.classList.add('hidden');
-                                    option.classList.remove('flex');
+                            function addTagButton(tagName) {
+                                const selectedTagsDiv = document.getElementById('selected-tags');
+                                const button = document.createElement('button');
+                                button.innerHTML += `<span>${tagName}</span>`;
+                                button.innerHTML += `<svg class="ml-2 w-3 h-3 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                            </svg>
+                                `;
+                                button.classList.add('bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1','inline-flex', 'items-center');
+                                button.addEventListener('click', function() {
+                                    button.remove();
+                                    const option = document.querySelector(`#updateTags option[value="${tagName}"]`);
+                                    if (option) {
+                                        option.removeAttribute('selected');
+                                    }
+                                });
+                                selectedTagsDiv.appendChild(button);
+                            }
+
+
+
+                            function clearSelectedTags() {
+                                document.getElementById('selected-tags').innerHTML = '';
+                                const options = document.querySelectorAll('#updateTags .tag-option');
+                                options.forEach(option => {
+                                    option.removeAttribute('selected');
+                                });
+                            }
+
+                            function handleModalClose() {
+                                clearSelectedTags();
+                            }
+
+                            // Attach event listeners for closing the modal
+                            document.addEventListener('click', function(event) {
+                                const modal = document.getElementById('crud-modal-update');
+                                const isCloseButton = event.target.getAttribute('data-modal-toggle') === 'crud-modal-update';
+                                const isOutsideModal = event.target === modal;
+
+                                if (isCloseButton || isOutsideModal) {
+                                    modal.classList.add('hidden');
+                                    handleModalClose();
                                 }
                             });
-                        </script>
+
+                            document.getElementById('close-update-modal').addEventListener('click', function() {
+                                const modal = document.getElementById('crud-modal-update');
+                                modal.classList.add('hidden');
+                                handleModalClose();
+                            });
+
+                            document.getElementById('update-form-sender').addEventListener('submit', function(event) {
+                                event.preventDefault(); // Prevent form submission for demonstration
+                                document.getElementById('crud-modal-update').classList.add('hidden');
+                                handleModalClose();
+                            });
+                        </script> <!--Script pour la recherche dans la modal d'edition de filtres-->
                     </form>
                 </div>
             </div>
@@ -437,83 +478,10 @@
                         </li>
                     </ul>
                 </nav>
-            </div> <!--Pagination-->
+            </div>
         </div>
     </section>
 {#    <section class="modals">#}
-{#        <div class="modal fade" id="updateCharacterToMenuModal" tabindex="-1"#}
-{#             aria-labelledby="updateCharacterToMenuModal"#}
-{#             aria-hidden="true">#}
-{#            <div class="modal-xl modal-dialog modal-dialog-centered modal-dialog-scrollable">#}
-{#                <div class="body modal-content">#}
-{#                    <div class="body-opaque modal-header">#}
-{#                        <p class="modal-title fs-5" id="updateCharacterToMenuModal">#}
-{#                            <span class="fs-5 h1">Mettre à jour un personnage</span><br>#}
-{#                            <span class="fs-6 h2 text-muted fst-italic">Modifiez les infos du personnage</span>#}
-{#                        </p>#}
-{#                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>#}
-{#                    </div>#}
-{#                    <div class="modal-body row">#}
-{#                        <div class="form-container">#}
-{#                            <form method="post" action="/admin/characters/update-character"#}
-{#                                  enctype="multipart/form-data">#}
-{#                                <div class="form-group">#}
-{#                                    <input type="text" class="form-control" id="oldId" name="oldId" hidden="hidden">#}
-{#                                </div>#}
-{#                                <div class="form-group mt-3">#}
-{#                                    <label for="updateId">ID:</label>#}
-{#                                    <input type="text" class="form-control" id="updateId" name="Id" required>#}
-{#                                </div>#}
-{#                                <div class="form-group mt-3">#}
-{#                                    <label for="updateImage">Image:</label>#}
-{#                                    <input type="file" class="form-control" id="updateImage" name="Image"#}
-{#                                           accept="image/">#}
-{#                                </div>#}
-{#                                <div class="form-group mt-3">#}
-{#                                    <label for="updateName">Nom:</label>#}
-{#                                    <input type="text" class="form-control" id="updateName" name="Name"#}
-{#                                           required>#}
-{#                                </div>#}
-{#                                <div class="form-group mt-3">#}
-{#                                    <label for="updateRarity">Rareté :</label>#}
-{#                                    <select class="form-control" id="updateRarity" name="Rarity" required>#}
-{#                                        {% for rarity in rarities %}#}
-{#                                            <option value="{{ rarity.value }}">{{ rarity.value|title }}</option>#}
-{#                                        {% endfor %}#}
-{#                                    </select>#}
-{#                                </div>#}
-{#                                <div class="form-group mt-3">#}
-{#                                    <label class="form-check-label" for="updateIsLfCheckbox">Legends Limited</label>#}
-{#                                    <input class="form-check-input" type="checkbox" name="IsLF" id="updateIsLfCheckbox">#}
-{#                                </div>#}
-{#                                <div class="form-group mt-3">#}
-{#                                    <label for="updateColor">Couleur: </label>#}
-{#                                    <select class="form-control" id="updateColor" name="Color" required>#}
-{#                                        {% for color in colors %}#}
-{#                                            <option value="{{ color.value }}">{{ color.value|title }}</option>#}
-{#                                        {% endfor %}#}
-{#                                    </select>#}
-{#                                </div>#}
-{#                                <div class="form-group mt-3">#}
-{#                                    <label for="updateTags">Tags: </label>#}
-{#                                    <select id="updateTags" class="form-control form-select" multiple name="Tags[]">#}
-{#                                        {% for tag in tags %}#}
-{#                                            <option value="{{ tag.getName() }}">{{ tag.getName() }}</option>#}
-{#                                        {% endfor %}#}
-{#                                    </select>#}
-{#                                </div>#}
-{#                                <div class="body-opaque modal-footer">#}
-{#                                    <button type="submit" class="btn btn-primary">Modifier</button>#}
-{#                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer#}
-{#                                    </button>#}
-{#                                </div>#}
-{#                            </form>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-
 {#        <div class="modal fade" id="deleteCharacterModal" tabindex="-1" aria-labelledby="deleteCharacterModal"#}
 {#             aria-hidden="true">#}
 {#            <div class="modal-lg modal-dialog modal-dialog-centered">#}

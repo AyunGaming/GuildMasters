@@ -65,12 +65,12 @@ class CharacterController extends AbstractController
     {
         $tags = [];
 
-        if (!array_key_exists('Tags', $post)) {
-            $post['Tags'] = [];
-        } else if (!is_array($post['Tags'])) {
-            $post['Tags'] = [$post['Tags']];
+        if (!array_key_exists('tags', $post)) {
+            $post['tags'] = [];
+        } else if (!is_array($post['tags'])) {
+            $post['tags'] = [$post['tags']];
         }
-        foreach ($post['Tags'] as $tag) {
+        foreach ($post['tags'] as $tag) {
             $tags[] = $this->tagManager->getByName($tag);
         }
 
@@ -152,7 +152,7 @@ class CharacterController extends AbstractController
 
         $parser = RouteContext::fromRequest($request)->getRouteParser();
 
-        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list'));
+        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => $post["page"]]));
 
         $post = $this->saveImage($file, $post);
 
