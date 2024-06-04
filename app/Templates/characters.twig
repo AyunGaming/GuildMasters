@@ -39,6 +39,7 @@
                     </div>
                     <!-- Modal body -->
                     <form class="p-4 md:p-5" method="post" action="/admin/characters/update-character" enctype="multipart/form-data">
+                        <label for="page" hidden="hidden"></label>
                         <input type="text" hidden="hidden" id="page" name="page" value="{{ currentPage }}">
                         <div class="grid gap-4 mb-4 grid-cols-2">
                             <div class="col-span-2">
@@ -81,6 +82,7 @@
                                 <label for="updateTags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>
                                 <div class="lg:max-w-[548px] w-full mx-auto relative bg-white rounded-lg shadow dark:bg-gray-700">
                                     <div class="pb-1">
+                                        <label for="tag-search" hidden="hidden"></label>
                                         <input id="tag-search" type="text" class="flex-grow bg-gray-50 text-gray-900 text-sm border border-gray-300 rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un tag...">
                                         <button id="add-tag" class="hidden ml-2 p-2 bg-blue-500 text-white rounded">+</button>
                                     </div>
@@ -116,18 +118,377 @@
                 </div>
             </div>
         </div>
+        <!-- Delete character modal -->
+        <div id="crud-modal-delete" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-md max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                            Supprimer un personnage
+                        </h3>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal-delete" id="close-delete-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form class="p-4 md:p-5" method="post" action="/admin/characters/delete-character" enctype="multipart/form-data">
+                        <input type="text" hidden="hidden" id="page" name="page" value="{{ currentPage }}">
+                        <div class="flex mb-4">
+                            <div class="flex-1 mr-4">
+                                <div class="flex items-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg h-full focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                    <img draggable="false" id="d_characterImage" src="" alt="" width="300" height="300" class="inline-block align-middle">
+                                </div>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="p-2.5 mb-4">
+                                    <label for="characterId" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID</label>
+                                    <input readonly id="characterId" type="text" name="characterId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="DBL-EVT-00s" required>
+                                </div>
+                                <div class="p-2.5">
+                                    <label for="characterName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
+                                    <input readonly id="characterName" type="text" name="characterName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Name" required>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="delete-form-sender" type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M5 8a4 4 0 1 1 7.796 1.263l-2.533 2.534A4 4 0 0 1 5 8Zm4.06 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h2.172a2.999 2.999 0 0 1-.114-1.588l.674-3.372a3 3 0 0 1 .82-1.533L9.06 13Zm9.032-5a2.907 2.907 0 0 0-2.056.852L9.967 14.92a1 1 0 0 0-.273.51l-.675 3.373a1 1 0 0 0 1.177 1.177l3.372-.675a1 1 0 0 0 .511-.273l6.07-6.07a2.91 2.91 0 0 0-.944-4.742A2.907 2.907 0 0 0 18.092 8Z" clip-rule="evenodd"/>
+                            </svg>
+                            <span class="px-1"> Supprimer</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Create character modal -->
+        <div id="crud-modal-create" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-md max-h-full">
+                <!-- Modal content -->
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <!-- Modal Stepper -->
+                    <div class="px-4 py-2 md:px-5 md:py-2 rounded-t">
+                        <ol id="create-stepper" class=" overflow-x-hidden flex items-center w-full p-3 space-x-2 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+                            <li class="flex items-center text-blue-600 dark:text-blue-500">
+                                <span class="flex items-center justify-center w-3.5 h-3.5 me-1 text-2xs border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
+                                    1
+                                </span>
+                                Informations
+                                <svg class="w-1.5 h-1.5 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
+                                </svg>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="flex items-center justify-center w-3.5 h-3.5 me-1 text-2xs border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+                                    2
+                                </span>
+                                Détails
+                                <svg class="w-1.5 h-1.5 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
+                                </svg>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="flex items-center justify-center w-3.5 h-3.5 me-1 text-2xs border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+                                    3
+                                </span>
+                                Tags
+                                <svg class="w-1.5 h-1.5 ms-2 sm:ms-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
+                                </svg>
+                            </li>
+                            <li class="flex items-center">
+                                <span class="flex items-center justify-center w-3.5 h-3.5 me-1 text-2xs border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+                                    4
+                                </span>
+                                Review
+                            </li>
+                        </ol>
 
+
+                    </div>
+                    <!-- Modal header -->
+                    <div class="flex items-center justify-between pt-1 px-4 pb-4 md:pt-1 md:px-5 md:pb-5 border-b rounded-t dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                            Créer un personnage
+                        </h3>
+                        <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal-create" id="close-create-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <form id="character-create-form" class="p-4 md:p-5 border-b rounded-t dark:border-gray-600" method="post" action="/admin/characters/update-character" enctype="multipart/form-data">
+                        <div id="create_page_1">
+                            <label for="page" hidden="hidden"></label>
+                            <input type="text" hidden="hidden" id="page" name="page" value="{{ currentPage }}">
+                            <div class="grid gap-4 mb-4 grid-cols-2">
+                                <div class="col-span-2">
+                                    <label for="c_characterImage" class=" block mb-2 text-sm font-medium text-gray-900 dark:text-white">Image<span class="text-red-700">*</span>:</label>
+                                    <input type="file" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" id="c_characterImage" name="c_characterImage" accept="image/">
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label for="c_characterName" class=" block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom<span class="text-red-700">*</span>:</label>
+                                    <input type="text" name="c_characterName" id="c_characterName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Goku" required>
+                                </div>
+                                <div class="col-span-2 sm:col-span-1">
+                                    <label for="c_characterID" class=" block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID<span class="text-red-700">*</span>:</label>
+                                    <input type="text" name="c_characterID" id="c_characterID" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="DBL-EVT-00S" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="create_page_2">
+                            <div class="col-span-2 m-2">
+                                <label for="c_characterRarity" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rareté<span class="text-red-700">*</span>:</label>
+                                <select id="c_characterRarity" name="c_characterRarity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                                    {% for rarity in rarities %}
+                                        <option value="{{ rarity.value }}">{{ rarity.value|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-span-2 m-2">
+                                <label for="c_characterLL" class=" block mb-2 text-sm font-medium text-gray-900 dark:text-white">Legends Limited:</label>
+                                <input type="checkbox" name="c_characterLL" id="c_characterLL" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                </div>
+                            <div class="col-span-2 m-2">
+                                <label for="c_characterColor" class="block text-sm font-medium text-gray-900 dark:text-white">Couleur<span class="text-red-700">*</span>:</label>
+                                <select id="c_characterColor" name="c_characterColor" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+                                    {% for color in colors %}
+                                        <option value="{{ color.value }}">{{ color.value|title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div id="create_page_3">
+{#                            <label for="updateTags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>#}
+{#                            <div class="lg:max-w-[548px] w-full mx-auto relative bg-white rounded-lg shadow dark:bg-gray-700">#}
+{#                                <div class="pb-1">#}
+{#                                    <label for="tag-search" hidden="hidden"></label>#}
+{#                                    <input id="tag-search" type="text" class="flex-grow bg-gray-50 text-gray-900 text-sm border border-gray-300 rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un tag...">#}
+{#                                    <button id="add-tag" class="hidden ml-2 p-2 bg-blue-500 text-white rounded">+</button>#}
+{#                                </div>#}
+{#                                <div id="dropdown" class="absolute bottom-full left-0 w-full bg-white text-gray-900 border border-gray-300 rounded-md shadow-lg hidden z-10 mb-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">#}
+{#                                    <ul id="dropdown-list" class="h-48 overflow-y-auto">#}
+{#                                        {% for tag in tags %}#}
+{#                                            <li class="p-2 cursor-pointer hover:bg-gray-500 text-white">#}
+{#                                                <span>{{ tag.getName }}</span>#}
+{#                                            </li>#}
+{#                                        {% endfor %}#}
+{#                                    </ul>#}
+{#                                </div>#}
+{#                                <div id="selected-tags" class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white h-24 overflow-y-scroll">#}
+{#                                    <!-- Boutons des tags sélectionnés -->#}
+{#                                </div>#}
+{#                                <select id="updateTags" name="tags[]" class="hidden" multiple>#}
+{#                                    {% for tag in tags %}#}
+{#                                        <option value="{{ tag.getName() }}" name="{{ tag.getName() }}" class="tag-option hidden">#}
+{#                                            {{ tag.getName() }}#}
+{#                                        </option>#}
+{#                                    {% endfor %}#}
+{#                                </select>#}
+{#                            </div>#}
+                            <label for="c_characterTags">Tags:</label>
+                            <select class="form-control form-select" id="c_characterTags" name="c_characterTags" multiple>
+                                {% for tag in tags %}
+                                    <option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div id="create_page_4">
+
+                        </div>
+                    </form>
+                    <!-- Modal footer -->
+                    <div class="flex items-center justify-between p-4 md:p-5">
+                        <button id="previous-button" type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">Précédent</button>
+                        <button id="next-button" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Suivant</button>
+                    </div>
+                    <script>
+                        function afficherReview() {
+                            const imageInput = document.getElementById('c_characterImage');
+                            console.log(imageInput.files.length === 0);
+                            const idInput = document.getElementById('c_characterID').value;
+                            const nomInput = document.getElementById('c_characterName').value;
+                            const rareteSelect = document.getElementById('c_characterRarity').value;
+                            const lfInput = document.getElementById('c_characterLL').checked;
+                            const couleurSelect = document.getElementById('c_characterColor').value;
+                            const tagsSelect = Array.from(document.getElementById('c_characterTags').selectedOptions).map(option => option.value);
+
+                            const reviewDiv = document.getElementById('create_page_4');
+                            reviewDiv.innerHTML = `
+                                <div class="flex mb-4">
+                                    <div class="flex-1 mr-4">
+                                        <div class="flex items-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg h-full focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                                            <img draggable="false" id="d_characterImage" src="${imageInput.files.length === 0 ? '/public/images/members/default.png' : window.URL.createObjectURL((imageInput.files[0]))}" alt="" width="auto" height="auto" class="inline-block align-middle">
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <div class="p-2.5 mb-4">
+                                            <label for="characterId" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID</label>
+                                            <input readonly id="characterId" type="text" name="characterId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="DBL-EVT-00S" required value="${idInput}">
+                                        </div>
+                                        <div class="p-2.5">
+                                            <label for="characterName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
+                                            <input readonly id="characterName" type="text" name="characterName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Name" required value="${nomInput}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div class="flex my-4" style="justify-content: space-evenly">
+                                    <span class="inline-flex items-center justify-center p-1 rounded-full bg-gray-600 border-4 border-gray-500"><img src="/public/images/rarities/${rareteSelect}.png" alt="rarete: ${rareteSelect}" width="50" height="50"></span>
+                                    <span class="inline-flex items-center justify-center p-1 rounded-full bg-gray-600 border-4 border-gray-500"><img src="/public/images/lf/${lfInput ? 'LF' : 'NOTLF'}.png" alt="LF: ${lfInput ? 'OUI' : 'NON'}" width="50" height="50"></span>
+                                    <span class="inline-flex items-center justify-center p-1 rounded-full bg-gray-600 border-4 border-gray-500"><img src="/public/images/colors/${couleurSelect}.png" alt="Couleur: ${couleurSelect}" width="50" height="50"></span>
+                                </div>
+                                <hr/>
+                                <div class="flex my-4">
+                                    <div id="c_selected-tags" class="w-full relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white h-24 w-auto overflow-y-scroll">
+                                    </div>
+                                </div
+                            `;
+                            addTagsDisplay(tagsSelect);
+                        }
+
+                        function addTagsDisplay(tags) {
+                            const selectedTagsDiv = document.getElementById('c_selected-tags');
+
+                            tags.forEach(tagName => {
+                                // Check if the tag is already added
+                                const existingDivs = selectedTagsDiv.querySelectorAll('div');
+                                for (const div of existingDivs) {
+                                    if (div.querySelector('span').textContent === tagName) {
+                                        return; // Do not add the tag if it already exists
+                                    }
+                                }
+
+                                const span = document.createElement('span');
+                                span.innerText += tagName;
+                                span.classList.add('h-8', 'bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1', 'inline-flex', 'items-center');
+                                selectedTagsDiv.appendChild(span);
+                            });
+                        }
+
+                        document.addEventListener('DOMContentLoaded', function () {
+                            let createPage = 1;
+                            const form = document.getElementById('character-create-form');
+                            const previousButton = document.getElementById('previous-button');
+                            const nextButton = document.getElementById('next-button');
+                            const totalSteps = 4;  // Nombre total de pages/étapes
+
+                            function updatePage() {
+                                form.page.value = createPage;
+                                previousButton.disabled = createPage === 1;
+                                nextButton.textContent = createPage === totalSteps ? 'Soumettre' : 'Suivant';
+
+                                if (createPage === 1) {
+                                    previousButton.disabled = true;
+                                    previousButton.classList.remove('text-gray-900', 'dark:text-gray-400');
+                                    previousButton.classList.add('text-red-900', 'dark:text-red-400');
+                                    previousButton.style.cursor = 'not-allowed';
+                                } else {
+                                    previousButton.disabled = false;
+                                    previousButton.classList.remove('text-red-900', 'dark:text-red-400');
+                                    previousButton.classList.add('text-gray-900', 'dark:text-gray-400');
+                                    previousButton.style.cursor = '';
+                                }
+
+                                if (createPage === totalSteps) {
+                                    afficherReview();
+                                    nextButton.textContent = 'Soumettre';
+                                    nextButton.setAttribute("type","submit");
+                                    nextButton.classList.remove('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
+                                    nextButton.classList.add('bg-green-700', 'hover:bg-green-800', 'focus:ring-green-300', 'dark:bg-green-600', 'dark:hover:bg-green-700', 'dark:focus:ring-green-800');
+                                } else {
+                                    nextButton.textContent = 'Suivant';
+                                    nextButton.setAttribute("type","button");
+                                    nextButton.classList.remove('bg-green-700', 'hover:bg-green-800', 'focus:ring-green-300', 'dark:bg-green-600', 'dark:hover:bg-green-700', 'dark:focus:ring-green-800');
+                                    nextButton.classList.add('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
+                                }
+
+                                for (let i = 1; i <= totalSteps; i++) {
+                                    const section = document.getElementById(`create_page_${i}`);
+                                    if (section) {
+                                        section.style.display = i === createPage ? 'block' : 'none';
+                                    }
+                                }
+
+                                // Mettre à jour les étapes dans le stepper
+                                const stepper = document.getElementById('create-stepper');
+                                if (stepper) {
+                                    stepper.querySelectorAll('li').forEach((li, index) => {
+                                        if (index < createPage) {
+                                            li.classList.add('text-blue-600', 'dark:text-blue-500');
+                                            li.classList.remove('text-gray-500', 'dark:text-gray-400');
+                                            const span = li.querySelector('span');
+                                            if (span) {
+                                                span.classList.add('border-blue-600', 'dark:border-blue-500');
+                                                span.classList.remove('border-gray-500', 'dark:border-gray-400');
+                                            }
+                                        } else {
+                                            li.classList.remove('text-blue-600', 'dark:text-blue-500');
+                                            li.classList.add('text-gray-500', 'dark:text-gray-400');
+                                            const span = li.querySelector('span');
+                                            if (span) {
+                                                span.classList.remove('border-blue-600', 'dark:border-blue-500');
+                                                span.classList.add('border-gray-500', 'dark:border-gray-400');
+                                            }
+                                        }
+
+                                    });
+                                }
+                            }
+
+                            previousButton.addEventListener('click', function () {
+                                if (createPage > 1) {
+                                    createPage--;
+                                    updatePage();
+                                }
+                            });
+
+                            nextButton.addEventListener('click', function () {
+                                if (createPage < totalSteps) {
+                                    createPage++;
+                                    updatePage();
+                                } else {
+                                    // Soumettre le formulaire lorsque toutes les étapes sont complétées
+                                    form.submit();
+                                }
+                            });
+
+                            // Initialiser l'affichage de la page
+                            updatePage();
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
     </section>
+    <a data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                 onclick="">
+    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+         xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+         fill="currentColor" viewBox="0 0 24 24">
+        <path fill-rule="evenodd"
+              d="M5 8a4 4 0 1 1 7.796 1.263l-2.533 2.534A4 4 0 0 1 5 8Zm4.06 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h2.172a2.999 2.999 0 0 1-.114-1.588l.674-3.372a3 3 0 0 1 .82-1.533L9.06 13Zm9.032-5a2.907 2.907 0 0 0-2.056.852L9.967 14.92a1 1 0 0 0-.273.51l-.675 3.373a1 1 0 0 0 1.177 1.177l3.372-.675a1 1 0 0 0 .511-.273l6.07-6.07a2.91 2.91 0 0 0-.944-4.742A2.907 2.907 0 0 0 18.092 8Z"
+              clip-rule="evenodd"/>
+    </svg>
+</a>
     <section class="bg-white dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
             <div class="row align-items-center">
                 <div class="col">
+                    <label for="character-research">Recherche de personnage</label>
                     <select name="select-character-research" id="character-research">
                         <option value="name" selected>Nom</option>
                         <option value="id">ID</option>
                     </select>
                 </div>
                 <div class="col-8">
+                    <label for="search"> Barre de Recherche: </label>
                     <input type="search" class="form-control" id="search" placeholder="Rechercher...">
                 </div>
                 <div class="col">
@@ -166,7 +527,8 @@
                         <div class="col-4 ms-5 ps-5">
                             <div class="row mb-3">
                                 <h5 class="mb-4">Tags</h5>
-                                <select id="filterTags" class="form-control form-select" multiple name="Tags[]"
+                                <label for="filterTags">Zone des Tags (filtre)</label>
+                                <select id="filterTags" class="form-control form-select" multiple name="tags[]"
                                         onchange="search()">
                                     {% for tag in tags %}
                                         <option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
@@ -268,7 +630,7 @@
                                                   clip-rule="evenodd"/>
                                         </svg>
                                     </a>
-                                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                    <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline" data-modal-target="crud-modal-delete" data-modal-toggle="crud-modal-delete"
                                        onclick="getDeleteUserInfos('{{ character.getImage() }}', '{{ character.getName() }}')">
                                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                              xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -385,6 +747,4 @@
 {#            </div>#}
 {#        </div>#}
 {#    </section>#}
-
-{#    <div id="charactersList" class="d-none">{{ characters|json_encode(constant('JSON_UNESCAPED_UNICODE')) }}</div>#}
 {% endblock %}

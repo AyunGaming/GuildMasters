@@ -186,15 +186,15 @@ class CharacterController extends AbstractController
         $post = $request->getParsedBody();
 
         $parser = RouteContext::fromRequest($request)->getRouteParser();
-        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list'));
+        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => $post["page"]]));
         $dao = new CharacterDAO($this->database);
 
         try {
-            $character = $this->characterManager->getByImage($post['ID']);
+            $character = $this->characterManager->getByImage($post['characterId']);
             $dao->delete($character);
-            Flashes::add(FlashMessage::success("Le personnage {$post['ID']} a été supprimé !"));
+            Flashes::add(FlashMessage::success("Le personnage {$post['characterId']} a été supprimé !"));
         } catch (\Exception) {
-            Flashes::add(FlashMessage::danger("Le personnage {$post['ID']} n'existe pas !"));
+            Flashes::add(FlashMessage::danger("Le personnage {$post['characterId']} n'existe pas !"));
         }
 
         return $res;
