@@ -70,7 +70,7 @@ class CharacterManager {
 
 		$this->characterDAO->create($character);
 
-		$character = $this->getByImage($data['Id']);
+		$character = $this->getByImage($data['c_characterID']);
 		foreach ($tags as $tag) {
 			$this->characterTagDAO->create($character, $tag);
 		}

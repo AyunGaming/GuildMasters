@@ -118,7 +118,6 @@ document.getElementById('close-update-modal').addEventListener('click', function
 });
 
 document.getElementById('update-form-sender').addEventListener('submit', function(event) {
-	event.preventDefault(); // Prevent form submission for demonstration
 	document.getElementById('crud-modal-update').classList.add('hidden');
 	handleModalClose();
 });

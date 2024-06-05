@@ -107,25 +107,25 @@ class CharacterController extends AbstractController
     public function postCreateCharacter(Request $request, Response $response): Response
     {
         $post = $request->getParsedBody();
-        $file = $request->getUploadedFiles()['characterImage'];
+        $file = $request->getUploadedFiles()['c_characterImage'];
 
         $parser = RouteContext::fromRequest($request)->getRouteParser();
 
-        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list'));
+        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => $post["page"]]));
 
         $post = $this->saveImage($file, $post);
 
-        if (!array_key_exists('IsLF', $post)) {
-            $post['IsLF'] = false;
+        if (!array_key_exists('c_characterLL', $post)) {
+            $post['c_characterLL'] = false;
         }
         $tags = $this->setTagsPost($post);
 
-        unset($post['Tags']);
+        unset($post['c_characterTags']);
 
 
         try {
             $this->characterManager->createCharacter($post, $tags);
-            Flashes::add(FlashMessage::success("Le personnage {$post['Id']} a été créé !"));
+            Flashes::add(FlashMessage::success("Le personnage {$post['c_characterID']} a été créé !"));
         } catch (\RuntimeException $e) {
             Flashes::add(FlashMessage::danger($e->getMessage()));
         }

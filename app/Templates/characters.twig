@@ -6,6 +6,7 @@
     <script type="text/javascript" src="/public/js/getUserInfos.js" defer></script>
     <script type="text/javascript" src="/public/js/SearchCharacter.js" defer></script>
     <script type="text/javascript" src="/public/js/updateCharacter.js" defer></script>
+    <script type="text/javascript" src="/public/js/createCharacter.js" defer></script>
 {% endblock %}
 
 {% block body %}
@@ -223,7 +224,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <form id="character-create-form" class="p-4 md:p-5 border-b rounded-t dark:border-gray-600" method="post" action="/admin/characters/update-character" enctype="multipart/form-data">
+                    <form id="character-create-form" class="p-4 md:p-5 border-b rounded-t dark:border-gray-600" method="post" action="{{ url_for('character-create') }}" enctype="multipart/form-data">
                         <div id="create_page_1">
                             <label for="page" hidden="hidden"></label>
                             <input type="text" hidden="hidden" id="page" name="page" value="{{ currentPage }}">
@@ -308,193 +309,41 @@
                         <button id="previous-button" type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700">Précédent</button>
                         <button id="next-button" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Suivant</button>
                     </div>
-                    <script>
-                        function afficherReview() {
-                            const imageInput = document.getElementById('c_characterImage');
-                            console.log(imageInput.files.length === 0);
-                            const idInput = document.getElementById('c_characterID').value;
-                            const nomInput = document.getElementById('c_characterName').value;
-                            const rareteSelect = document.getElementById('c_characterRarity').value;
-                            const lfInput = document.getElementById('c_characterLL').checked;
-                            const couleurSelect = document.getElementById('c_characterColor').value;
-                            const tagsSelect = Array.from(document.getElementById('c_characterTags').selectedOptions).map(option => option.value);
-
-                            const reviewDiv = document.getElementById('create_page_4');
-                            reviewDiv.innerHTML = `
-                                <div class="flex mb-4">
-                                    <div class="flex-1 mr-4">
-                                        <div class="flex items-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg h-full focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-                                            <img draggable="false" id="d_characterImage" src="${imageInput.files.length === 0 ? '/public/images/members/default.png' : window.URL.createObjectURL((imageInput.files[0]))}" alt="" width="auto" height="auto" class="inline-block align-middle">
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <div class="p-2.5 mb-4">
-                                            <label for="characterId" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ID</label>
-                                            <input readonly id="characterId" type="text" name="characterId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="DBL-EVT-00S" required value="${idInput}">
-                                        </div>
-                                        <div class="p-2.5">
-                                            <label for="characterName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nom</label>
-                                            <input readonly id="characterName" type="text" name="characterName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Name" required value="${nomInput}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr/>
-                                <div class="flex my-4" style="justify-content: space-evenly">
-                                    <span class="inline-flex items-center justify-center p-1 rounded-full bg-gray-600 border-4 border-gray-500"><img src="/public/images/rarities/${rareteSelect}.png" alt="rarete: ${rareteSelect}" width="50" height="50"></span>
-                                    <span class="inline-flex items-center justify-center p-1 rounded-full bg-gray-600 border-4 border-gray-500"><img src="/public/images/lf/${lfInput ? 'LF' : 'NOTLF'}.png" alt="LF: ${lfInput ? 'OUI' : 'NON'}" width="50" height="50"></span>
-                                    <span class="inline-flex items-center justify-center p-1 rounded-full bg-gray-600 border-4 border-gray-500"><img src="/public/images/colors/${couleurSelect}.png" alt="Couleur: ${couleurSelect}" width="50" height="50"></span>
-                                </div>
-                                <hr/>
-                                <div class="flex my-4">
-                                    <div id="c_selected-tags" class="w-full relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white h-24 w-auto overflow-y-scroll">
-                                    </div>
-                                </div
-                            `;
-                            addTagsDisplay(tagsSelect);
-                        }
-
-                        function addTagsDisplay(tags) {
-                            const selectedTagsDiv = document.getElementById('c_selected-tags');
-
-                            tags.forEach(tagName => {
-                                // Check if the tag is already added
-                                const existingDivs = selectedTagsDiv.querySelectorAll('div');
-                                for (const div of existingDivs) {
-                                    if (div.querySelector('span').textContent === tagName) {
-                                        return; // Do not add the tag if it already exists
-                                    }
-                                }
-
-                                const span = document.createElement('span');
-                                span.innerText += tagName;
-                                span.classList.add('h-8', 'bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1', 'inline-flex', 'items-center');
-                                selectedTagsDiv.appendChild(span);
-                            });
-                        }
-
-                        document.addEventListener('DOMContentLoaded', function () {
-                            let createPage = 1;
-                            const form = document.getElementById('character-create-form');
-                            const previousButton = document.getElementById('previous-button');
-                            const nextButton = document.getElementById('next-button');
-                            const totalSteps = 4;  // Nombre total de pages/étapes
-
-                            function updatePage() {
-                                form.page.value = createPage;
-                                previousButton.disabled = createPage === 1;
-                                nextButton.textContent = createPage === totalSteps ? 'Soumettre' : 'Suivant';
-
-                                if (createPage === 1) {
-                                    previousButton.disabled = true;
-                                    previousButton.classList.remove('text-gray-900', 'dark:text-gray-400');
-                                    previousButton.classList.add('text-red-900', 'dark:text-red-400');
-                                    previousButton.style.cursor = 'not-allowed';
-                                } else {
-                                    previousButton.disabled = false;
-                                    previousButton.classList.remove('text-red-900', 'dark:text-red-400');
-                                    previousButton.classList.add('text-gray-900', 'dark:text-gray-400');
-                                    previousButton.style.cursor = '';
-                                }
-
-                                if (createPage === totalSteps) {
-                                    afficherReview();
-                                    nextButton.textContent = 'Soumettre';
-                                    nextButton.setAttribute("type","submit");
-                                    nextButton.classList.remove('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
-                                    nextButton.classList.add('bg-green-700', 'hover:bg-green-800', 'focus:ring-green-300', 'dark:bg-green-600', 'dark:hover:bg-green-700', 'dark:focus:ring-green-800');
-                                } else {
-                                    nextButton.textContent = 'Suivant';
-                                    nextButton.setAttribute("type","button");
-                                    nextButton.classList.remove('bg-green-700', 'hover:bg-green-800', 'focus:ring-green-300', 'dark:bg-green-600', 'dark:hover:bg-green-700', 'dark:focus:ring-green-800');
-                                    nextButton.classList.add('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
-                                }
-
-                                for (let i = 1; i <= totalSteps; i++) {
-                                    const section = document.getElementById(`create_page_${i}`);
-                                    if (section) {
-                                        section.style.display = i === createPage ? 'block' : 'none';
-                                    }
-                                }
-
-                                // Mettre à jour les étapes dans le stepper
-                                const stepper = document.getElementById('create-stepper');
-                                if (stepper) {
-                                    stepper.querySelectorAll('li').forEach((li, index) => {
-                                        if (index < createPage) {
-                                            li.classList.add('text-blue-600', 'dark:text-blue-500');
-                                            li.classList.remove('text-gray-500', 'dark:text-gray-400');
-                                            const span = li.querySelector('span');
-                                            if (span) {
-                                                span.classList.add('border-blue-600', 'dark:border-blue-500');
-                                                span.classList.remove('border-gray-500', 'dark:border-gray-400');
-                                            }
-                                        } else {
-                                            li.classList.remove('text-blue-600', 'dark:text-blue-500');
-                                            li.classList.add('text-gray-500', 'dark:text-gray-400');
-                                            const span = li.querySelector('span');
-                                            if (span) {
-                                                span.classList.remove('border-blue-600', 'dark:border-blue-500');
-                                                span.classList.add('border-gray-500', 'dark:border-gray-400');
-                                            }
-                                        }
-
-                                    });
-                                }
-                            }
-
-                            previousButton.addEventListener('click', function () {
-                                if (createPage > 1) {
-                                    createPage--;
-                                    updatePage();
-                                }
-                            });
-
-                            nextButton.addEventListener('click', function () {
-                                if (createPage < totalSteps) {
-                                    createPage++;
-                                    updatePage();
-                                } else {
-                                    // Soumettre le formulaire lorsque toutes les étapes sont complétées
-                                    form.submit();
-                                }
-                            });
-
-                            // Initialiser l'affichage de la page
-                            updatePage();
-                        });
-                    </script>
                 </div>
             </div>
         </div>
     </section>
-    <a data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create" class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                 onclick="">
-    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-         xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-         fill="currentColor" viewBox="0 0 24 24">
-        <path fill-rule="evenodd"
-              d="M5 8a4 4 0 1 1 7.796 1.263l-2.533 2.534A4 4 0 0 1 5 8Zm4.06 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h2.172a2.999 2.999 0 0 1-.114-1.588l.674-3.372a3 3 0 0 1 .82-1.533L9.06 13Zm9.032-5a2.907 2.907 0 0 0-2.056.852L9.967 14.92a1 1 0 0 0-.273.51l-.675 3.373a1 1 0 0 0 1.177 1.177l3.372-.675a1 1 0 0 0 .511-.273l6.07-6.07a2.91 2.91 0 0 0-.944-4.742A2.907 2.907 0 0 0 18.092 8Z"
-              clip-rule="evenodd"/>
-    </svg>
-</a>
+
     <section class="bg-white dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
-            <div class="row align-items-center">
-                <div class="col">
-                    <label for="character-research">Recherche de personnage</label>
-                    <select name="select-character-research" id="character-research">
+            <div class="flex row items-center justify-between bg-gray-100 border border-gray-200 rounded-s-lg dark:bg-gray-800 dark:border-gray-700 my-4 py-8 px-4">
+                <div class="flex w-full">
+                    <label for="character-research" hidden="hidden">Recherche de personnage</label>
+                    <select name="select-character-research" id="character-research" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600">
                         <option value="name" selected>Nom</option>
                         <option value="id">ID</option>
                     </select>
+                    <label hidden="hidden" for="search"> Barre de Recherche: </label>
+                    <div class="relative w-full">
+                        <input type="search" id="search" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Rechercher un personnage..." required />
+                        <button type="button" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                            </svg>
+                            <span class="sr-only">Search</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="col-8">
-                    <label for="search"> Barre de Recherche: </label>
-                    <input type="search" class="form-control" id="search" placeholder="Rechercher...">
-                </div>
-                <div class="col">
-                    <a href="{{ url_for('character-create') }}" class="form-control btn btn-sm btn-success">Créer un
-                        personnage</a>
-                    <button type="button" class="form-control btn-sm btn-primary mt-2" id="filtersBtn">Filters</button>
+                <div class="px-4">
+                    <button type="button" data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create" class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                       onclick="">
+                        <span>
+                            Créer un personnage
+                        </span>
+                    </button>
+                    <button type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                        Filtres
+                    </button>
                 </div>
             </div>
             <div class="section" id="filters" style="display: none;">
