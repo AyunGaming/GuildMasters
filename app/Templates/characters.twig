@@ -91,7 +91,7 @@
                                         <ul id="dropdown-list" class="h-48 overflow-y-auto">
                                             {% for tag in tags %}
                                                 <li class="p-2 cursor-pointer hover:bg-gray-500 text-white">
-                                                    <span>{{ tag.getName }}</span>
+                                                    {{ tag.getName() }}
                                                 </li>
                                             {% endfor %}
                                         </ul>
@@ -266,39 +266,33 @@
                             </div>
                         </div>
                         <div id="create_page_3">
-{#                            <label for="updateTags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags</label>#}
-{#                            <div class="lg:max-w-[548px] w-full mx-auto relative bg-white rounded-lg shadow dark:bg-gray-700">#}
-{#                                <div class="pb-1">#}
-{#                                    <label for="tag-search" hidden="hidden"></label>#}
-{#                                    <input id="tag-search" type="text" class="flex-grow bg-gray-50 text-gray-900 text-sm border border-gray-300 rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un tag...">#}
-{#                                    <button id="add-tag" class="hidden ml-2 p-2 bg-blue-500 text-white rounded">+</button>#}
-{#                                </div>#}
-{#                                <div id="dropdown" class="absolute bottom-full left-0 w-full bg-white text-gray-900 border border-gray-300 rounded-md shadow-lg hidden z-10 mb-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">#}
-{#                                    <ul id="dropdown-list" class="h-48 overflow-y-auto">#}
-{#                                        {% for tag in tags %}#}
-{#                                            <li class="p-2 cursor-pointer hover:bg-gray-500 text-white">#}
-{#                                                <span>{{ tag.getName }}</span>#}
-{#                                            </li>#}
-{#                                        {% endfor %}#}
-{#                                    </ul>#}
-{#                                </div>#}
-{#                                <div id="selected-tags" class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white h-24 overflow-y-scroll">#}
-{#                                    <!-- Boutons des tags sélectionnés -->#}
-{#                                </div>#}
-{#                                <select id="updateTags" name="tags[]" class="hidden" multiple>#}
-{#                                    {% for tag in tags %}#}
-{#                                        <option value="{{ tag.getName() }}" name="{{ tag.getName() }}" class="tag-option hidden">#}
-{#                                            {{ tag.getName() }}#}
-{#                                        </option>#}
-{#                                    {% endfor %}#}
-{#                                </select>#}
-{#                            </div>#}
-                            <label for="c_characterTags">Tags:</label>
-                            <select class="form-control form-select" id="c_characterTags" name="tags" multiple>
-                                {% for tag in tags %}
-                                    <option value="{{ tag.getName() }}">{{ tag.getName() }}</option>
-                                {% endfor %}
-                            </select>
+                            <label for="c_characterTags" class=" block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tags:</label>
+                            <div class="w-full mx-auto relative bg-white rounded-lg shadow dark:bg-gray-700">
+                                <div class="pb-1">
+                                    <label for="create-tag-search" hidden="hidden"></label>
+                                    <input id="create-tag-search" type="text" class="flex-grow bg-gray-50 text-gray-900 text-sm border botder-gray-300 rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un tag...">
+                                    <button id="create-add-tag" class="hidden ml-2 p-2 bg-blue-500 text-white rounded">+</button>
+                                </div>
+                                <div id="create-tag-dropdown" class="absolute bottom-full left-0 w-full bg-white text-gray-900 border border-gray-300 rounded-md shadow-lg hidden z-10 mb-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                    <ul id="create-tag-dropdown-list" class="h-48 overflow-y-auto">
+                                        {% for tag in tags %}
+                                            <li class="p-2 cursor-pointer hover:bg-gray-500 text-white">
+                                                <span>{{ tag.getName() }}</span>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div id="create-selected-tags" class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white h-24 overflow-y-scroll">
+                                    <!-- Boutons des tags sélectionnés -->
+                                </div>
+                                <select hidden="hidden" class="form-control form-select" id="c_characterTags" name="tags" multiple>
+                                    {% for tag in tags %}
+                                        <option value="{{ tag.getName() }}" name="{{ tag.getName() }}" class="tag-option hidden">
+                                            {{ tag.getName() }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                         <div id="create_page_4">
 

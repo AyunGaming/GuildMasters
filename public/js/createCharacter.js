@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('character-create-form').reset()
             createPage = 1;
             updatePage()
-            handleModalClose();
+            handleCreateModalClose();
         }
     });
 
@@ -184,11 +184,127 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('character-create-form').reset();
         createPage = 1;
         updatePage()
-        handleModalClose();
+        handleCreateModalClose();
     });
 
-    document.getElementById('next-create-button').addEventListener('submit', function (event) {
+    document.getElementById('next-create-button').addEventListener('submit', function () {
         document.getElementById('crud-modal-create').classList.add('hidden');
-        handleModalClose();
+        console.log(1);
+        console.log(document.querySelectorAll('#c_characterTags .tag-option'));
+
+        handleCreateModalClose();
     });
+});
+
+
+document.getElementById('create-tag-search').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase();
+    const dropdown = document.getElementById('create-tag-dropdown');
+    const dropdownList = document.getElementById('create-tag-dropdown-list');
+    const options = document.querySelectorAll('#c_characterTags .tag-option');
+
+    dropdownList.innerHTML = '';
+    let hasMatch = false;
+
+    console.log(options)
+
+    options.forEach(option => {
+        console.log(option.textContent.toLowerCase()+" : "+option.textContent.toLowerCase().includes(searchValue))
+        if (option.textContent.toLowerCase().includes(searchValue)) {
+            const li = document.createElement('li');
+            li.textContent = option.textContent;
+            li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-500', 'text-white');
+            li.addEventListener('click', function() {
+                option.setAttribute('selected', 'true');
+                addCreateTagButton(option.value);
+                dropdown.classList.add('hidden');
+                document.getElementById('create-tag-search').value = '';
+            });
+            dropdownList.appendChild(li);
+            hasMatch = true;
+        }
+    });
+
+    if (hasMatch && searchValue) {
+        dropdown.classList.remove('hidden');
+    } else {
+        dropdown.classList.add('hidden');
+    }
+});
+
+document.getElementById('create-add-tag').addEventListener('click', function(event) {
+    event.preventDefault();
+    const searchValue = document.getElementById('create-tag-search').value.toLowerCase();
+    const options = document.querySelectorAll('#c_characterTags .tag-option');
+
+    let optionExists = false;
+
+    options.forEach(option => {
+        if (option.textContent.toLowerCase() === searchValue) {
+            option.setAttribute('selected', 'true');
+            addCreateTagButton(option.value);
+            optionExists = true;
+        }
+    });
+
+    if (!optionExists && searchValue) {
+        const newOption = document.createElement('option');
+        newOption.value = searchValue;
+        newOption.textContent = searchValue;
+        newOption.setAttribute('selected', 'true');
+        newOption.classList.add('tag-option');
+        document.getElementById('c_characterTags').appendChild(newOption);
+        addCreateTagButton(searchValue);
+    }
+
+    document.getElementById('create-tag-search').value = '';
+    document.getElementById('create-tag-dropdown').classList.add('hidden');
+});
+
+function addCreateTagButton(tagName) {
+    const selectedTagsDiv = document.getElementById('create-selected-tags');
+
+    // Check if the tag is already added
+    const existingButtons = selectedTagsDiv.querySelectorAll('button');
+    for (const button of existingButtons) {
+        if (button.querySelector('span').textContent === tagName) {
+            return; // Do not add the tag if it already exists
+        }
+    }
+
+    const button = document.createElement('button');
+    button.innerHTML += `<span>${tagName}</span>`;
+    button.innerHTML += `<svg class="ml-2 w-3 h-3 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                            </svg>
+                                `;
+    button.classList.add('h-8', 'bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1','inline-flex', 'items-center');
+    button.addEventListener('click', function() {
+        button.remove();
+        const option = document.querySelector(`#c_characterTags option[value="${tagName}"]`);
+        if (option) {
+            option.removeAttribute('selected');
+        }
+    });
+    selectedTagsDiv.appendChild(button);
+}
+
+function clearCreateSelectedTags() {
+    document.getElementById('create-selected-tags').innerHTML = '';
+    const options = document.querySelectorAll('#c_characterTags .tag-option');
+    options.forEach(option => {
+        option.removeAttribute('selected');
+    });
+}
+
+function handleCreateModalClose() {
+    clearCreateSelectedTags();
+}
+
+document.addEventListener('keydown', function(event) {
+    const modal = document.getElementById('crud-modal-create')
+    if (event.key === 'Escape' && modal.classList.contains('hidden')) {
+        modal.classList.add('hidden');
+        handleModalClose();
+    }
 });

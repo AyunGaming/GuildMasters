@@ -8,10 +8,11 @@ function getUpdateUserInfos(image, rarity, lf, name, color, tags) {
 	document.getElementById('updateTags').value = tags;
 	const tagsArray = tags.split(", ");
 	const select = document.getElementById('updateTags');
-
+	console.log(tagsArray)
 	for (let i = 0; i < tagsArray.length; i++) {
 		for (let j=0; j < select.options.length; j++) {
 			if (tagsArray[i] === select.options[j].value) {
+				console.log(select.options[j].value)
 				addTagButton(select.options[j].value);
 				select.options[j].setAttribute('selected', 'selected');
 			}
