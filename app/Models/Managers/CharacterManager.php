@@ -70,9 +70,13 @@ class CharacterManager {
 
 		$this->characterDAO->create($character);
 
-		$character = $this->getByImage($data['c_characterID']);
+		$character = $this->getByImage($data['Id']);
 		foreach ($tags as $tag) {
 			$this->characterTagDAO->create($character, $tag);
 		}
 	}
+
+    public function searchBy(string $search_param, string $search_input): ?array {
+
+    }
 }

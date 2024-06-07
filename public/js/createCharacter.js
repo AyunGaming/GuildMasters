@@ -1,14 +1,14 @@
 function afficherReview() {
-	const imageInput = document.getElementById('c_characterImage');
-	const idInput = document.getElementById('c_characterID').value;
-	const nomInput = document.getElementById('c_characterName').value;
-	const rareteSelect = document.getElementById('c_characterRarity').value;
-	const lfInput = document.getElementById('c_characterLL').checked;
-	const couleurSelect = document.getElementById('c_characterColor').value;
-	const tagsSelect = Array.from(document.getElementById('c_characterTags').selectedOptions).map(option => option.value);
+    const imageInput = document.getElementById('c_characterImage');
+    const idInput = document.getElementById('c_characterID').value;
+    const nomInput = document.getElementById('c_characterName').value;
+    const rareteSelect = document.getElementById('c_characterRarity').value;
+    const lfInput = document.getElementById('c_characterLL').checked;
+    const couleurSelect = document.getElementById('c_characterColor').value;
+    const tagsSelect = Array.from(document.getElementById('c_characterTags').selectedOptions).map(option => option.value);
 
-	const reviewDiv = document.getElementById('create_page_4');
-	reviewDiv.innerHTML = `
+    const reviewDiv = document.getElementById('create_page_4');
+    reviewDiv.innerHTML = `
                                 <div class="flex mb-4">
                                     <div class="flex-1 mr-4">
                                         <div class="flex items-center bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg h-full focus:ring-primary-600 focus:border-primary-600 w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
@@ -38,144 +38,157 @@ function afficherReview() {
                                     </div>
                                 </div
                             `;
-	addTagsDisplay(tagsSelect);
+    addTagsDisplay(tagsSelect);
 }
 
 function addTagsDisplay(tags) {
-	const selectedTagsDiv = document.getElementById('c_selected-tags');
+    const selectedTagsDiv = document.getElementById('c_selected-tags');
 
-	tags.forEach(tagName => {
-		// Check if the tag is already added
-		const existingDivs = selectedTagsDiv.querySelectorAll('div');
-		for (const div of existingDivs) {
-			if (div.querySelector('span').textContent === tagName) {
-				return; // Do not add the tag if it already exists
-			}
-		}
+    tags.forEach(tagName => {
+        // Check if the tag is already added
+        const existingDivs = selectedTagsDiv.querySelectorAll('div');
+        for (const div of existingDivs) {
+            if (div.querySelector('span').textContent === tagName) {
+                return; // Do not add the tag if it already exists
+            }
+        }
 
-		const span = document.createElement('span');
-		span.innerText += tagName;
-		span.classList.add('h-8', 'bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1', 'inline-flex', 'items-center');
-		selectedTagsDiv.appendChild(span);
-	});
+        const span = document.createElement('span');
+        span.innerText += tagName;
+        span.classList.add('h-8', 'bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1', 'inline-flex', 'items-center');
+        selectedTagsDiv.appendChild(span);
+    });
+}
+
+function validateFormPage(page_number) {
+    const current_page = document.getElementById(`create_page_${page_number}`);
+    const inputs = current_page.querySelectorAll('input[required]');
+    for (let input of inputs) {
+        if (!input.value.trim()) {
+            console.log("need all required inputs (*) to be filled");
+            return false;
+        }
+    }
+    return true;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-	let createPage = 1;
-	const form = document.getElementById('character-create-form');
-	const previousButton = document.getElementById('previous-button');
-	const nextButton = document.getElementById('next-button');
-	const totalSteps = 4;  // Nombre total de pages/étapes
+    let createPage = 1;
+    const form = document.getElementById('character-create-form');
+    const previousButton = document.getElementById('previous-create-button');
+    const nextButton = document.getElementById('next-create-button');
+    const totalSteps = 4;  // Nombre total de pages/étapes
 
-	function updatePage() {
-		form.page.value = createPage;
-		previousButton.disabled = createPage === 1;
-		nextButton.textContent = createPage === totalSteps ? 'Soumettre' : 'Suivant';
+    function updatePage() {
+        previousButton.disabled = createPage === 1;
+        nextButton.textContent = createPage === totalSteps ? 'Soumettre' : 'Suivant';
 
-		if (createPage === 1) {
-			previousButton.disabled = true;
-			previousButton.classList.remove('text-gray-900', 'dark:text-gray-400');
-			previousButton.classList.add('text-red-900', 'dark:text-red-400');
-			previousButton.style.cursor = 'not-allowed';
-		} else {
-			previousButton.disabled = false;
-			previousButton.classList.remove('text-red-900', 'dark:text-red-400');
-			previousButton.classList.add('text-gray-900', 'dark:text-gray-400');
-			previousButton.style.cursor = '';
-		}
+        if (createPage === 1) {
+            previousButton.disabled = true;
+            previousButton.classList.remove('text-gray-900', 'dark:text-gray-400');
+            previousButton.classList.add('text-red-900', 'dark:text-red-400');
+            previousButton.style.cursor = 'not-allowed';
+        } else {
+            previousButton.disabled = false;
+            previousButton.classList.remove('text-red-900', 'dark:text-red-400');
+            previousButton.classList.add('text-gray-900', 'dark:text-gray-400');
+            previousButton.style.cursor = '';
+        }
 
-		if (createPage === totalSteps) {
-			afficherReview();
-			nextButton.textContent = 'Soumettre';
-			nextButton.setAttribute("type","submit");
-			nextButton.classList.remove('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
-			nextButton.classList.add('bg-green-700', 'hover:bg-green-800', 'focus:ring-green-300', 'dark:bg-green-600', 'dark:hover:bg-green-700', 'dark:focus:ring-green-800');
-		} else {
-			nextButton.textContent = 'Suivant';
-			nextButton.setAttribute("type","button");
-			nextButton.classList.remove('bg-green-700', 'hover:bg-green-800', 'focus:ring-green-300', 'dark:bg-green-600', 'dark:hover:bg-green-700', 'dark:focus:ring-green-800');
-			nextButton.classList.add('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
-		}
+        if (createPage === totalSteps) {
+            afficherReview();
+            nextButton.textContent = 'Soumettre';
+            nextButton.setAttribute("type", "submit");
+            nextButton.classList.remove('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
+            nextButton.classList.add('bg-green-700', 'hover:bg-green-800', 'focus:ring-green-300', 'dark:bg-green-600', 'dark:hover:bg-green-700', 'dark:focus:ring-green-800');
+        } else {
+            nextButton.textContent = 'Suivant';
+            nextButton.setAttribute("type", "button");
+            nextButton.classList.remove('bg-green-700', 'hover:bg-green-800', 'focus:ring-green-300', 'dark:bg-green-600', 'dark:hover:bg-green-700', 'dark:focus:ring-green-800');
+            nextButton.classList.add('bg-blue-700', 'hover:bg-blue-800', 'focus:ring-blue-300', 'dark:bg-blue-600', 'dark:hover:bg-blue-700', 'dark:focus:ring-blue-800');
+        }
 
-		for (let i = 1; i <= totalSteps; i++) {
-			const section = document.getElementById(`create_page_${i}`);
-			if (section) {
-				section.style.display = i === createPage ? 'block' : 'none';
-			}
-		}
+        for (let i = 1; i <= totalSteps; i++) {
+            const section = document.getElementById(`create_page_${i}`);
+            if (section) {
+                section.style.display = i === createPage ? 'block' : 'none';
+            }
+        }
 
-		// Mettre à jour les étapes dans le stepper
-		const stepper = document.getElementById('create-stepper');
-		if (stepper) {
-			stepper.querySelectorAll('li').forEach((li, index) => {
-				if (index < createPage) {
-					li.classList.add('text-blue-600', 'dark:text-blue-500');
-					li.classList.remove('text-gray-500', 'dark:text-gray-400');
-					const span = li.querySelector('span');
-					if (span) {
-						span.classList.add('border-blue-600', 'dark:border-blue-500');
-						span.classList.remove('border-gray-500', 'dark:border-gray-400');
-					}
-				} else {
-					li.classList.remove('text-blue-600', 'dark:text-blue-500');
-					li.classList.add('text-gray-500', 'dark:text-gray-400');
-					const span = li.querySelector('span');
-					if (span) {
-						span.classList.remove('border-blue-600', 'dark:border-blue-500');
-						span.classList.add('border-gray-500', 'dark:border-gray-400');
-					}
-				}
+        // Mettre à jour les étapes dans le stepper
+        const stepper = document.getElementById('create-stepper');
+        if (stepper) {
+            stepper.querySelectorAll('li').forEach((li, index) => {
+                if (index < createPage) {
+                    li.classList.add('text-blue-600', 'dark:text-blue-500');
+                    li.classList.remove('text-gray-500', 'dark:text-gray-400');
+                    const span = li.querySelector('span');
+                    if (span) {
+                        span.classList.add('border-blue-600', 'dark:border-blue-500');
+                        span.classList.remove('border-gray-500', 'dark:border-gray-400');
+                    }
+                } else {
+                    li.classList.remove('text-blue-600', 'dark:text-blue-500');
+                    li.classList.add('text-gray-500', 'dark:text-gray-400');
+                    const span = li.querySelector('span');
+                    if (span) {
+                        span.classList.remove('border-blue-600', 'dark:border-blue-500');
+                        span.classList.add('border-gray-500', 'dark:border-gray-400');
+                    }
+                }
 
-			});
-		}
-	}
+            });
+        }
+    }
 
-	previousButton.addEventListener('click', function () {
-		if (createPage > 1) {
-			createPage--;
-			updatePage();
-		}
-	});
+    previousButton.addEventListener('click', function () {
+        if (createPage > 1) {
+            createPage--;
+            updatePage();
+        }
+    });
 
-	nextButton.addEventListener('click', function () {
-		if (createPage < totalSteps) {
-			createPage++;
-			updatePage();
-		} else {
-			// Soumettre le formulaire lorsque toutes les étapes sont complétées
-			form.submit();
-		}
-	});
+    nextButton.addEventListener('click', function () {
+        if (createPage < totalSteps) {
+            if (validateFormPage(createPage)) {
+                createPage++;
+                updatePage();
+            }
+        } else {
+            // Soumettre le formulaire lorsque toutes les étapes sont complétées
+            form.submit();
+        }
+    });
 
-	// Initialiser l'affichage de la page
-	updatePage();
+    // Initialiser l'affichage de la page
+    updatePage();
 
-	// Fermeture de la modal
-	document.addEventListener('click', function(event) {
-		const modal = document.getElementById('crud-modal-create');
-		const isCloseButton = event.target.getAttribute('data-modal-toggle') === 'crud-modal-create';
-		const isOutsideModal = event.target === modal;
+    // Fermeture de la modal
+    document.addEventListener('click', function (event) {
+        const modal = document.getElementById('crud-modal-create');
+        const isCloseButton = event.target.getAttribute('data-modal-toggle') === 'crud-modal-create';
+        const isOutsideModal = event.target === modal;
 
-		if (isCloseButton || isOutsideModal) {
-			modal.classList.add('hidden');
-			document.getElementById('character-create-form').reset()
-			createPage = 1;
-			updatePage()
-			handleModalClose();
-		}
-	});
+        if (isCloseButton || isOutsideModal) {
+            modal.classList.add('hidden');
+            document.getElementById('character-create-form').reset()
+            createPage = 1;
+            updatePage()
+            handleModalClose();
+        }
+    });
 
-	document.getElementById('close-create-modal').addEventListener('click', function() {
-		const modal = document.getElementById('crud-modal-create');
-		modal.classList.add('hidden');
-		document.getElementById('character-create-form').reset();
-		createPage = 1;
-		updatePage()
-		handleModalClose();
-	});
+    document.getElementById('close-create-modal').addEventListener('click', function () {
+        const modal = document.getElementById('crud-modal-create');
+        modal.classList.add('hidden');
+        document.getElementById('character-create-form').reset();
+        createPage = 1;
+        updatePage()
+        handleModalClose();
+    });
 
-	document.getElementById('next-button').addEventListener('submit', function(event) {
-		document.getElementById('crud-modal-create').classList.add('hidden');
-		handleModalClose();
-	});
+    document.getElementById('next-create-button').addEventListener('submit', function (event) {
+        document.getElementById('crud-modal-create').classList.add('hidden');
+        handleModalClose();
+    });
 });

@@ -115,4 +115,31 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 			throw new CannotGetCharacterException($PDOException->getMessage());
 		}
 	}
+
+    public function searchBy(string $search_param, string $search_input): array
+    {
+        try {
+            $req = $this->database->prepare('SELECT * FROM dbl_characters WHERE ? LIKE ?');
+
+            $req->bindValue(1, $search_param);
+            $req->bindValue(2, $search_input);
+            $req->execute();
+
+            $characters = [];
+            $data = $req->fetchAll();
+
+            $characters = [];
+            $data = $req->fetchAll();
+            foreach ($data as $datum) {
+                $character = new Character();
+                $character->hydrate($datum);
+                $characters[] = $character;
+            }
+
+            return $characters;
+        }
+        catch (PDOException $PDOException){
+            throw new CannotGetCharacterException($PDOException->getMessage());
+        }
+    }
 }

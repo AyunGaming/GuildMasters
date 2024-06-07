@@ -107,7 +107,7 @@ class CharacterController extends AbstractController
     public function postCreateCharacter(Request $request, Response $response): Response
     {
         $post = $request->getParsedBody();
-        $file = $request->getUploadedFiles()['c_characterImage'];
+        $file = $request->getUploadedFiles()['Image'];
 
         $parser = RouteContext::fromRequest($request)->getRouteParser();
 
@@ -115,17 +115,17 @@ class CharacterController extends AbstractController
 
         $post = $this->saveImage($file, $post);
 
-        if (!array_key_exists('c_characterLL', $post)) {
-            $post['c_characterLL'] = false;
+        if (!array_key_exists('IsLF', $post)) {
+            $post['IsLF'] = false;
         }
         $tags = $this->setTagsPost($post);
 
-        unset($post['c_characterTags']);
+        unset($post['Tags']);
 
 
         try {
             $this->characterManager->createCharacter($post, $tags);
-            Flashes::add(FlashMessage::success("Le personnage {$post['c_characterID']} a été créé !"));
+            Flashes::add(FlashMessage::success("Le personnage {$post['Id']} a été créé !"));
         } catch (\RuntimeException $e) {
             Flashes::add(FlashMessage::danger($e->getMessage()));
         }
