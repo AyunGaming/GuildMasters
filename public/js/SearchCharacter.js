@@ -71,6 +71,30 @@ function decocherInputsDansDiv(divId) {
         console.error("Le div spécifié n'existe pas.");
     }
 }
+function deselectionnerInputsDansFiltres() {
+    // Sélectionne la section spécifiée
+    const section = document.getElementById('filters');
+    const characterResearchType = document.getElementById('character-research');
+    const characterResearchZone = document.getElementById('search');
+
+    // Vérifie si la section existe
+    if (section) {
+        // Sélectionne tous les éléments input de type checkbox ou radio dans cette section
+        const inputs = section.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+
+        // Parcours chaque input
+        inputs.forEach(function(input) {
+            // Désélectionne l'input
+            input.checked = false;
+        });
+        characterResearchType.options[0].selected = true;
+        characterResearchZone.value="";
+        toggleInputType();
+        clearFilterSelectedTags();
+    } else {
+        console.error("La section spécifiée n'existe pas.");
+    }
+}
 document.getElementById('filter-tag-search').addEventListener('input', function() {
     const searchValue = this.value.toLowerCase();
     const dropdown = document.getElementById('filter-tag-dropdown');
@@ -163,14 +187,10 @@ function addFilterTagButton(tagName) {
     selectedTagsDiv.appendChild(button);
 }
 
-function clearCreateSelectedTags() {
-    document.getElementById('create-selected-tags').innerHTML = '';
-    const options = document.querySelectorAll('#c_characterTags .tag-option');
+function clearFilterSelectedTags() {
+    document.getElementById('filter-selected-tags').innerHTML = '';
+    const options = document.querySelectorAll('#filter_tags .tag-option');
     options.forEach(option => {
         option.removeAttribute('selected');
     });
-}
-
-function handleCreateModalClose() {
-    clearCreateSelectedTags();
 }
