@@ -207,29 +207,31 @@ class CharacterController extends AbstractController
 
     public function viewPagedListCharacters(Request $request, Response $response, Twig $twig, int $page): Response
     {
-        $page = $request->getAttribute('page');
-        $tags = $this->tagManager->getAllTags();
-        $displayed = $this->getCharacterList($page);
-        $characterNumber = $this->getCharacterNumber();
-        $pages = ceil($characterNumber / 50);
-        $pagination = $this->pagination($page,$pages);
-        $last_c = $this->getLastCharacterFromPage($characterNumber, $page);
-        $user = $request->getAttribute(User::class);
-        $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page)];
-        return $twig->render($response, 'characters.twig', [
-            'flashes' => Flashes::all(),
-            'user' => $user,
-            'displayed' => $displayed,
-            'characters' => $characterNumber,
-            'rarities' => Rarity::cases(),
-            'colors' => Color::cases(),
-            'tags' => $tags,
-            'pages' => $pages,
-            'currentPage' => $page,
-            'last_c' => $last_c,
-            'pagination' => $pagination,
-            'disable' => $disable
-        ]);
+        //if (not $filtered) {
+            $page = $request->getAttribute('page');
+            $tags = $this->tagManager->getAllTags();
+            $displayed = $this->getCharacterList($page);
+            $characterNumber = $this->getCharacterNumber();
+            $pages = ceil($characterNumber / 50);
+            $pagination = $this->pagination($page,$pages);
+            $last_c = $this->getLastCharacterFromPage($characterNumber, $page);
+            $user = $request->getAttribute(User::class);
+            $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page)];
+            return $twig->render($response, 'characters.twig', [
+                'flashes' => Flashes::all(),
+                'user' => $user,
+                'displayed' => $displayed,
+                'characters' => $characterNumber,
+                'rarities' => Rarity::cases(),
+                'colors' => Color::cases(),
+                'tags' => $tags,
+                'pages' => $pages,
+                'currentPage' => $page,
+                'last_c' => $last_c,
+                'pagination' => $pagination,
+                'disable' => $disable
+            ]);
+        //}
     }
 
     public function viewCreateCharacter(Request $request, Response $response, Twig $twig): Response
