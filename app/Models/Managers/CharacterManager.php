@@ -9,6 +9,7 @@ use division\Data\DAO\Interfaces\characters\ICharacterTagDAO;
 use division\Exceptions\CannotUpdateCharacterException;
 use division\Models\Character;
 use Exception;
+use function PHPUnit\Framework\isEmpty;
 
 class CharacterManager {
 	private ICharacterDAO $characterDAO;
@@ -19,8 +20,19 @@ class CharacterManager {
 		$this->characterTagDAO = $characterTagDAO;
 	}
 
-	public function getPagedCharacters(int $page): ?array {
-		$characters = $this->characterDAO->getAll();
+	public function getPagedCharacters(int $page, array $filtre): ?array {
+        $count = 0;
+        if (!empty($filtre)) {
+            $query = $this->characterDAO->characterSearchQuery($filtre);
+            $characters = $this->characterDAO->searchBy($query);
+            if(isset($filtre['tags'])) {
+                $characters = $this->characterTagDAO->tagsFilterComparison($characters, $filtre);
+                $count = count($characters);
+            }
+        } else {
+            $characters = $this->characterDAO->getAll();
+            $count = count($characters);
+        }
 		if($page == 1){
 			$start = 0;
 		}
@@ -41,7 +53,7 @@ class CharacterManager {
 
 		}
 
-		return $displayed;
+		return ['characters' => $displayed, 'count' => $count];
 	}
 
 	public function getCharacterNumber(): int {

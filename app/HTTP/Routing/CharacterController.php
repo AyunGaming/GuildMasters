@@ -38,9 +38,9 @@ class CharacterController extends AbstractController
         $this->characterTagDAO = new CharacterTagDAO($this->database);
     }
 
-    private function getCharacterList(int $page): array
+    private function getCharacterList(int $page, $filtre): array
     {
-        return $this->characterManager->getPagedCharacters($page);
+        return $this->characterManager->getPagedCharacters($page, $filtre);
     }
 
     private function saveImage($file, array $post): array
@@ -103,6 +103,56 @@ class CharacterController extends AbstractController
                 $dao->create($character, $tag);
             }
         }
+    }
+
+    public function postGetFilters(Request $request, Response $response): Response
+    {
+        $post = $request->getParsedBody();
+        var_dump($post);
+        die();
+
+        // VISUEL FILTERS:
+        //        $filters = [
+        //            'operator' => 'on',
+        //            'filtres' => [
+        //                'image' => 'DBL-EVT-00S', OU 'name' => 'Goku'
+        //                'rarity' => ['SPARKING'],
+        //                'color' => ['BLE'],
+        //                'lf' => ['off']
+        //            ],
+        //            'tags' => ['Exclusif aux événements']
+        //        ];
+
+        $filters = [];
+        if(isset($post['filter-character-andor'])) {
+            $filters['operator'] = $post['filter-character-andor'];
+        } else {
+            $filters['operator'] = 'off';
+        }
+
+        $filters['filtres'] = [];
+        if($post['filter-character-searchbar'] !== '') {
+            $filters['filtres'][$post['filter-select-character-research']] = $post['filter-character-searchbar']; // "name" ou "id" pour la cle du filtre_data
+        }
+
+        foreach ($post as $key => $item) {
+
+
+        }
+
+        if(isset($post['filter-character-lf'])) {
+            $filters['tags'] = $post['filter-character-tags'];
+        } else {
+            $filters['tags'] = [];
+        }
+
+//        var_dump($filters);
+//        die();
+
+        $_SESSION["display_characters"] = $this->characterManager->getPagedCharacters(1, $filters);
+
+        $parser = RouteContext::fromRequest($request)->getRouteParser();
+        return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list'));
     }
 
     public function postCreateCharacter(Request $request, Response $response): Response
@@ -211,8 +261,8 @@ class CharacterController extends AbstractController
         //if (not $filtered) {
         $page = $request->getAttribute('page');
         $tags = $this->tagManager->getAllTags();
-        $displayed = $this->getCharacterList($page);
-        $characterNumber = $this->getCharacterNumber();
+        $displayed = $this->getCharacterList($page, ['operator' => 'off', 'filtres' => ['name'=> 'Goku'], 'tags'=>[]]);
+        $characterNumber = $displayed['count']; //total des persos pris
         $pages = ceil($characterNumber / 50);
         $pagination = $this->pagination($page, $pages);
         $last_c = $this->getLastCharacterFromPage($characterNumber, $page);
@@ -221,7 +271,7 @@ class CharacterController extends AbstractController
         return $twig->render($response, 'characters.twig', [
             'flashes' => Flashes::all(),
             'user' => $user,
-            'displayed' => $displayed,
+            'displayed' => $displayed['characters'],
             'characters' => $characterNumber,
             'rarities' => Rarity::cases(),
             'colors' => Color::cases(),
@@ -234,21 +284,6 @@ class CharacterController extends AbstractController
         ]);
         //}
     }
-
-//    public function viewCreateCharacter(Request $request, Response $response, Twig $twig): Response
-//    {
-//        $tags = $this->tagManager->getAllTags();
-//        $characters = $this->getCharacterList(1);
-//        $user = $request->getAttribute(User::class);
-//        return $twig->render($response, 'charactersCreate.twig', [
-//            'flashes' => Flashes::all(),
-//            'user' => $user,
-//            'characters' => $characters,
-//            'rarities' => Rarity::cases(),
-//            'colors' => Color::cases(),
-//            'tags' => $tags
-//        ]);
-//    }
 
     private function getLastCharacterFromPage(int $characterNumber, int $currentPage): int
     {

@@ -310,113 +310,116 @@
 
     <section class="bg-white dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
-            <div id="search_zone" class="flex row items-center justify-between bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 my-4 py-8 px-4">
-                <div class="flex w-full">
-                    <label for="character-research" hidden="hidden">Recherche de personnage</label>
-                    <select name="select-character-research" id="character-research" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600">
-                        <option value="name" selected>Nom</option>
-                        <option value="id">ID</option>
-                    </select>
-                    <label hidden="hidden" for="search"> Barre de Recherche: </label>
-                    <div class="relative w-full">
-                        <input type="search" id="search" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Rechercher un personnage..." required />
-                        <button type="button" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                            </svg>
-                            <span class="sr-only">Search</span>
-                        </button>
+            <form id="" method="post" action="{{ url_for('search-filter-character') }}" enctype="multipart/form-data">
+                <div id="search_zone" class="flex row items-center justify-between bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 my-4 py-8 px-4">
+                    <div class="flex w-full">
+                        <label for="character-research" hidden="hidden">Recherche de personnage</label>
+                        <select name="filter-select-character-research" id="character-research" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600">
+                            <option value="name" selected>Nom</option>
+                            <option value="id">ID</option>
+                        </select>
+                        <label hidden="hidden" for="search"> Barre de Recherche: </label>
+                        <div class="relative w-full">
+                            <input type="search" id="search" name="filter-character-searchbar" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500" placeholder="Rechercher un personnage..." />
+                            <button id="search-form-sender" type="submit" class="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+
+                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                </svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="px-4">
-                    <button type="button" data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create" class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                       onclick="">
+                    <div class="px-4">
+                        <button type="button" data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create" class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                                onclick="">
                         <span>
                             Créer un personnage
                         </span>
-                    </button>
-                    <div class="flex w-full">
-                        <button type="button" onclick="switch_filters()" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-1 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                            Filtres
                         </button>
-                        <button type="button" onclick="deselectionnerInputsDansFiltres()" class="w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-1 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
-                            Réinitialiser
-                        </button>
+                        <div class="flex w-full">
+                            <button type="button" onclick="switch_filters()" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-1 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                Filtres
+                            </button>
+                            <button type="button" onclick="deselectionnerInputsDansFiltres()" class="w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 ml-1 mb-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
+                                Réinitialiser
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <section class="row items-center justify-between bg-gray-100 border border-gray-200 rounded-b-lg dark:bg-gray-800 dark:border-gray-700 mb-4 py-8 px-4 hidden" id="filters">
-                <div class="grid grid-cols-3 grid-rows-3 gap-0">
-                    <div class="col-span-3 row-span-1 m-2">
-                        <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">MODE DE RECHERCHE <span class="text-2xs">(défaut: ET)</span></h5>
-                        <div class="flex">
-                            <input type="checkbox" onclick="toggleInputType()" id="filter_andor" name="filter_andor" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                            <label for="filter_andor" class="block mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">OU</label>
-                        </div>
-                    </div>
-                    <div class="col-span-1 row-span-1 m-2">
-                        <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RARETÉ</h5>
-                        <div id="filter-rarity-list">
-                            {% for rarity in rarities %}
-                                <div class="block">
-                                    <input type="radio" id="{{ rarity.value }}" name="rarity" value="{{ rarity.value }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="{{ rarity.value }}" class="mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">{{ rarity.value }}</label>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <button onclick="decocherInputsDansDiv('filter-rarity-list')" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xs px-1.5 py-1 text-center me-2 my-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Aucune</button>
-                    </div>
-                    <div class="col-span-1 row-span-1 m-2">
-                        <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">COULEUR</h5>
-                        <div id="filter-color-list" class="grid grid-cols-2">
-                            {% for color in colors %}
-                                <div class="block">
-                                    <input type="radio" id="{{ color.value }}" name="color" value="{{ color.value }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="{{ color.value }}" class="mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">{{ color.value }}</label>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        <button onclick="decocherInputsDansDiv('filter-color-list')" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xs px-1.5 py-1 text-center me-2 my-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Aucune</button>
-                    </div>
-                    <div class="col-span-1 row-span-1 m-2">
-                        <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">LEGENDS LIMITED <span class="text-2xs">(défaut: NON)</span></h5>
-                        <div class="flex">
-                            <input type="checkbox" id="filter_lf" name="filter_lf" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                            <label for="filter_lf" class="block mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">OUI</label>
-                        </div>
-                    </div>
-                    <div class="col-span-3 row-span-1 m-2">
-                        <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">TAGS</h5>
-                        <div class="w-full mx-auto relative rounded-lg">
-                            <div class="pb-1">
-                                <label for="filter-tag-search" hidden="hidden"></label>
-                                <input id="filter-tag-search" type="text" class="flex-grow bg-gray-50 text-gray-900 text-sm border botder-gray-300 rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un tag...">
-                                <button id="filter-add-tag" class="hidden ml-2 p-2 bg-blue-500 text-white rounded">+</button>
+                <section class="row items-center justify-between bg-gray-100 border border-gray-200 rounded-b-lg dark:bg-gray-800 dark:border-gray-700 mb-4 py-8 px-4 hidden" id="filters">
+                    <div class="grid grid-cols-3 grid-rows-3 gap-0">
+                        <div class="col-span-3 row-span-1 m-2">
+                            <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">MODE DE RECHERCHE <span class="text-2xs">(défaut: ET)</span></h5>
+                            <div class="flex">
+                                <input type="checkbox" onclick="toggleInputType()" id="filter_andor" name="filter-character-andor" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                <label for="filter_andor" class="block mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">OU</label>
                             </div>
-                            <div id="filter-tag-dropdown" class="absolute bottom-full left-0 w-full bg-white text-gray-900 border border-gray-300 rounded-md shadow-lg hidden z-10 mb-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
-                                <ul id="filter-tag-dropdown-list" class="h-48 overflow-y-auto">
-                                    {% for tag in tags %}
-                                        <li class="p-2 cursor-pointer hover:bg-gray-500 text-white">
-                                            <span>{{ tag.getName() }}</span>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            <div id="filter-selected-tags" class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white h-24 overflow-y-scroll">
-                                <!-- Boutons des tags sélectionnés -->
-                            </div>
-                            <label for="filter_tags" class="mb-2 text-sm font-medium text-gray-900 dark:text-white hidden"></label>
-                            <select hidden="hidden" class="" id="filter_tags" name="filter_tags" multiple>
-                                {% for tag in tags %}
-                                    <option value="{{ tag.getName() }}" name="{{ tag.getName() }}" class="tag-option hidden">
-                                        {{ tag.getName() }}
-                                    </option>
+                        </div>
+                        <div class="col-span-1 row-span-1 m-2">
+                            <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">RARETÉ</h5>
+                            <div id="filter-rarity-list">
+                                {% for rarity in rarities %}
+                                    <div class="block">
+                                        <input type="radio" id="{{ rarity.value }}" name="filter-character-rarity" value="{{ rarity.value }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="{{ rarity.value }}" class="mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">{{ rarity.value }}</label>
+                                    </div>
                                 {% endfor %}
-                            </select>
+                            </div>
+                            <button onclick="decocherInputsDansDiv('filter-rarity-list')" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xs px-1.5 py-1 text-center me-2 my-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Aucune</button>
+                        </div>
+                        <div class="col-span-1 row-span-1 m-2">
+                            <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">COULEUR</h5>
+                            <div id="filter-color-list" class="grid grid-cols-2">
+                                {% for color in colors %}
+                                    <div class="block">
+                                        <input type="radio" id="{{ color.value }}" name="filter-character-color" value="{{ color.value }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <label for="{{ color.value }}" class="mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">{{ color.value }}</label>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button onclick="decocherInputsDansDiv('filter-color-list')" type="button" class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-2xs px-1.5 py-1 text-center me-2 my-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Aucune</button>
+                        </div>
+                        <div class="col-span-1 row-span-1 m-2">
+                            <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">LEGENDS LIMITED <span class="text-2xs">(défaut: NON)</span></h5>
+                            <div class="flex">
+                                <input type="checkbox" id="filter_lf" name="filter-character-lf" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                                <label for="filter_lf" class="block mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">OUI</label>
+                            </div>
+                        </div>
+                        <div class="col-span-3 row-span-1 m-2">
+                            <h5 class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">TAGS</h5>
+                            <div class="w-full mx-auto relative rounded-lg">
+                                <div class="pb-1">
+                                    <label for="filter-tag-search" hidden="hidden"></label>
+                                    <input id="filter-tag-search" type="text" class="flex-grow bg-gray-50 text-gray-900 text-sm border botder-gray-300 rounded-lg focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Entrer un tag...">
+                                    <button id="filter-add-tag" class="hidden ml-2 p-2 bg-blue-500 text-white rounded">+</button>
+                                </div>
+                                <div id="filter-tag-dropdown" class="absolute bottom-full left-0 w-full bg-white text-gray-900 border border-gray-300 rounded-md shadow-lg hidden z-10 mb-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white">
+                                    <ul id="filter-tag-dropdown-list" class="h-48 overflow-y-auto">
+                                        {% for tag in tags %}
+                                            <li class="p-2 cursor-pointer hover:bg-gray-500 text-white">
+                                                <span>{{ tag.getName() }}</span>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div id="filter-selected-tags" class="relative bg-gray-50 text-gray-900 text-sm px-4 py-3 rounded-lg border-t border-b border-gray-200 flex gap-x-4 flex-wrap gap-y-4 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white h-24 overflow-y-scroll">
+                                    <!-- Boutons des tags sélectionnés -->
+                                </div>
+                                <label for="filter_tags" class="mb-2 text-sm font-medium text-gray-900 dark:text-white hidden"></label>
+                                <select hidden="hidden" class="" id="filter_tags" name="filter-character-tags" multiple>
+                                    {% for tag in tags %}
+                                        <option value="{{ tag.getName() }}" name="{{ tag.getName() }}" class="tag-option hidden">
+                                            {{ tag.getName() }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </form>
             <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-4">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <table id="shown_table" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

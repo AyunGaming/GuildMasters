@@ -73,7 +73,9 @@ class CharacterTagDAO extends BaseDAO implements ICharacterTagDAO {
         $filteredCharacters = [];
 
         foreach ($characters as $character) {
-            $tags = $character->getTags();
+            $id = $character->getImage();
+
+            $tags = $this->getByCharacter($id);
             $match = false;
 
             if($operator) { // OR operation

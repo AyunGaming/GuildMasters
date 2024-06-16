@@ -66,6 +66,7 @@ $app->group('/admin', static function (RouteCollectorProxy $admin) {
 
 		$characters->post('/update-character', [CharacterController::class, 'postUpdateCharacter'])->setName('character-update');
 		$characters->post('/delete-character', [CharacterController::class, 'postDeleteCharacter'])->setName('delete-character');
+        $characters->post('', [CharacterController::class, 'postGetFilters'])->setName('search-filter-character');
 		$characters->get('/{page}', [CharacterController::class, 'viewPagedListCharacters'])->setName('character-list');
 	});
 });

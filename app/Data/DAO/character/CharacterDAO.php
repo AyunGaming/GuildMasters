@@ -125,9 +125,6 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
             $characters = [];
             $data = $req->fetchAll();
-
-            $characters = [];
-            $data = $req->fetchAll();
             foreach ($data as $datum) {
                 $character = new Character();
                 $character->hydrate($datum);
@@ -171,7 +168,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
             $query .= " WHERE " . implode(" $operator ", $clauses);
         }
 
-        $query .= " ORDER BY Image ASC";
+        $query .= " ORDER BY Image ASC;";
         return $query;
     }
 }

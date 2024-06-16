@@ -19,4 +19,6 @@ interface ICharacterDAO {
 	public function count(): int;
 
     public function searchBy(string $query): array;
+
+    public function characterSearchQuery(array $filters): string;
 }
