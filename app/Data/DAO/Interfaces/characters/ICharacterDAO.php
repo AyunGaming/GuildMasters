@@ -18,5 +18,5 @@ interface ICharacterDAO {
 
 	public function count(): int;
 
-    public function searchBy(string $search_param, string $search_input): array;
+    public function searchBy(string $query): array;
 }

@@ -21,6 +21,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
+use function PHPSTORM_META\map;
 
 class CharacterController extends AbstractController
 {
@@ -208,46 +209,46 @@ class CharacterController extends AbstractController
     public function viewPagedListCharacters(Request $request, Response $response, Twig $twig, int $page): Response
     {
         //if (not $filtered) {
-            $page = $request->getAttribute('page');
-            $tags = $this->tagManager->getAllTags();
-            $displayed = $this->getCharacterList($page);
-            $characterNumber = $this->getCharacterNumber();
-            $pages = ceil($characterNumber / 50);
-            $pagination = $this->pagination($page,$pages);
-            $last_c = $this->getLastCharacterFromPage($characterNumber, $page);
-            $user = $request->getAttribute(User::class);
-            $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page)];
-            return $twig->render($response, 'characters.twig', [
-                'flashes' => Flashes::all(),
-                'user' => $user,
-                'displayed' => $displayed,
-                'characters' => $characterNumber,
-                'rarities' => Rarity::cases(),
-                'colors' => Color::cases(),
-                'tags' => $tags,
-                'pages' => $pages,
-                'currentPage' => $page,
-                'last_c' => $last_c,
-                'pagination' => $pagination,
-                'disable' => $disable
-            ]);
+        $page = $request->getAttribute('page');
+        $tags = $this->tagManager->getAllTags();
+        $displayed = $this->getCharacterList($page);
+        $characterNumber = $this->getCharacterNumber();
+        $pages = ceil($characterNumber / 50);
+        $pagination = $this->pagination($page, $pages);
+        $last_c = $this->getLastCharacterFromPage($characterNumber, $page);
+        $user = $request->getAttribute(User::class);
+        $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page)];
+        return $twig->render($response, 'characters.twig', [
+            'flashes' => Flashes::all(),
+            'user' => $user,
+            'displayed' => $displayed,
+            'characters' => $characterNumber,
+            'rarities' => Rarity::cases(),
+            'colors' => Color::cases(),
+            'tags' => $tags,
+            'pages' => $pages,
+            'currentPage' => $page,
+            'last_c' => $last_c,
+            'pagination' => $pagination,
+            'disable' => $disable
+        ]);
         //}
     }
 
-    public function viewCreateCharacter(Request $request, Response $response, Twig $twig): Response
-    {
-        $tags = $this->tagManager->getAllTags();
-        $characters = $this->getCharacterList(1);
-        $user = $request->getAttribute(User::class);
-        return $twig->render($response, 'charactersCreate.twig', [
-            'flashes' => Flashes::all(),
-            'user' => $user,
-            'characters' => $characters,
-            'rarities' => Rarity::cases(),
-            'colors' => Color::cases(),
-            'tags' => $tags
-        ]);
-    }
+//    public function viewCreateCharacter(Request $request, Response $response, Twig $twig): Response
+//    {
+//        $tags = $this->tagManager->getAllTags();
+//        $characters = $this->getCharacterList(1);
+//        $user = $request->getAttribute(User::class);
+//        return $twig->render($response, 'charactersCreate.twig', [
+//            'flashes' => Flashes::all(),
+//            'user' => $user,
+//            'characters' => $characters,
+//            'rarities' => Rarity::cases(),
+//            'colors' => Color::cases(),
+//            'tags' => $tags
+//        ]);
+//    }
 
     private function getLastCharacterFromPage(int $characterNumber, int $currentPage): int
     {
@@ -272,7 +273,7 @@ class CharacterController extends AbstractController
             // et du nombre total de pages.
             $last = $page - $offset - (($page - $offset) % $nb_pages);
             for ($i = $nb_pages - 5; $i < $last; $i++) {
-                $page_array[] = $i+1;
+                $page_array[] = $i + 1;
             }
         } else {
             for ($i = $page - 2; $i <= $page + 2; $i++) {

@@ -41,6 +41,10 @@ class Character implements JsonSerializable {
 		return $this->color;
 	}
 
+    public function getTags(): array {
+        return $this->tags;
+    }
+
 	public function getTagString(): string {
 		$string = "";
 		for ($i = 0; $i <= count($this->tags) - 1; $i++) {

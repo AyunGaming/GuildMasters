@@ -38,6 +38,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
 			$characters = [];
 			$data = $statement->fetchAll();
+
 			foreach ($data as $datum) {
 				$character = new Character();
 				$character->hydrate($datum);
@@ -116,13 +117,10 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 		}
 	}
 
-    public function searchBy(string $search_param, string $search_input): array
+    public function searchBy(string $query): array
     {
         try {
-            $req = $this->database->prepare('SELECT * FROM dbl_characters WHERE ? LIKE ?');
-
-            $req->bindValue(1, $search_param);
-            $req->bindValue(2, $search_input);
+            $req = $this->database->prepare($query);
             $req->execute();
 
             $characters = [];
@@ -141,5 +139,39 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
         catch (PDOException $PDOException){
             throw new CannotGetCharacterException($PDOException->getMessage());
         }
+    }
+
+
+    public function characterSearchQuery(array $data): string {
+        // filters = [] => charge tout, sinon charge filtré
+        $query = 'SELECT * FROM dbl_characters';
+        $operator = $data['operator'] === 'on' ? 'OR' : 'AND';
+
+        $clauses = [];
+
+        if (!empty($data)) {
+            if (!empty($data['filtres']['image'])) {
+                $clauses[] = "Image LIKE '%{$data['filtres']['image']}%'";
+            }
+            if (!empty($data['filtres']['name'])) {
+                $clauses[] = "Name LIKE '%{$data['filtres']['name']}%'";
+            }
+            if (!empty($data['filtres']['rarity'])) {
+                $clauses[] = "Rarity = '{$data['filtres']['rarity']}'";
+            }
+            if (!empty($data['filtres']['color'])) {
+                $clauses[] = "Color = '{$data['filtres']['color']}'";
+            }
+            if (!empty($data['filtres']['lf'])) {
+                $lf = $data['filtres']['lf'] === 'on' ? 1 : 0;
+                $clauses[] = "IsLF = $lf";
+            }
+        }
+        if (!empty($clauses)) {
+            $query .= " WHERE " . implode(" $operator ", $clauses);
+        }
+
+        $query .= " ORDER BY Image ASC";
+        return $query;
     }
 }

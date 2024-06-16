@@ -67,4 +67,37 @@ class CharacterTagDAO extends BaseDAO implements ICharacterTagDAO {
 			return [];
 		}
 	}
+
+    public function tagsFilterComparison(array $characters, array $filter): array {
+        $operator = $filter['operator'] === 'on';
+        $filteredCharacters = [];
+
+        foreach ($characters as $character) {
+            $tags = $character->getTags();
+            $match = false;
+
+            if($operator) { // OR operation
+                foreach ($filter['tags'] as $tag) {
+                    if(in_array($tag, $tags)) {
+                        $match = true;
+                        break;
+                    }
+                }
+            } else { // AND operation
+                $match = true;
+                foreach ($filter['tags'] as $tag) {
+                    if (!in_array($tag, $tags)) {
+                        $match = false;
+                        break;
+                    }
+                }
+            }
+
+            if ($match) {
+                $filteredCharacters[] = $character;
+            }
+        }
+
+        return $filteredCharacters;
+    }
 }

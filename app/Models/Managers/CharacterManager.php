@@ -75,8 +75,4 @@ class CharacterManager {
 			$this->characterTagDAO->create($character, $tag);
 		}
 	}
-
-    public function searchBy(string $search_param, string $search_input): ?array {
-
-    }
 }
