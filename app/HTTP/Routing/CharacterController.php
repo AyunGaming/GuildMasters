@@ -108,51 +108,42 @@ class CharacterController extends AbstractController
     public function postGetFilters(Request $request, Response $response): Response
     {
         $post = $request->getParsedBody();
-        var_dump($post);
-        die();
 
-        // VISUEL FILTERS:
-        //        $filters = [
-        //            'operator' => 'on',
-        //            'filtres' => [
-        //                'image' => 'DBL-EVT-00S', OU 'name' => 'Goku'
-        //                'rarity' => ['SPARKING'],
-        //                'color' => ['BLE'],
-        //                'lf' => ['off']
-        //            ],
-        //            'tags' => ['Exclusif aux événements']
-        //        ];
+        // Initialize the final array with an empty 'filtres' dictionary
+        $constructedArray = array(
+            "filtres" => array()
+        );
 
-        $filters = [];
-        if(isset($post['filter-character-andor'])) {
-            $filters['operator'] = $post['filter-character-andor'];
+        // Copy andor key if exists
+        if (isset($array["filter-character-andor"])) {
+            $constructedArray["filter-character-andor"] = "OR";
         } else {
-            $filters['operator'] = 'off';
+            $constructedArray["filter-character-andor"] = "AND";
         }
 
-        $filters['filtres'] = [];
-        if($post['filter-character-searchbar'] !== '') {
-            $filters['filtres'][$post['filter-select-character-research']] = $post['filter-character-searchbar']; // "name" ou "id" pour la cle du filtre_data
+        // Determine if character search is name or id and add it to 'filtres'
+        if (isset($array["filter-select-character-research"]) && isset($array["filter-character-searchbar"])) {
+            $character_key = "filter-character-" . $array["filter-select-character-research"];
+            $constructedArray["filtres"][$character_key] = $array["filter-character-searchbar"];
+        }
+        // Add the remaining keys to 'filtres' if they exist
+        $keys_to_transfer = array(
+            "filter-character-rarity",
+            "filter-character-color",
+            "filter-character-lf",
+            "filter-character-tags"
+        );
+
+        foreach ($keys_to_transfer as $key) {
+            if (isset($array[$key])) {
+                $constructedArray["filtres"][$key] = $array[$key];
+            }
         }
 
-        foreach ($post as $key => $item) {
-
-
-        }
-
-        if(isset($post['filter-character-lf'])) {
-            $filters['tags'] = $post['filter-character-tags'];
-        } else {
-            $filters['tags'] = [];
-        }
-
-//        var_dump($filters);
-//        die();
-
-        $_SESSION["display_characters"] = $this->characterManager->getPagedCharacters(1, $filters);
+        $_SESSION["display_characters"] = $this->characterManager->getPagedCharacters(1, $constructedArray);
 
         $parser = RouteContext::fromRequest($request)->getRouteParser();
-        return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list'));
+        return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => 1]));
     }
 
     public function postCreateCharacter(Request $request, Response $response): Response
@@ -261,7 +252,7 @@ class CharacterController extends AbstractController
         //if (not $filtered) {
         $page = $request->getAttribute('page');
         $tags = $this->tagManager->getAllTags();
-        $displayed = $this->getCharacterList($page, ['operator' => 'off', 'filtres' => ['name'=> 'Goku'], 'tags'=>[]]);
+        $displayed = $this->getCharacterList($page, []);
         $characterNumber = $displayed['count']; //total des persos pris
         $pages = ceil($characterNumber / 50);
         $pagination = $this->pagination($page, $pages);

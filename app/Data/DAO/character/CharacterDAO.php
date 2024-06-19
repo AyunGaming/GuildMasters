@@ -142,25 +142,25 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
     public function characterSearchQuery(array $data): string {
         // filters = [] => charge tout, sinon charge filtré
         $query = 'SELECT * FROM dbl_characters';
-        $operator = $data['operator'] === 'on' ? 'OR' : 'AND';
+        $operator = $data['filter-character-andor'] === 'on' ? 'OR' : 'AND';
 
         $clauses = [];
 
         if (!empty($data)) {
-            if (!empty($data['filtres']['image'])) {
-                $clauses[] = "Image LIKE '%{$data['filtres']['image']}%'";
+            if (!empty($data['filtres']['filter-character-image'])) {
+                $clauses[] = "Image LIKE '%{$data['filtres']['filter-character-image']}%'";
             }
-            if (!empty($data['filtres']['name'])) {
-                $clauses[] = "Name LIKE '%{$data['filtres']['name']}%'";
+            if (!empty($data['filtres']['filter-character-name'])) {
+                $clauses[] = "Name LIKE '%{$data['filtres']['filter-character-name']}%'";
             }
-            if (!empty($data['filtres']['rarity'])) {
-                $clauses[] = "Rarity = '{$data['filtres']['rarity']}'";
+            if (!empty($data['filtres']['filter-character-rarity'])) {
+                $clauses[] = "Rarity = '{$data['filtres']['filter-character-rarity']}'";
             }
-            if (!empty($data['filtres']['color'])) {
-                $clauses[] = "Color = '{$data['filtres']['color']}'";
+            if (!empty($data['filtres']['filter-character-color'])) {
+                $clauses[] = "Color = '{$data['filtres']['filter-character-color']}'";
             }
-            if (!empty($data['filtres']['lf'])) {
-                $lf = $data['filtres']['lf'] === 'on' ? 1 : 0;
+            if (!empty($data['filtres']['filter-character-lf'])) {
+                $lf = $data['filtres']['filter-character-lf'] === 'on' ? 1 : 0;
                 $clauses[] = "IsLF = $lf";
             }
         }
