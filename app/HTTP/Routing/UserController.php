@@ -43,6 +43,7 @@ class UserController extends AbstractController {
 
 	public function signOut(Request $request, Response $response): Response{
 		unset($_SESSION['user_id']);
+		unset($_SESSION);
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 

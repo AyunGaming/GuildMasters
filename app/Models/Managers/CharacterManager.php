@@ -21,23 +21,22 @@ class CharacterManager {
 	}
 
 	public function getPagedCharacters(int $page, array $filtre): ?array {
-        $count = 0;
-        if (!empty($filtre)) {
-            $query = $this->characterDAO->characterSearchQuery($filtre);
-            $characters = $this->characterDAO->searchBy($query);
-            if(isset($filtre['filtres']['tags'])) {
-                $characters = $this->characterTagDAO->tagsFilterComparison($characters, $filtre);
-                $count = count($characters);
-            }
-        } else {
-            $_SESSION["display_characters"] = [];
-            $characters = $this->characterDAO->getAll();
-            $count = count($characters);
-        }
-		if($page == 1){
-			$start = 0;
+		if (!empty($filtre['filtres'])) {
+			$_SESSION['filtres'] = $filtre;
+			$query = $this->characterDAO->characterSearchQuery($filtre);
+			$characters = $this->characterDAO->searchBy($query);
+			if (isset($filtre['filtres']['tags'])) {
+				$characters = $this->characterTagDAO->tagsFilterComparison($characters, $filtre);
+			}
+		} else {
+			$characters = $this->characterDAO->getAll();
 		}
-		else{
+
+		$count = count($characters);
+
+		if ($page == 1) {
+			$start = 0;
+		} else {
 			$start = ($page - 1) * 50;
 		}
 		$displayed = array_slice($characters, $start, 50);
@@ -67,13 +66,12 @@ class CharacterManager {
 	}
 
 	public function updateCharacter(array $data): void {
-		try{
+		try {
 			$character = new Character();
 			$character->hydrate($data);
 
-			$this->characterDAO->update($character,$data['oldId']);
-		}
-		catch (Exception $e){
+			$this->characterDAO->update($character, $data['oldId']);
+		} catch (Exception $e) {
 			throw new CannotUpdateCharacterException($e->getMessage());
 		}
 	}
@@ -88,5 +86,23 @@ class CharacterManager {
 		foreach ($tags as $tag) {
 			$this->characterTagDAO->create($character, $tag);
 		}
+	}
+
+	public function saveImage($file, array $post): array {
+		if ($file->getClientFileName() !== '') {
+			$filename = $file->getClientFileName();
+			$filename = explode('.', $filename);
+			$extension = array_pop($filename);
+			$filename = implode('.', $filename) . '.' . $extension;
+
+			if (strtolower($extension) == 'png') {
+				$image = $post['Id'] . '.' . $extension;
+				file_exists(__DIR__ . '/../../../public/images/characters/' . $image) && unlink(__DIR__ . '/../../../public/images/characters/' . $image);
+				$file->moveTo(__DIR__ . '/../../../public/images/characters/' . $image);
+			}
+		} else {
+			$post['Image'] = $post['Id'];
+		}
+		return $post;
 	}
 }

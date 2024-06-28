@@ -43,25 +43,6 @@ class CharacterController extends AbstractController
         return $this->characterManager->getPagedCharacters($page, $filtre);
     }
 
-    private function saveImage($file, array $post): array
-    {
-        if ($file->getClientFileName() !== '') {
-            $filename = $file->getClientFileName();
-            $filename = explode('.', $filename);
-            $extension = array_pop($filename);
-            $filename = implode('.', $filename) . '.' . $extension;
-
-            if (strtolower($extension) == 'png') {
-                $image = $post['Id'] . '.' . $extension;
-                file_exists(__DIR__ . '/../../../public/images/characters/' . $image) && unlink(__DIR__ . '/../../../public/images/characters/' . $image);
-                $file->moveTo(__DIR__ . '/../../../public/images/characters/' . $image);
-            }
-        } else {
-            $post['Image'] = $post['Id'];
-        }
-        return $post;
-    }
-
     private function setTagsPost(array $post): array
     {
         $tags = [];
@@ -161,7 +142,7 @@ class CharacterController extends AbstractController
 
         $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => $post["page"]]));
 
-        $post = $this->saveImage($file, $post);
+        $post = $this->characterManager->saveImage($file, $post);
 
         if (!array_key_exists('IsLF', $post)) {
             $post['IsLF'] = false;
@@ -178,18 +159,6 @@ class CharacterController extends AbstractController
             Flashes::add(FlashMessage::danger($e->getMessage()));
         }
 
-
-        /*
-        try {
-            $character = $this->characterManager->getByImage($post['Id']);
-            foreach ($tags as $tag) {
-                $this->characterTagDAO->create($character, $tag);
-            }
-
-        } catch (\RuntimeException $e) {
-            Flashes::add(FlashMessage::danger($e->getMessage()));
-        }*/
-
         return $res;
     }
 
@@ -202,7 +171,7 @@ class CharacterController extends AbstractController
 
         $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => $post["page"]]));
 
-        $post = $this->saveImage($file, $post);
+        $post = $this->characterManager->saveImage($file, $post);
 
         $old = $this->characterManager->getByImage($post['oldId']);
 
@@ -216,7 +185,6 @@ class CharacterController extends AbstractController
         } catch (CannotUpdateCharacterException $e) {
             Flashes::add(FlashMessage::danger($e->getMessage()));
         }
-
 
         try {
             $character = $this->characterManager->getByImage($post['Id']);
@@ -258,7 +226,23 @@ class CharacterController extends AbstractController
         //if (not $filtered) {
         $page = $request->getAttribute('page');
         $tags = $this->tagManager->getAllTags();
-        $displayed =empty($_SESSION["display_characters"]) ? $this->characterManager->getPagedCharacters($page, []) : $_SESSION["display_characters"];
+
+		if(empty($_SESSION["display_characters"]))
+			if($page == $_SESSION['page']+1 || $page < 1){ // Si on est sur la page suivante
+				$_SESSION["display_characters"] =  $this->characterManager->getPagedCharacters($page,
+					$_SESSION['filtres'] ?? []);
+			}
+			else{
+				$_SESSION['page'] = 1;
+				$_SESSION["display_characters"] =  $this->characterManager->getPagedCharacters($page,
+					['filtres' => [], 'filter-character-andor' => 'AND']);
+			}
+
+
+		$displayed = $_SESSION['display_characters'];
+		$_SESSION['page'] = $page;
+		unset($_SESSION["display_characters"]);
+
         $characterNumber = $displayed['count'];
         $pages = ceil($characterNumber / 50);
         $pagination = $this->pagination($page, $pages);
