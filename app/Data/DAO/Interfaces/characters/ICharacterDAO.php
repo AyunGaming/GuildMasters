@@ -17,4 +17,8 @@ interface ICharacterDAO {
 	public function delete(Character $character): void;
 
 	public function count(): int;
+
+    public function searchBy(string $query): array;
+
+    public function characterSearchQuery(array $filters): string;
 }

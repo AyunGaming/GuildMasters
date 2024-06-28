@@ -21,6 +21,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
+use function PHPSTORM_META\map;
 
 class CharacterController extends AbstractController
 {
@@ -37,28 +38,9 @@ class CharacterController extends AbstractController
         $this->characterTagDAO = new CharacterTagDAO($this->database);
     }
 
-    private function getCharacterList(int $page): array
+    private function getCharacterList(int $page, $filtre): array
     {
-        return $this->characterManager->getPagedCharacters($page);
-    }
-
-    private function saveImage($file, array $post): array
-    {
-        if ($file->getClientFileName() !== '') {
-            $filename = $file->getClientFileName();
-            $filename = explode('.', $filename);
-            $extension = array_pop($filename);
-            $filename = implode('.', $filename) . '.' . $extension;
-
-            if (strtolower($extension) == 'png') {
-                $image = $post['Id'] . '.' . $extension;
-                file_exists(__DIR__ . '/../../../public/images/characters/' . $image) && unlink(__DIR__ . '/../../../public/images/characters/' . $image);
-                $file->moveTo(__DIR__ . '/../../../public/images/characters/' . $image);
-            }
-        } else {
-            $post['Image'] = $post['Id'];
-        }
-        return $post;
+        return $this->characterManager->getPagedCharacters($page, $filtre);
     }
 
     private function setTagsPost(array $post): array
@@ -108,16 +90,57 @@ class CharacterController extends AbstractController
         }
     }
 
+    public function postGetFilters(Request $request, Response $response): Response
+    {
+        $array = $request->getParsedBody();
+
+        // Initialize the final array with an empty 'filtres' dictionary
+        $constructedArray = array(
+            "filtres" => array()
+        );
+
+        // Copy andor key if exists
+        if (isset($array["filter-character-andor"])) {
+            $constructedArray["filter-character-andor"] = "OR";
+        } else {
+            $constructedArray["filter-character-andor"] = "AND";
+        }
+
+        // Determine if character search is name or id and add it to 'filtres'
+        if (!empty($array["filter-character-searchbar"])) {
+            $character_key = "filter-character-" . $array["filter-select-character-research"];
+            $constructedArray["filtres"][$character_key] = $array["filter-character-searchbar"];
+        }
+        // Add the remaining keys to 'filtres' if they exist
+        $keys_to_transfer = array(
+            "filter-character-rarity",
+            "filter-character-color",
+            "filter-character-lf",
+            "filter-character-tags"
+        );
+
+        foreach ($keys_to_transfer as $key) {
+            if (isset($array[$key])) {
+                $constructedArray["filtres"][$key] = $array[$key];
+            }
+        }
+
+        $_SESSION["display_characters"] = $this->characterManager->getPagedCharacters(1, $constructedArray);
+
+        $parser = RouteContext::fromRequest($request)->getRouteParser();
+        return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => 1]));
+    }
+
     public function postCreateCharacter(Request $request, Response $response): Response
     {
         $post = $request->getParsedBody();
-        $file = $request->getUploadedFiles()['characterImage'];
+        $file = $request->getUploadedFiles()['Image'];
 
         $parser = RouteContext::fromRequest($request)->getRouteParser();
 
-        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list'));
+        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => $post["page"]]));
 
-        $post = $this->saveImage($file, $post);
+        $post = $this->characterManager->saveImage($file, $post);
 
         if (!array_key_exists('IsLF', $post)) {
             $post['IsLF'] = false;
@@ -134,18 +157,6 @@ class CharacterController extends AbstractController
             Flashes::add(FlashMessage::danger($e->getMessage()));
         }
 
-
-        /*
-        try {
-            $character = $this->characterManager->getByImage($post['Id']);
-            foreach ($tags as $tag) {
-                $this->characterTagDAO->create($character, $tag);
-            }
-
-        } catch (\RuntimeException $e) {
-            Flashes::add(FlashMessage::danger($e->getMessage()));
-        }*/
-
         return $res;
     }
 
@@ -158,7 +169,7 @@ class CharacterController extends AbstractController
 
         $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => $post["page"]]));
 
-        $post = $this->saveImage($file, $post);
+        $post = $this->characterManager->saveImage($file, $post);
 
         $old = $this->characterManager->getByImage($post['oldId']);
 
@@ -172,7 +183,6 @@ class CharacterController extends AbstractController
         } catch (CannotUpdateCharacterException $e) {
             Flashes::add(FlashMessage::danger($e->getMessage()));
         }
-
 
         try {
             $character = $this->characterManager->getByImage($post['Id']);
@@ -190,40 +200,53 @@ class CharacterController extends AbstractController
         $post = $request->getParsedBody();
 
         $parser = RouteContext::fromRequest($request)->getRouteParser();
-        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list'));
+        $res = $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('character-list', ['page' => $post["page"]]));
         $dao = new CharacterDAO($this->database);
 
         try {
-            $character = $this->characterManager->getByImage($post['ID']);
+            $character = $this->characterManager->getByImage($post['characterId']);
             $dao->delete($character);
-            Flashes::add(FlashMessage::success("Le personnage {$post['ID']} a été supprimé !"));
+            Flashes::add(FlashMessage::success("Le personnage {$post['characterId']} a été supprimé !"));
         } catch (\Exception) {
-            Flashes::add(FlashMessage::danger("Le personnage {$post['ID']} n'existe pas !"));
+            Flashes::add(FlashMessage::danger("Le personnage {$post['characterId']} n'existe pas !"));
         }
 
         return $res;
     }
 
-    public function getCharacterNumber(): int
-    {
-        return $this->characterManager->getCharacterNumber();
-    }
-
     public function viewPagedListCharacters(Request $request, Response $response, Twig $twig, int $page): Response
     {
+        //if (not $filtered) {
         $page = $request->getAttribute('page');
         $tags = $this->tagManager->getAllTags();
-        $displayed = $this->getCharacterList($page);
-        $characterNumber = $this->getCharacterNumber();
+
+		if(empty($_SESSION["display_characters"]))
+			if(isset($_SESSION['filtres'])){ // Si on est sur la page suivante
+				$_SESSION["display_characters"] =  $this->characterManager->getPagedCharacters($page,
+					$_SESSION['filtres']);
+			}
+			else{
+				$_SESSION['page'] = 1;
+				$_SESSION["display_characters"] =  $this->characterManager->getPagedCharacters($page,
+					['filtres' => [], 'filter-character-andor' => 'AND']);
+			}
+
+
+		$displayed = $_SESSION['display_characters'];
+		$_SESSION['page'] = $page;
+		unset($_SESSION["display_characters"]);
+
+        $characterNumber = $displayed['count'];
         $pages = ceil($characterNumber / 50);
-        $pagination = $this->pagination($page,$pages);
+        $pagination = $this->pagination($page, $pages);
         $last_c = $this->getLastCharacterFromPage($characterNumber, $page);
         $user = $request->getAttribute(User::class);
-        $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page)];
+        $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page),
+			'first' => $this->disableFirst($page), 'last' => $this->disableLast($page, $pages)];
         return $twig->render($response, 'characters.twig', [
             'flashes' => Flashes::all(),
             'user' => $user,
-            'displayed' => $displayed,
+            'displayed' => $displayed['characters'],
             'characters' => $characterNumber,
             'rarities' => Rarity::cases(),
             'colors' => Color::cases(),
@@ -236,21 +259,6 @@ class CharacterController extends AbstractController
         ]);
     }
 
-    public function viewCreateCharacter(Request $request, Response $response, Twig $twig): Response
-    {
-        $tags = $this->tagManager->getAllTags();
-        $characters = $this->getCharacterList(1);
-        $user = $request->getAttribute(User::class);
-        return $twig->render($response, 'charactersCreate.twig', [
-            'flashes' => Flashes::all(),
-            'user' => $user,
-            'characters' => $characters,
-            'rarities' => Rarity::cases(),
-            'colors' => Color::cases(),
-            'tags' => $tags
-        ]);
-    }
-
     private function getLastCharacterFromPage(int $characterNumber, int $currentPage): int
     {
         return ($currentPage * 50 > $characterNumber) ? $characterNumber : $currentPage * 50;
@@ -259,6 +267,7 @@ class CharacterController extends AbstractController
     private function pagination(int $page, int $nb_pages): array
     {
         $page_array = [];
+		if($nb_pages == 1) return $page_array;
         if ($page - 2 < 1) {
             $offset = ($page - 2) * (-1) + 1;
 
@@ -274,7 +283,7 @@ class CharacterController extends AbstractController
             // et du nombre total de pages.
             $last = $page - $offset - (($page - $offset) % $nb_pages);
             for ($i = $nb_pages - 5; $i < $last; $i++) {
-                $page_array[] = $i+1;
+                $page_array[] = $i + 1;
             }
         } else {
             for ($i = $page - 2; $i <= $page + 2; $i++) {
@@ -282,7 +291,7 @@ class CharacterController extends AbstractController
             }
         }
 
-        return $page_array;
+		return array_slice($page_array,0,$nb_pages);
     }
 
     private function disableNext(int $page, int $pages): bool
@@ -294,4 +303,12 @@ class CharacterController extends AbstractController
     {
         return $page == 1;
     }
+
+	private function disableFirst(int $page): bool {
+		return $page == 1;
+	}
+
+	private function disableLast(int $page, int $pages): bool {
+		return $page == $pages;
+	}
 }

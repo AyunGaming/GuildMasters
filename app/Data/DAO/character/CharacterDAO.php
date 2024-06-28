@@ -38,6 +38,7 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
 			$characters = [];
 			$data = $statement->fetchAll();
+
 			foreach ($data as $datum) {
 				$character = new Character();
 				$character->hydrate($datum);
@@ -115,4 +116,70 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 			throw new CannotGetCharacterException($PDOException->getMessage());
 		}
 	}
+
+    public function searchBy(string $query): array
+    {
+        try {
+            $req = $this->database->prepare($query);
+            $req->execute();
+
+            $characters = [];
+            $data = $req->fetchAll();
+
+            foreach ($data as $datum) {
+                $character = new Character();
+                $character->hydrate($datum);
+                $characters[] = $character;
+            }
+
+//            var_dump($characters);
+//            die();
+
+            return $characters;
+        }
+        catch (PDOException $PDOException){
+            throw new CannotGetCharacterException($PDOException->getMessage());
+        }
+    }
+
+
+    public function characterSearchQuery(array $filters): string {
+        // filters = [] => charge tout, sinon charge filtré
+        $query = 'SELECT * FROM dbl_characters';
+        $operator = $filters['filter-character-andor'] === 'on' ? 'OR' : 'AND';
+
+        $clauses = [];
+
+        if (!empty($filters)) {
+            if (!empty($filters['filtres']['filter-character-id'])) {
+                $clauses[] = "Image LIKE '%{$filters['filtres']['filter-character-id']}%'";
+            }
+            if (!empty($filters['filtres']['filter-character-name'])) {
+                $clauses[] = "Name LIKE '%{$filters['filtres']['filter-character-name']}%'";
+            }
+            if (!empty($filters['filtres']['filter-character-rarity'])) {
+                foreach ($filters['filtres']['filter-character-rarity'] as $rar) {
+                    $rar = strtoupper($rar);
+                    $clauses[] = "Rarity = '{$rar}'";
+                }
+            }
+            if (!empty($filters['filtres']['filter-character-color'])) {
+                foreach ($filters['filtres']['filter-character-color'] as $col) {
+                    $clauses[] = "Color = '{$col}'";
+                }
+            }
+            if (!empty($filters['filtres']['filter-character-lf'])) {
+                $lf = $filters['filtres']['filter-character-lf'] === 'on' ? 1 : 0;
+                $clauses[] = "IsLF = $lf";
+            }
+        }
+
+        if (!empty($clauses)) {
+            $query .= " WHERE " . implode(" $operator ", $clauses);
+        }
+
+        $query .= " ORDER BY Image ASC;";
+
+        return $query;
+    }
 }

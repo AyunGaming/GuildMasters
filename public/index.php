@@ -21,6 +21,10 @@ use Slim\Views\TwigMiddleware;
 require_once __DIR__ . '/../app/Models/User.php';
 require_once __DIR__ . '/../app/Models/Kamenews.php';
 require_once __DIR__ . '/../app/Models/Article.php';
+require_once __DIR__ . '/../app/Models/Character.php';
+require_once __DIR__ . '/../app/Models/Tag.php';
+require_once __DIR__ . '/../app/Models/Enums/Rarity.php';
+require_once __DIR__ . '/../app/Models/Enums/Color.php';
 require_once __DIR__ . '/../app/Models/Enums/Role.php';
 
 session_start();
@@ -66,11 +70,13 @@ $app->group('/admin', static function (RouteCollectorProxy $admin) {
 
 		$characters->post('/update-character', [CharacterController::class, 'postUpdateCharacter'])->setName('character-update');
 		$characters->post('/delete-character', [CharacterController::class, 'postDeleteCharacter'])->setName('delete-character');
+        $characters->post('', [CharacterController::class, 'postGetFilters'])->setName('search-filter-character');
 		$characters->get('/{page}', [CharacterController::class, 'viewPagedListCharacters'])->setName('character-list');
 	});
 });
 
 $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
+	unset($_SESSION['filtres']);
 	$kamenews->group('/list', static function (RouteCollectorProxy $list) {
 		$list->get('', [KamenewsController::class, 'displayAllKamenews'])->setName('kamenews');
 	});
@@ -102,6 +108,7 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 });
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
+	unset($_SESSION['filtres']);
 	$user = $request->getAttribute(User::class);
 	$parser = RouteContext::fromRequest($request)->getRouteParser();
 

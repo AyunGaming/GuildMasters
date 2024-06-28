@@ -8,10 +8,11 @@ function getUpdateUserInfos(image, rarity, lf, name, color, tags) {
 	document.getElementById('updateTags').value = tags;
 	const tagsArray = tags.split(", ");
 	const select = document.getElementById('updateTags');
-
+	console.log(tagsArray)
 	for (let i = 0; i < tagsArray.length; i++) {
 		for (let j=0; j < select.options.length; j++) {
 			if (tagsArray[i] === select.options[j].value) {
+				console.log(select.options[j].value)
 				addTagButton(select.options[j].value);
 				select.options[j].setAttribute('selected', 'selected');
 			}
@@ -20,7 +21,9 @@ function getUpdateUserInfos(image, rarity, lf, name, color, tags) {
 }
 
 function getDeleteUserInfos(image,name){
-	document.getElementById('deleteConfirm').innerText = `Voulez-vous supprimer définitivement le personnage: ${image}: ${name} ?`;
 	document.getElementById('characterId').value = image;
-	console.log(document.getElementById('deleteConfirm').innerText);
+	document.getElementById('characterName').value = name;
+	document.getElementById('d_characterImage').src=`/public/images/characters/${image}.png`;
+	document.getElementById('d_characterImage').alt=`Image de ${image}`;
+	console.log(`Supprimer Id: ${image}; Nom: ${name} ?`);
 }

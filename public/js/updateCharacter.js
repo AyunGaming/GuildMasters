@@ -117,8 +117,15 @@ document.getElementById('close-update-modal').addEventListener('click', function
 	handleModalClose();
 });
 
-document.getElementById('update-form-sender').addEventListener('submit', function(event) {
-	event.preventDefault(); // Prevent form submission for demonstration
+document.getElementById('update-form-sender').addEventListener('submit', function() {
 	document.getElementById('crud-modal-update').classList.add('hidden');
 	handleModalClose();
+});
+
+document.addEventListener('keydown', function(event) {
+	const modal = document.getElementById('crud-modal-update')
+	if (event.key === 'Escape' && modal.classList.contains('hidden')) {
+		modal.classList.add('hidden');
+		handleModalClose();
+	}
 });

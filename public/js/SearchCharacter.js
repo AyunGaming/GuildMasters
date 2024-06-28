@@ -1,203 +1,196 @@
-let searchBox = document.getElementById('search')
-let filtersBtn = document.getElementById('filtersBtn');
-let charactersString = document.getElementById('charactersList').innerText;
-let filters_buttons = document.querySelectorAll('.filter-btn');
-let filter_check = document.querySelectorAll('.filter-check');
-let resetTagsBtn = document.getElementById('resetTags');
+function handleSearch() {
+    const searchType = document.getElementById('character-research');
+    const searchTerm = document.getElementById('search').value;
 
-filtersBtn.addEventListener('click', function () {
-	displayFilters();
-})
-
-searchBox.addEventListener('keyup', function () {
-	search();
-})
-
-filters_buttons.forEach(function (input) {
-	input.addEventListener('click', function () {
-		search();
-	})
-})
-
-filter_check.forEach(function (input) {
-	input.addEventListener('change', function () {
-		search();
-	})
-})
-
-resetTagsBtn.addEventListener('click', function () {
-	resetFilters();
-})
-
-function displayFilters() {
-	let filterDiv = document.getElementById('filters');
-
-	if (filterDiv.style.display === 'none') {
-		filterDiv.style.display = "flex";
-	} else {
-		filterDiv.style.display = 'none';
-	}
+    const table_body = document.getElementById('shown_table').body;
 }
 
-function search() {
-	// Declare variables
-	let category, filter, table;
-	category = document.getElementById("character-research");
-	filter = searchBox.value.toUpperCase();
-	table = document.getElementById("characters");
+function switch_filters() {
+    const filter_sec_classes=document.getElementById('filters').classList;
+    const search_div_classes = document.getElementById('search_zone').classList;
 
-	let rarity = document.querySelector('input[name="rarity"]:checked');
-	if (rarity) {
-		rarity = rarity.value;
-	} else {
-		rarity = "all";
-	}
+    if (!filter_sec_classes.contains('hidden')) {
+        search_div_classes.remove('mt-4');
+        search_div_classes.add('my-4');
+        search_div_classes.add('rounded-lg');
+        search_div_classes.remove('rounded-t-lg');
+    } else {
+        search_div_classes.remove('my-4');
+        search_div_classes.add('mt-4');
+        search_div_classes.remove('rounded-lg');
+        search_div_classes.add('rounded-t-lg');
+    }
+    filter_sec_classes.toggle('block');
+    filter_sec_classes.toggle('hidden');
+}
+function toggleInputType() {
+    const andorCheckbox = document.getElementById('filter_andor');
+    const rarityRadios = document.querySelectorAll('#filters input[name="filter-character-rarity[]"]');
+    const colorRadios = document.querySelectorAll('#filters input[name="filter-character-color[]"]');
 
-	let color = document.querySelector('input[name="color"]:checked');
-	if (color) {
-		color = color.value;
-	} else {
-		color = "all";
-	}
+    if (andorCheckbox.checked) {
+        // Change radio inputs to checkboxes
+        rarityRadios.forEach(function(radio) {
+            radio.type = 'checkbox';
+            radio.classList.add('rounded');
+        });
+        colorRadios.forEach(function(radio) {
+            radio.type = 'checkbox';
+            radio.classList.add('rounded');
+        });
+    } else {
+        // Change checkboxes back to radio inputs
+        rarityRadios.forEach(function(radio) {
+            radio.type = 'radio';
+            radio.classList.remove('rounded');
+        });
+        colorRadios.forEach(function(radio) {
+            radio.type = 'radio';
+            radio.classList.remove('rounded');
+        });
+    }
+}
+function decocherInputsDansDiv(divId) {
+    // Sélectionne le div spécifié
+    const div = document.getElementById(divId);
 
-	let lf = document.querySelector('input[name="updateIsLfCheckbox"]:checked');
-	if (lf) {
-		lf = "lf";
-	} else {
-		lf = "notlf";
-	}
+    // Vérifie si le div existe
+    if (div) {
+        // Sélectionne tous les éléments input dans ce div
+        const inputs = div.querySelectorAll('input');
 
-	let selectedValues = [];
-	let select = document.querySelector('#filterTags');
+        // Parcours chaque input
+        inputs.forEach(function(input) {
+            // Vérifie si c'est un radio ou un checkbox
+            if (input.type === 'radio' || input.type === 'checkbox') {
+                // Décoche l'input
+                input.checked = false;
+            }
+        });
+    } else {
+        console.error("Le div spécifié n'existe pas.");
+    }
+}
+function deselectionnerInputsDansFiltres() {
+    // Sélectionne la section spécifiée
+    const section = document.getElementById('filters');
+    const characterResearchType = document.getElementById('character-research');
+    const characterResearchZone = document.getElementById('search');
 
-	for (let i = 0; i < select.length; i++) {
-		if (select.options[i].selected) {
-			selectedValues.push(select.options[i].value);
-		}
-	}
+    // Vérifie si la section existe
+    if (section) {
+        // Sélectionne tous les éléments input de type checkbox ou radio dans cette section
+        const inputs = section.querySelectorAll('input[type="checkbox"], input[type="radio"]');
 
-	let dict = {
-		"name": 4,
-		"id": 0,
-	}
+        // Parcours chaque input
+        inputs.forEach(function(input) {
+            // Désélectionne l'input
+            input.checked = false;
+        });
+        characterResearchType.options[0].selected = true;
+        characterResearchZone.value="";
+        toggleInputType();
+        clearFilterSelectedTags();
+    } else {
+        console.error("La section spécifiée n'existe pas.");
+    }
+}
+document.getElementById('filter-tag-search').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase();
+    const dropdown = document.getElementById('filter-tag-dropdown');
+    const dropdownList = document.getElementById('filter-tag-dropdown-list');
+    const options = document.querySelectorAll('#filter_tags .tag-option');
 
-	let rows = table.rows;
+    dropdownList.innerHTML = '';
+    let hasMatch = false;
 
-	for (let i = 1; i < rows.length; i++) {
+    console.log(options)
 
-		let row = rows[i];
+    options.forEach(option => {
+        console.log(option.textContent.toLowerCase()+" : "+option.textContent.toLowerCase().includes(searchValue))
+        if (option.textContent.toLowerCase().includes(searchValue)) {
+            const li = document.createElement('li');
+            li.textContent = option.textContent;
+            li.classList.add('p-2', 'cursor-pointer', 'hover:bg-gray-500', 'text-white');
+            li.addEventListener('click', function() {
+                option.setAttribute('selected', 'true');
+                addFilterTagButton(option.value);
+                dropdown.classList.add('hidden');
+                document.getElementById('filter-tag-search').value = '';
+            });
+            dropdownList.appendChild(li);
+            hasMatch = true;
+        }
+    });
 
-		let cells = row.cells;
+    if (hasMatch && searchValue) {
+        dropdown.classList.remove('hidden');
+    } else {
+        dropdown.classList.add('hidden');
+    }
+});
 
-		let rarCell = cells[2].children[0].src.slice(47, -4);
-		let lfCell = cells[3].children[0].src.slice(41, -4);
-		let colCell = cells[5].children[0].src.slice(45, -4);
-		let tagsCell = cells[6].innerHTML;
-		let searchCell = cells[dict[category.value]];
+document.getElementById('filter-add-tag').addEventListener('click', function(event) {
+    event.preventDefault();
+    const searchValue = document.getElementById('filter-tag-search').value.toLowerCase();
+    const options = document.querySelectorAll('#filter_tags .tag-option');
 
-		let sfil = search_filter(rarity, lf, color, selectedValues);
-		let showRow = true;
+    let optionExists = false;
 
-		if (sfil[0].length === 1 && showRow) //si une seule rareté et doit etre montré
-		{
-			sfil[0].forEach(element => {
-				if (element.toUpperCase() !== rarCell.toUpperCase()) {
-					showRow = false;
-				}
-			});
-		}
+    options.forEach(option => {
+        if (option.textContent.toLowerCase() === searchValue) {
+            option.setAttribute('selected', 'true');
+            addFilterTagButton(option.value);
+            optionExists = true;
+        }
+    });
 
-		if (sfil[1].length === 1 && showRow) //si lf et doit etre montré
-		{
+    if (!optionExists && searchValue) {
+        const newOption = document.createElement('option');
+        newOption.value = searchValue;
+        newOption.textContent = searchValue;
+        newOption.setAttribute('selected', 'true');
+        newOption.classList.add('tag-option');
+        document.getElementById('filter_tags').appendChild(newOption);
+        addFilterTagButton(searchValue);
+    }
 
-			sfil[1].forEach(element => {
-				if (element.toUpperCase() !== lfCell.toUpperCase()) {
-					showRow = false;
-				}
-			});
-		}
+    document.getElementById('filter-tag-search').value = '';
+    document.getElementById('filter-tag-dropdown').classList.add('hidden');
+});
 
-		if (sfil[2].length === 1 && showRow) //si une seule couleur et doit etre montré
-		{
-			sfil[2].forEach(element => {
-				if (element.toUpperCase() !== colCell.toUpperCase()) {
-					showRow = false;
-				}
-			});
-		}
+function addFilterTagButton(tagName) {
+    const selectedTagsDiv = document.getElementById('filter-selected-tags');
 
+    // Check if the tag is already added
+    const existingButtons = selectedTagsDiv.querySelectorAll('button');
+    for (const button of existingButtons) {
+        if (button.querySelector('span').textContent === tagName) {
+            return; // Do not add the tag if it already exists
+        }
+    }
 
-		if (sfil[3].length !== 0 && showRow) //si au moins un tag et doit etre montré
-		{
-			let tagArray = tagsCell.split(",")
-			tagArray = trimTagArray(tagArray)
-			sfil[3].forEach(element => {
-				if (!tagArray.includes(element)) {
-					showRow = false;
-				}
-			});
-		}
-
-		if (!(searchCell.innerHTML.toUpperCase().indexOf(filter) > -1)) {
-			showRow = false;
-		}
-
-		if (showRow) {
-
-			rows[i].style.display = "";
-		} else {
-
-			rows[i].style.display = "none";
-		}
-	}
+    const button = document.createElement('button');
+    button.innerHTML += `<span>${tagName}</span>`;
+    button.innerHTML += `<svg class="ml-2 w-3 h-3 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6"/>
+                            </svg>
+                                `;
+    button.classList.add('h-8', 'bg-blue-600', 'text-xs', 'text-white', 'rounded-full', 'px-2', 'py-1', 'mb-1','inline-flex', 'items-center');
+    button.addEventListener('click', function() {
+        button.remove();
+        const option = document.querySelector(`#filter_tags option[value="${tagName}"]`);
+        if (option) {
+            option.removeAttribute('selected');
+        }
+    });
+    selectedTagsDiv.appendChild(button);
 }
 
-function search_filter(rarity, lf, color, tags) {
-	let filters = [];
-	if (rarity === "all") {
-
-		filters.push(["HERO", "EXTREME", "SPARKING", "ULTRA"]);
-	} else {
-
-		filters.push([rarity]);
-	}
-
-	if (lf === "lf") {
-		filters.push([lf]);
-	} else {
-
-		filters.push(["lf", "notlf"]);
-	}
-
-	if (color === "all") {
-
-		filters.push(["rou", "jau", "vio", "ver", "ble", "lum"]);
-	} else {
-
-		filters.push([color]);
-	}
-
-	if (tags === []) {
-
-		filters.push([]);
-	} else {
-		filters.push(tags);
-	}
-
-	return filters;
+function clearFilterSelectedTags() {
+    document.getElementById('filter-selected-tags').innerHTML = '';
+    const options = document.querySelectorAll('#filter_tags .tag-option');
+    options.forEach(option => {
+        option.removeAttribute('selected');
+    });
 }
-
-function resetFilters() {
-	document.getElementById("filterTags").selectedIndex = -1;
-	$("#filterTags").end();
-	search();
-}
-
-function trimTagArray(array) {
-	for (let i = 1; i < array.length; i++) {
-		array[i] = array[i].trim()
-	}
-	return array
-}
-
-let characters = JSON.parse(charactersString);
