@@ -25,11 +25,12 @@ class CharacterManager {
         if (!empty($filtre)) {
             $query = $this->characterDAO->characterSearchQuery($filtre);
             $characters = $this->characterDAO->searchBy($query);
-            if(isset($filtre['tags'])) {
+            if(isset($filtre['filtres']['tags'])) {
                 $characters = $this->characterTagDAO->tagsFilterComparison($characters, $filtre);
                 $count = count($characters);
             }
         } else {
+            $_SESSION["display_characters"] = [];
             $characters = $this->characterDAO->getAll();
             $count = count($characters);
         }
@@ -40,6 +41,7 @@ class CharacterManager {
 			$start = ($page - 1) * 50;
 		}
 		$displayed = array_slice($characters, $start, 50);
+
 		foreach ($characters as $character) {
 			$data['Tags'] = [];
 			$characterTags = $this->characterTagDAO->getByCharacter($character->getImage());

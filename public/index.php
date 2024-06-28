@@ -21,6 +21,8 @@ use Slim\Views\TwigMiddleware;
 require_once __DIR__ . '/../app/Models/User.php';
 require_once __DIR__ . '/../app/Models/Kamenews.php';
 require_once __DIR__ . '/../app/Models/Article.php';
+require_once __DIR__ . '/../app/Models/Enums/Rarity.php';
+require_once __DIR__ . '/../app/Models/Enums/Color.php';
 require_once __DIR__ . '/../app/Models/Enums/Role.php';
 
 session_start();

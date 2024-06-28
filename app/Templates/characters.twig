@@ -361,7 +361,7 @@
                             <div id="filter-rarity-list">
                                 {% for rarity in rarities %}
                                     <div class="block">
-                                        <input type="radio" id="{{ rarity.value }}" name="filter-character-rarity" value="{{ rarity.value }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <input type="radio" id="{{ rarity.value }}" name="filter-character-rarity[]" value="{{ rarity.value }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                         <label for="{{ rarity.value }}" class="mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">{{ rarity.value }}</label>
                                     </div>
                                 {% endfor %}
@@ -373,7 +373,7 @@
                             <div id="filter-color-list" class="grid grid-cols-2">
                                 {% for color in colors %}
                                     <div class="block">
-                                        <input type="radio" id="{{ color.value }}" name="filter-character-color" value="{{ color.value }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                        <input type="radio" id="{{ color.value }}" name="filter-character-color[]" value="{{ color.value }}" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                         <label for="{{ color.value }}" class="mb-2 text-xs font-normal text-gray-900 dark:text-white ml-2">{{ color.value }}</label>
                                     </div>
                                 {% endfor %}
@@ -408,7 +408,7 @@
                                     <!-- Boutons des tags sélectionnés -->
                                 </div>
                                 <label for="filter_tags" class="mb-2 text-sm font-medium text-gray-900 dark:text-white hidden"></label>
-                                <select hidden="hidden" class="" id="filter_tags" name="filter-character-tags" multiple>
+                                <select hidden="hidden" class="" id="filter_tags" name="filter-character-tags[]" multiple>
                                     {% for tag in tags %}
                                         <option value="{{ tag.getName() }}" name="{{ tag.getName() }}" class="tag-option hidden">
                                             {{ tag.getName() }}

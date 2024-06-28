@@ -125,11 +125,15 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
 
             $characters = [];
             $data = $req->fetchAll();
+
             foreach ($data as $datum) {
                 $character = new Character();
                 $character->hydrate($datum);
                 $characters[] = $character;
             }
+
+//            var_dump($characters);
+//            die();
 
             return $characters;
         }
@@ -154,10 +158,15 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
                 $clauses[] = "Name LIKE '%{$data['filtres']['filter-character-name']}%'";
             }
             if (!empty($data['filtres']['filter-character-rarity'])) {
-                $clauses[] = "Rarity = '{$data['filtres']['filter-character-rarity']}'";
+                foreach ($data['filtres']['filter-character-rarity'] as $rar) {
+                    $rar = strtoupper($rar);
+                    $clauses[] = "Rarity = '{$rar}'";
+                }
             }
             if (!empty($data['filtres']['filter-character-color'])) {
-                $clauses[] = "Color = '{$data['filtres']['filter-character-color']}'";
+                foreach ($data['filtres']['filter-character-color'] as $col) {
+                    $clauses[] = "Color = '{$col}'";
+                }
             }
             if (!empty($data['filtres']['filter-character-lf'])) {
                 $lf = $data['filtres']['filter-character-lf'] === 'on' ? 1 : 0;
@@ -169,6 +178,10 @@ class CharacterDAO extends BaseDAO implements ICharacterDAO {
         }
 
         $query .= " ORDER BY Image ASC;";
+
+//        var_dump($query);
+//        die();
+
         return $query;
     }
 }

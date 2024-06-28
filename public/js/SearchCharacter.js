@@ -25,8 +25,8 @@ function switch_filters() {
 }
 function toggleInputType() {
     const andorCheckbox = document.getElementById('filter_andor');
-    const rarityRadios = document.querySelectorAll('#filters input[name="rarity"]');
-    const colorRadios = document.querySelectorAll('#filters input[name="color"]');
+    const rarityRadios = document.querySelectorAll('#filters input[name="filter-character-rarity[]"]');
+    const colorRadios = document.querySelectorAll('#filters input[name="filter-character-color[]"]');
 
     if (andorCheckbox.checked) {
         // Change radio inputs to checkboxes

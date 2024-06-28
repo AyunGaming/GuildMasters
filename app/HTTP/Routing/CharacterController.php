@@ -107,7 +107,10 @@ class CharacterController extends AbstractController
 
     public function postGetFilters(Request $request, Response $response): Response
     {
-        $post = $request->getParsedBody();
+        $array = $request->getParsedBody();
+
+//        var_dump($array);
+//        die();
 
         // Initialize the final array with an empty 'filtres' dictionary
         $constructedArray = array(
@@ -122,7 +125,7 @@ class CharacterController extends AbstractController
         }
 
         // Determine if character search is name or id and add it to 'filtres'
-        if (isset($array["filter-select-character-research"]) && isset($array["filter-character-searchbar"])) {
+        if (!empty($array["filter-character-searchbar"])) {
             $character_key = "filter-character-" . $array["filter-select-character-research"];
             $constructedArray["filtres"][$character_key] = $array["filter-character-searchbar"];
         }
@@ -139,6 +142,9 @@ class CharacterController extends AbstractController
                 $constructedArray["filtres"][$key] = $array[$key];
             }
         }
+
+//        var_dump($constructedArray);
+//        die();
 
         $_SESSION["display_characters"] = $this->characterManager->getPagedCharacters(1, $constructedArray);
 
@@ -252,8 +258,8 @@ class CharacterController extends AbstractController
         //if (not $filtered) {
         $page = $request->getAttribute('page');
         $tags = $this->tagManager->getAllTags();
-        $displayed = $this->getCharacterList($page, []);
-        $characterNumber = $displayed['count']; //total des persos pris
+        $displayed =empty($_SESSION["display_characters"]) ? $this->characterManager->getPagedCharacters($page, []) : $_SESSION["display_characters"];
+        $characterNumber = $displayed['count'];
         $pages = ceil($characterNumber / 50);
         $pagination = $this->pagination($page, $pages);
         $last_c = $this->getLastCharacterFromPage($characterNumber, $page);
