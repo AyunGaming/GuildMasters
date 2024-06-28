@@ -76,6 +76,7 @@ $app->group('/admin', static function (RouteCollectorProxy $admin) {
 });
 
 $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
+	unset($_SESSION['filtres']);
 	$kamenews->group('/list', static function (RouteCollectorProxy $list) {
 		$list->get('', [KamenewsController::class, 'displayAllKamenews'])->setName('kamenews');
 	});
@@ -107,6 +108,7 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 });
 
 $app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
+	unset($_SESSION['filtres']);
 	$user = $request->getAttribute(User::class);
 	$parser = RouteContext::fromRequest($request)->getRouteParser();
 

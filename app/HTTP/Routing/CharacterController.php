@@ -216,11 +216,6 @@ class CharacterController extends AbstractController
         return $res;
     }
 
-    public function getCharacterNumber(): int
-    {
-        return $this->characterManager->getCharacterNumber();
-    }
-
     public function viewPagedListCharacters(Request $request, Response $response, Twig $twig, int $page): Response
     {
         //if (not $filtered) {
@@ -228,9 +223,9 @@ class CharacterController extends AbstractController
         $tags = $this->tagManager->getAllTags();
 
 		if(empty($_SESSION["display_characters"]))
-			if($page == $_SESSION['page']+1 || $page < 1){ // Si on est sur la page suivante
+			if(isset($_SESSION['filtres'])){ // Si on est sur la page suivante
 				$_SESSION["display_characters"] =  $this->characterManager->getPagedCharacters($page,
-					$_SESSION['filtres'] ?? []);
+					$_SESSION['filtres']);
 			}
 			else{
 				$_SESSION['page'] = 1;
@@ -248,7 +243,8 @@ class CharacterController extends AbstractController
         $pagination = $this->pagination($page, $pages);
         $last_c = $this->getLastCharacterFromPage($characterNumber, $page);
         $user = $request->getAttribute(User::class);
-        $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page)];
+        $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page),
+			'first' => $this->disableFirst($page), 'last' => $this->disableLast($page, $pages)];
         return $twig->render($response, 'characters.twig', [
             'flashes' => Flashes::all(),
             'user' => $user,
@@ -263,7 +259,6 @@ class CharacterController extends AbstractController
             'pagination' => $pagination,
             'disable' => $disable
         ]);
-        //}
     }
 
     private function getLastCharacterFromPage(int $characterNumber, int $currentPage): int
@@ -274,6 +269,7 @@ class CharacterController extends AbstractController
     private function pagination(int $page, int $nb_pages): array
     {
         $page_array = [];
+		if($nb_pages == 1) return $page_array;
         if ($page - 2 < 1) {
             $offset = ($page - 2) * (-1) + 1;
 
@@ -297,7 +293,7 @@ class CharacterController extends AbstractController
             }
         }
 
-        return $page_array;
+		return array_slice($page_array,0,$nb_pages);
     }
 
     private function disableNext(int $page, int $pages): bool
@@ -309,4 +305,12 @@ class CharacterController extends AbstractController
     {
         return $page == 1;
     }
+
+	private function disableFirst(int $page): bool {
+		return $page == 1;
+	}
+
+	private function disableLast(int $page, int $pages): bool {
+		return $page == $pages;
+	}
 }
