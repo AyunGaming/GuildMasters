@@ -90,9 +90,6 @@ class CharacterController extends AbstractController
     {
         $array = $request->getParsedBody();
 
-//        var_dump($array);
-//        die();
-
         // Initialize the final array with an empty 'filtres' dictionary
         $constructedArray = array(
             "filtres" => array()
@@ -123,9 +120,6 @@ class CharacterController extends AbstractController
                 $constructedArray["filtres"][$key] = $array[$key];
             }
         }
-
-//        var_dump($constructedArray);
-//        die();
 
         $_SESSION["display_characters"] = $this->characterManager->getPagedCharacters(1, $constructedArray);
 
