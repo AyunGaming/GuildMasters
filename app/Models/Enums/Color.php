@@ -9,4 +9,5 @@ enum Color: string {
 	case VER = 'VER';
 	case VIO = 'VIO';
 	case LUM = 'LUM';
+	case TEN = 'TEN';
 }
