@@ -121,7 +121,6 @@
 			{% endfor %}
 		{% endif %}
 	{% endblock %}
-
 </body>
 
 
@@ -161,13 +160,10 @@
 					<h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">Legal</h2>
 					<ul class="text-gray-500 dark:text-gray-400 font-medium">
 						<li class="mb-4">
-							<a href="#" class="hover:underline">Politique de Confidentialité</a>
-						</li>
-						<li class="mb-4">
-							<a href="#" class="hover:underline">CGU</a>
+							<a href="{{ url_for('cgu') }}" class="hover:underline">CGU</a>
 						</li>
 						<li>
-							<a href="#" class="hover:underline">Mentions Légales</a>
+							<a href="{{ url_for('notices') }}" class="hover:underline">Mentions Légales</a>
 						</li>
 					</ul>
 				</div>

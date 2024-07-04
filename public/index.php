@@ -6,6 +6,7 @@ use division\Data\DAO\UserDAO;
 use division\Data\Database;
 use division\HTTP\Middlewares\GetUserMiddleware;
 use division\HTTP\Routing\CharacterController;
+use division\HTTP\Routing\IndexController;
 use division\HTTP\Routing\KamenewsController;
 use division\HTTP\Routing\UserController;
 use division\Models\Managers\UserManager;
@@ -107,17 +108,11 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 	});
 });
 
-$app->get('/', static function (ServerRequestInterface $request, ResponseInterface $response, Twig $twig): ResponseInterface {
-	unset($_SESSION['filtres']);
-	$user = $request->getAttribute(User::class);
-	$parser = RouteContext::fromRequest($request)->getRouteParser();
-
-	return $twig->render($response, 'main.twig', [
-		'flashes' => Flashes::all(),
-		'user_id' => @$_SESSION['a2v_user'],
-		'user' => $user
-	]);
-})->setName('home');
+$app->get('/', [IndexController::class, 'viewMainPage'])->setName('home');
+$app->group('/legal', static function (RouteCollectorProxy $legal) {
+	$legal->get('/cgu', [IndexController::class, 'viewCGUPage'])->setName('cgu');
+	$legal->get('/notices', [IndexController::class, 'viewNoticesPage'])->setName('notices');
+});
 
 $app->addMiddleware(new GetUserMiddleware(new UserManager(new UserDAO($database))));
 
