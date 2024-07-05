@@ -7,6 +7,50 @@
 {% endblock %}
 
 {% block body %}
+	<section>
+		<div class="">
+			<div class="col-2 me-3 me-sm-0">
+				<a href="{{ url_for('new-kamenews') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4
+				focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700
+				focus:outline-none dark:focus:ring-blue-800">
+					Créer un nouveau kamenews
+				</a>
+				<a href="{{ url_for('admin-kamenews') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4
+				focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700
+				focus:outline-none dark:focus:ring-blue-800">
+					Gérer les kamenews
+				</a>
+			</div>
+		</div>
+	</section>
+	<section class="bg-white dark:bg-gray-900">
+		<div class="py-8 px-8 mx-auto max-w-screen-xl lg:py-16">
+			<div class="grid grid-cols-3 gap-8">
+				{% for k in kamenews %}
+					<div class="max-w-sm bg-white rounded-lg shadow dark:bg-gray-800 p-4 mb-3">
+						 <div class="grid grid-rows-1 justify-center mb-3">
+								 <h5 class="text-xl text-center font-bold leading-none text-gray-900 dark:text-white">
+									 Kamenews n°{{ k.getId() }}
+								 </h5>
+						 </div>
+
+						 <div class="grid grid-rows-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+							 <div class="flex justify-center pt-5">
+								 <img class="w-40" src="/public/images/db_2star.png" alt="">
+							 </div>
+							 <p class="text-center text-gray-700 dark:text-gray-300 mt-2">{{ k.getDesc() }}</p>
+
+						 </div>
+
+						<div class="grid grid-rows-1 mt-4">
+							<p class="text-sm text-center font-bold italic text-gray-700 dark:text-gray-300">{{ k.getDate() }}</p>
+						</div>
+					</div>
+				 {% endfor %}
+			</div>
+		</div>
+	 </section>
+<!--
 	<div class="container-fluid">
 		<h1>Kamenews</h1>
 		{% if user is not null and user.getRole() is constant('division\\Models\\Enums\\Role::ADMIN') %}
@@ -34,7 +78,7 @@
 					</button>
 				</div>
 			{% endfor %}
-		</div>
+		</div> -->
 {% endblock %}
 
 {% block script %}
