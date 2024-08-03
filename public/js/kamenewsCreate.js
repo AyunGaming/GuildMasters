@@ -1,5 +1,5 @@
 function initKamenewsCreator(){
-	document.querySelectorAll('.date').forEach(date => {
+	document.querySelectorAll('#date').forEach(date => {
 		date.valueAsDate = new Date()
 	})
 
