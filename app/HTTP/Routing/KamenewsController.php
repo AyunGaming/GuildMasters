@@ -141,7 +141,7 @@ class KamenewsController extends AbstractController {
 			$filename = explode('.', $filename);
 			$extension = array_pop($filename);
 			$filename = implode('.', $filename) . '.' . $extension;
-			$title = str_replace(' ', '_',$post['title']);
+			$title = str_replace(' ', '_', $post['title']);
 
 
 			$image = $title . '.' . $extension;
