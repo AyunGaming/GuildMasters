@@ -4,6 +4,7 @@ namespace division\Data\DAO;
 
 use division\Data\DAO\Interfaces\kamenews\IArticlesDAO;
 use division\Models\Article;
+use Exception;
 use PDOException;
 
 class ArticlesDAO extends BaseDAO implements IArticlesDAO {
@@ -20,17 +21,29 @@ class ArticlesDAO extends BaseDAO implements IArticlesDAO {
 			if ($data !== false) {
 				$article = new Article();
 				$article->hydrate($data);
-
-				return $article;
 			}
 			return null;
 		} catch (PDOException) {
 			return null;
+		} finally {
+			$req = $this->database->prepare('SELECT image_name FROM articles_images WHERE article_id = ?');
+			$req->bindParam(1, $id);
+
+			$req->execute();
+
+			$images = $req->fetchAll();
+
+			if($images !== false){
+				$data['image'] = $images;
+				$article->hydrate($data);
+
+				return $article;
+			}
 		}
 	}
 
 	public function delete(int $id): void {
-		try{
+		try {
 			$req = $this->database->prepare('DELETE FROM articles WHERE id = ?');
 
 			$req->bindParam(1, $id);
@@ -41,8 +54,8 @@ class ArticlesDAO extends BaseDAO implements IArticlesDAO {
 	}
 
 	public function update(Article $article): void {
-		try{
-			$req = $this->database->prepare('UPDATE articles SET title = ?, text = ?, image = ? WHERE id = ?');
+		try {
+			$req = $this->database->prepare('UPDATE articles SET title = ?, text = ? WHERE id = ?');
 
 			$req->bindValue(1, $article->getTitle());
 			$req->bindValue(2, $article->getText());
@@ -56,16 +69,28 @@ class ArticlesDAO extends BaseDAO implements IArticlesDAO {
 	}
 
 	public function create(Article $article): void {
-		try{
-			$req = $this->database->prepare('INSERT INTO articles (title, text, image) VALUES (?, ?, ?)');
+		try {
+			$req = $this->database->prepare('INSERT INTO articles (title, text) VALUES (?, ?)');
 
 			$req->bindValue(1, $article->getTitle());
 			$req->bindValue(2, $article->getText());
-			$req->bindValue(3, $article->getImage());
 
 			$req->execute();
 		} catch (PDOException $e) {
 
+		} finally {
+			try {
+				$id = $this->database->lastInsertId();
+				foreach ($article->getImage() as $image) {
+					$req = $this->database->prepare('INSERT INTO articles_images (article_id, image_name) VALUES (?, ?)');
+					$req->bindValue(1, $id);
+					$req->bindValue(2, $image);
+
+					$req->execute();
+				}
+			} catch (PDOException $e) {
+				throw new Exception("Error while inserting images for article" . $article->getTitle() . ":" . $e->getMessage());
+			}
 		}
 	}
 
@@ -73,7 +98,7 @@ class ArticlesDAO extends BaseDAO implements IArticlesDAO {
 	 * @throws \Exception
 	 */
 	public function getLastInserted(int $n): array {
-		try{
+		try {
 			$req = $this->database->prepare('SELECT * FROM articles ORDER BY id DESC LIMIT ?');
 			$req->bindParam(1, $n);
 

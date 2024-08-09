@@ -134,22 +134,26 @@ class KamenewsController extends AbstractController {
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('edit-kamenews'));
 	}
 
-	private function saveImage($file, array $post): string {
-		$image = '';
-		if ($file->getClientFileName() !== '') {
-			$filename = $file->getClientFileName();
-			$filename = explode('.', $filename);
-			$extension = array_pop($filename);
-			$filename = implode('.', $filename) . '.' . $extension;
-			$title = str_replace(' ', '_', $post['title']);
+	private function saveImage($files, array $post): array {
+		$images = [];
+		$i = 0;
+		foreach ($files as $file) {
+			$i += 1;
+			if ($file->getClientFileName() !== '') {
+				$filename = $file->getClientFileName();
+				$filename = explode('.', $filename);
+				$extension = array_pop($filename);
+				$filename = implode('.', $filename) . '.' . $extension;
+				$title = str_replace(' ', '_', $post['title']) . "_" . $i;
 
-
-			$image = $title . '.' . $extension;
-			file_exists(__DIR__ . '/../../../public/images/kamenews/' . $image) && unlink(__DIR__ . '/../../../public/images/kamenews/' . $image);
-			$file->moveTo(__DIR__ . '/../../../public/images/kamenews/' . $image);
+				$name = "$title.$extension";
+				$images[] = $name;
+				file_exists(__DIR__ . '/../../../public/images/kamenews/' . $name) && unlink(__DIR__ . '/../../../public/images/kamenews/' . $name);
+				$file->moveTo(__DIR__ . '/../../../public/images/kamenews/' . $name);
+			}
 		}
 
-		return $image;
+		return $images;
 	}
 
 	public function createArticle(Request $request, Response $response): Response {

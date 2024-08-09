@@ -6,7 +6,7 @@
 	{{ parent() }}
 
 	{% if kamenews is not null %}
-		<section>
+		<section id="container">
 			<div class="grid grid-rows-2 px-8 mx-auto max-w-screen-xl bg-white dark:bg-gray-900 mt-3 mb-8">
 				<div class="flex justify-center">
 					<img alt="Illustration d'un journal" draggable="false" src="/public/images/kamenews/kamenewspaper.png">
@@ -34,8 +34,12 @@
 							{% endautoescape %}
 						</div>
 
-						<div class="flex justify-center mt-4">
-							<img class="rounded-lg shadow min-w-0 max-w-2xl" src="/public/images/kamenews/{{ article.getImage() }}" alt="Illustration du Kamenews">
+						<div class="grid grid-cols-3 articleImages">
+							{% for image in article.getImage() %}
+								<div class="flex justify-center mt-4 imageContainer">
+									<img class="rounded-lg shadow min-w-0 max-w-2xl images" src="/public/images/kamenews/{{ image.image_name }}" alt="Illustration du Kamenews">
+								</div>
+							{% endfor %}
 						</div>
 					</div>
 					<hr/>
@@ -43,4 +47,8 @@
 			</div>
 		</section>
 	{% endif %}
+{% endblock %}
+
+{% block script %}
+	<script src="/public/js/imagesTools.js" defer></script>
 {% endblock %}
