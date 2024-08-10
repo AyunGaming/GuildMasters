@@ -88,6 +88,18 @@ class KamenewsController extends AbstractController {
 
 	public function createKamenews(Request $request, Response $response): Response {
 		$post = $request->getParsedBody();
+		$file = $request->getUploadedFiles()['banner'];
+		if ($file->getClientFileName() !== '') {
+			$filename = $file->getClientFileName();
+			$filename = explode('.', $filename);
+			$extension = array_pop($filename);
+			$filename = implode('.', $filename) . '.' . $extension;
+
+			file_exists(__DIR__ . '/../../../public/images/kamenews/' . $filename) && unlink(__DIR__ . '/../../../public/images/kamenews/' . $filename);
+			$file->moveTo(__DIR__ . '/../../../public/images/kamenews/' . $filename);
+			$image = $filename;
+		}
+		if(isset($image)) $post['banner'] = $image;
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 

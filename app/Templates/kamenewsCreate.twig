@@ -66,6 +66,10 @@
 						<input type="number" id="nbArticles" name="nbArticles" hidden="hidden">
 					</div>
 					<div class="col-span-2">
+						<label for="banner" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Bannière du Kamenews (360x120px)</label>
+						<input type="file" id="banner" name="banner" accept="image/*" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+					</div>
+					<div class="col-span-2">
 						<label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titre</label>
 						<input type="text" id="title" name="titre" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
 					</div>
@@ -90,7 +94,8 @@
 					</div>
 					<div class="col-span-2">
 						<label for="date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date</label>
-						<input type="date" id="date" name="date" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500">
+						<input type="date" id="date" class="mb-6 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" required disabled>
+						<input type="date" id="hidden-date" name="date" hidden="hidden" required>
 					</div>
 					<div class="col-span-2">
 						<button id="createKamenews" type="submit" class="text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">

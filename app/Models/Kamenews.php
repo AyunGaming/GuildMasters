@@ -5,6 +5,8 @@ namespace division\Models;
 class Kamenews {
 	private int $id;
 
+	private string $banner;
+
 	private string $title;
 
 	private string $date;
@@ -21,6 +23,10 @@ class Kamenews {
 	public function hydrate(array $data) {
 		if (array_key_exists('id', $data)) {
 			$this->id = $data['id'];
+		}
+
+		if (array_key_exists('banner', $data)) {
+			$this->banner = $data['banner'];
 		}
 
 		if (array_key_exists('titre', $data)) {
@@ -66,5 +72,9 @@ class Kamenews {
 
 	public function getWriter(): User {
 		return $this->writer;
+	}
+
+	public function getBanner(): string {
+		return $this->banner;
 	}
 }
