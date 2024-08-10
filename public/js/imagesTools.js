@@ -1,15 +1,18 @@
 function expandImage(image){
 	image.style.display = 'flex';
 	image.style.transform = "scale(2)";
-	image.style.transition = "transform 0.25s ease";
+	image.style.transition = "transform 0.4s ease";
 	image.style.zIndex = "5";
 }
 
 function resetImage(image){
-	image.style.display = "relative";
-	image.style.zIndex = "0";
 	image.style.transform = "scale(1)";
-	image.style.transition = "transform 0.25s ease";
+	image.style.transition = "transform 0.4s ease";
+
+	setTimeout(() => {
+		image.style.display = "relative";
+		image.style.zIndex = "0";
+	},400);
 }
 
 window.addEventListener('load', () => {

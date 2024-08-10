@@ -23,7 +23,7 @@ class Article {
 		}
 
 		if (array_key_exists('image', $data)) {
-			$this->image = $data['image'];
+			is_array($data['image']) ? $this->image = $data['image'] : $this->image[] = $data['image'];
 		}
 		else{
 			$this->image = [];
