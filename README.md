@@ -1,6 +1,6 @@
-# Division net
+# Guild Masters
 
-Bienvenue sur Division net ! Ce projet vise à fournir une plateforme en ligne pour améliorer l'expérience des membres de ma guilde dans le jeu Dragon Ball Legends. Grâce à cette application web, il est possible de centraliser les informations, coordonner des activités et renforcer la communauté de votre guilde.
+Bienvenue sur Guild Masters ! Ce projet vise à fournir une plateforme en ligne pour améliorer l'expérience des membres de ma guilde dans le jeu Dragon Ball Legends. Grâce à cette application web, il est possible de centraliser les informations, coordonner des activités et renforcer la communauté de votre guilde.
 
 ## Fonctionnalités principales
 
