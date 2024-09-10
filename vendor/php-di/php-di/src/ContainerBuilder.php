@@ -238,7 +238,7 @@ class ContainerBuilder
      * @return $this
      * @throws InvalidArgumentException when writeToFile is set to true and the proxy directory is null
      */
-    public function writeProxiesToFile(bool $writeToFile, string $proxyDirectory = null) : self
+    public function writeProxiesToFile(bool $writeToFile, ?string $proxyDirectory = null) : self
     {
         $this->ensureNotLocked();
 
@@ -247,7 +247,7 @@ class ContainerBuilder
                 'The proxy directory must be specified if you want to write proxies on disk'
             );
         }
-        $this->proxyDirectory = $proxyDirectory;
+        $this->proxyDirectory = $writeToFile ? $proxyDirectory : null;
 
         return $this;
     }
