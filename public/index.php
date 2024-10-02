@@ -60,6 +60,11 @@ $app->group('/signin', static function (RouteCollectorProxy $signIn) {
 	$signIn->get('', UserController::class)->setName('sign-in');
 });
 
+$app->group('/signup', static function (RouteCollectorProxy $signUp) {
+    $signUp->post('', [UserController::class, 'signup']);
+    $signUp->get('', UserController::class)->setName('sign-up');
+});
+
 $app->get('/signout', [UserController::class, 'signOut'])->setName('sign-out');
 
 $app->group('/admin', static function (RouteCollectorProxy $admin) {
