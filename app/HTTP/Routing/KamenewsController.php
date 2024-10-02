@@ -118,7 +118,7 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->deleteKamenews($post['ID']);
-			Flashes::add(FlashMessage::danger("Le kamenews n°{$post['ID']} n'a pas pu être supprimé"));
+			Flashes::add(FlashMessage::success("Le kamenews n°{$post['ID']} a été supprimé"));
 		} catch (\Exception $e) {
 			Flashes::add(FlashMessage::danger("Le kamenews n°{$post['ID']} n'a pas pu être supprimé"));
 		}
@@ -141,7 +141,7 @@ class KamenewsController extends AbstractController {
 			$filename = explode('.', $filename);
 			$extension = array_pop($filename);
 			$filename = implode('.', $filename) . '.' . $extension;
-			$title = str_replace(' ', '_',$post['title']);
+			$title = str_replace(' ', '_', $post['title']);
 
 
 			$image = $title . '.' . $extension;
