@@ -40,3 +40,38 @@ body {
 {
 	@apply text-green-800 border-green-300 bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800
 }
+
+.text
+{
+	@apply dark:text-white
+}
+
+.button
+{
+	@apply text-white font-medium rounded-lg text-sm px-2 py-2.5 focus:outline-none text-center
+}
+
+.button-large
+{
+	@apply text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none text-center
+}
+
+.green-button
+{
+	@apply bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800
+}
+
+.blue-button
+{
+	@apply bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800
+}
+
+.card
+{
+	@apply bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8
+}
+
+.link
+{
+	@apply text-blue-600 dark:text-blue-500 hover:underline
+}

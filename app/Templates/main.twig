@@ -4,7 +4,6 @@
 
 {% block title %} Guild Masters {% endblock %}
 
-
 {% block body %}
     {{ parent() }}
     <section class="bg-white dark:bg-gray-900">
@@ -38,7 +37,7 @@
 
     <section class="bg-white dark:bg-gray-900">
         <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
-            <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
+            <div class="card">
                 <a href="#"
                    class="bg-blue-100 text-blue-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-blue-400 mb-2">
                     <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -49,15 +48,17 @@
                 </a>
                 <h1 class="text-gray-900 dark:text-white text-3xl md:text-5xl font-extrabold mb-2">Présentation de
                     GuildMasters</h1>
-                <p class="text-lg font-normal text-gray-500 dark:text-gray-400 mb-6">GuildMasters est un outil de
-                    gestion de guilde spécialement conçu pour le jeu mobile Dragon Ball Legends. Cet outil vise à
+                <p class="text-lg font-normal text-gray-500 dark:text-gray-400 mb-6">
+                    GuildMasters est un outil de gestion de guilde spécialement conçu pour le jeu mobile Dragon Ball Legends. Cet outil vise à
                     enrichir et simplifier l'expérience des guildes en proposant une gamme de fonctionnalités dédiées à
                     la gestion et à la communication au sein des guildes. Avec GuildMasters, les joueurs peuvent
                     efficacement organiser leurs activités, planifier des événements, suivre les performances des
-                    membres et faciliter la coordination entre les membres de la guilde.</p>
+                    membres et faciliter la coordination entre les membres de la guilde.
+                </p>
             </div>
+
             <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
+                <div class="card">
                     <a href="#"
                        class="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-green-400 mb-2">
                         <svg class="w-3.5 h-3.5 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -70,11 +71,13 @@
                     </a>
                     <h2 class="text-gray-900 dark:text-white text-3xl font-extrabold mb-2">Une nouvelle façon de gérer
                         sa guilde</h2>
-                    <p class="text-lg font-normal text-gray-500 dark:text-gray-400 mb-4">Ajoutez, supprimez et modifiez
+                    <p class="text-lg font-normal text-gray-500 dark:text-gray-400 mb-4">
+                        Ajoutez, supprimez et modifiez
                         les membres de votre guilde afin de garder une trace de tout vos membres. De plus, une section
-                        "Annonce de guilde" est disponible !</p>
+                        "Annonce de guilde" est disponible !
+                    </p>
                     <a href="#"
-                       class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Vers
+                       class="link font-medium text-lg inline-flex items-center">Vers
                         la gestion de guilde
                         <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -83,7 +86,8 @@
                         </svg>
                     </a>
                 </div>
-                <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
+
+                <div class="card">
                     <a href="#"
                        class="bg-purple-100 text-purple-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-purple-400 mb-2">
 
@@ -100,7 +104,7 @@
                     <p class="text-lg font-normal text-gray-500 dark:text-gray-400 mb-4">Créez et organisez des tournois
                         au sein de votre guilde simplement avec l'outil "Tournoi" de GuildMasters.</p>
                     <a href="#"
-                       class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center">Vers
+                       class="link font-medium text-lg inline-flex items-center">Vers
                         la gestion de tournoi
                         <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
                              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -111,8 +115,8 @@
                 </div>
             </div>
 
-            <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
-                <a href="#"
+            <div class="card">
+                <a href="{{ url_for('kamenews') }}"
                    class="bg-blue-100 text-yellow-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded-md dark:bg-gray-700 dark:text-yellow-400 mb-2">
                     <svg class="w-4 h-4 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                          height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -129,7 +133,7 @@
                     nouveautés du jeu avec le kamenews ! Propre à chaque guilde le kamenews permet de partager les
                     nouveautés à tout vos membres.</p>
                 <a href="{{ url_for("kamenews") }}"
-                   class="inline-flex justify-center items-center py-2.5 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+                   class="inline-flex justify-center button-large blue-button">
                     Accéder à la liste des articles
                     <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                          fill="none" viewBox="0 0 14 10">
