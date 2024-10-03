@@ -10,16 +10,6 @@
 {% endblock %}
 
 {% block body %}
-    {# A CHECK
-		<div class="row mt-3">
-			{% for flash in flashes %}
-				<div class="alert alert-{{ flash.type }} alert-dismissible fade show" role="alert">
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-					{{ flash.message|raw }}
-				</div>
-			{% endfor %}
-		</div>
-    #}
     <section class="modals">
         <!-- Update character modal -->
         <div id="crud-modal-update" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
