@@ -3,6 +3,7 @@
 {% block title %} Kamenews {% endblock %}
 
 {% block body %}
+	{% if user is not null and user.getRole() is constant('division\\Models\\Enums\\Role::ADMIN') %}
 	<section class="pt-10 pb-5">
 		<div class="justify-end flex px-8 mx-auto max-w-screen-xl">
 			<div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-4">
@@ -19,9 +20,15 @@
 			</div>
 		</div>
 	</section>
-
+	{% endif %}
 	<section class="py-2 bg-white dark:bg-gray-900 mb-10">
 		<div class="px-8 mx-auto max-w-screen-xl">
+			{% if kamenews|length == 0 %}
+				<div class="flex justify-center items-center text-center mt-8">
+					<p class="text-xl dark:text-white">Aucun Kamenews n'est actuellement disponible</p>
+				</div>
+			{% endif %}
+
 			<div class="grid lg:grid-cols-3 sm:grid-cols-1 gap-8">
 				{% for k in kamenews %}
 					<a href="{{ url_for('display-kamenews') }}" id="{{ k.getId() }}" class="kamenews-read">
