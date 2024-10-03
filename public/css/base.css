@@ -8,3 +8,11 @@ body {
 	/*color: #fff;*/
 	overflow-x: hidden;
 }
+
+#footer-list {
+	list-style-type: none;
+}
+
+.characterImage {
+	width: 256px;
+}

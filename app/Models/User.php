@@ -10,7 +10,6 @@ class User {
 
 	private string $login;
 
-	private string $email;
 
 	private Role $role;
 
@@ -30,13 +29,6 @@ class User {
 		$this->login = $login;
 	}
 
-	public function getEmail(): string {
-		return $this->email;
-	}
-
-	public function setEmail(string $email): void {
-		$this->email = $email;
-	}
 
 	public function getRole(): Role {
 		return $this->role;
@@ -62,10 +54,6 @@ class User {
 
 		if(array_key_exists('login',$data)){
 			$this->login = $data['login'];
-		}
-
-		if(array_key_exists('email',$data) && $data['email'] !== null){
-			$this->email = $data['email'];
 		}
 
 		if(array_key_exists('role',$data)){

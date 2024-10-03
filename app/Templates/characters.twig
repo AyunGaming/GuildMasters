@@ -331,13 +331,13 @@
                         </div>
                     </div>
                     <div class="px-4">
-                        <button type="button" data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create" class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                        <button type="button" data-modal-target="crud-modal-create" data-modal-toggle="crud-modal-create" class=" me-2 mb-2"
                                 onclick="">
-                        <span>
+                        <span class="w-full focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
                             Créer un personnage
                         </span>
                         </button>
-                        <div class="flex w-full">
+                        <div class="flex w-full mt-2">
                             <button type="button" onclick="switch_filters()" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-1 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                                 Filtres
                             </button>
@@ -459,9 +459,9 @@
                                     {{ character.getImage() }}
                                 </th>
                                 <td class="px-6 py-4">
-                                    <img draggable="false" id="characterImage"
+                                    <img draggable="false" id="characterImage" class="characterImage"
                                          src="/public/images/characters/{{ character.getImage() }}.png"
-                                         alt="Image de {{ character.getImage() }}" width="300" height="300">
+                                         alt="Image de {{ character.getImage() }}">
                                 </td>
                                 <td class="px-6 py-4">
                                     <img draggable="false" id="characterRarity"

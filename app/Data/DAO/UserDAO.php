@@ -49,4 +49,18 @@ class UserDAO extends BaseDAO implements IUserDAO {
 			return null;
 		}
 	}
+
+    public function register(string $login, string $password)
+    {
+        try {
+            $req = $this->database->prepare('INSERT INTO users (login, password) VALUES (?, ?)');
+
+            $req->bindParam(1,$login);
+            $req->bindParam(2,$password);
+            $req->execute();
+        } catch (PDOException $e){
+            var_dump($e->getMessage());
+            die();
+        }
+    }
 }

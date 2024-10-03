@@ -7,34 +7,48 @@
 {% endblock %}
 
 {% block body %}
-	<section class="container">
-		<img draggable="false" class="characters" src="/public/images/kid_goku.png" alt="Images de Goku">
-		<div class="login-container">
-			<img draggable="false" class="circle circle-one" src="/public/images/db_2star.png" alt="Dragon ball à 2 étoiles">
-			<div class="form-container">
-				<h1 class="opacity">Connexion</h1>
-
-				{% for flash in flashes %}
-					<div class="alert alert-{{ flash.type }} alert-dismissible fade show" role="alert">
-						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-						{{ flash.message|raw }}
+	<div class="flex flex-1">
+		<div class="w-1/2 h-full p-4 my-8 mx-4"> <!-- Sign-in -->
+			<h1 class="text-2xl font-bold mb-2 text-white text-center">Inscription</h1>
+			<form action="{{ url_for('sign-up') }}" method="POST" class="max-w-sm mx-auto my-10">
+				<div class="mb-5">
+					<label for="login" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pseudo</label>
+					<input type="text" name="login" id="login" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Pseudo" required />
+				</div>
+				<div class="mb-5">
+					<label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>
+					<input type="password" name="password" id="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="********" required />
+				</div>
+				<div class="mb-5">
+					<label for="repeat-password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Répéter le mot de passe</label>
+					<input type="password" name="confirm-password" id="repeat-password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="********" required />
+				</div>
+				<div class="flex items-start mb-5">
+					<div class="flex items-center h-5">
+						<input id="terms" type="checkbox" value="" class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
 					</div>
-				{% endfor %}
+					<label for="terms" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">J'accepte les <a href="#" class="text-blue-600 hover:underline dark:text-blue-500">termes et conditions</a></label>
+				</div>
+				<button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">S'inscrire</button>
+			</form>
 
-				<form method="post" action="">
-					<label for="login">Login:</label>
-					<input id="login" name="login" type="text" required><br>
-
-					<label for="password">Mot de passe:</label>
-					<input id="password" name="password" type="password" required><br>
-
-					<button class="opacity" type="submit">Se connecter</button>
-					<br>
-				</form>
-
-			</div>
-			<img draggable="false" class="circle circle-two" src="/public/images/db_4star.png" alt="Dragon ball à 4 étoiles">
 		</div>
-		<img draggable="false" class="characters" src="/public/images/kamesennin.png" alt="Image de Kamesennin">
-	</section>
+
+		<div class="w-1/2 h-full p-4 my-8 mx-4"> <!-- Sign-up -->
+			<h1 class="text-2xl font-bold mb-2 text-white text-center">Connexion</h1>
+			<form action="{{ url_for('sign-in') }}" method="POST" class="max-w-sm mx-auto my-10">
+				<div class="mb-5">
+					<label for="login" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pseudo</label>
+					<input type="text" name="login" id="login" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Pseudo" required />
+				</div>
+				<div class="mb-5">
+					<label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mot de passe</label>
+					<input type="password" name="password" id="password" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="********" required />
+				</div>
+				<button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Se connecter</button>
+			</form>
+
+		</div>
+	</div>
 {% endblock %}
+

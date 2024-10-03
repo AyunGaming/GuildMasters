@@ -67,12 +67,14 @@
 							<span class="block text-sm  text-gray-500 truncate dark:text-gray-400">{{ user.getEmail }}</span>
 						</div>
 					<ul class="py-2" aria-labelledby="user-menu-button">
+						{% if user.getRole() is constant('division\\Models\\Enums\\Role::ADMIN') %}
 						<li>
 							<a href="{{ url_for('character-list', {'page':1}) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Gestion personnages</a>
 						</li>
 						<li>
 							<a href="{{ url_for('admin-kamenews') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Gestion kamenews</a>
 						</li>
+						{% endif %}
 						<li>
 							<a href="{{ url_for('sign-out') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
 							{% else %}

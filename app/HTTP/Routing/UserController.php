@@ -16,6 +16,36 @@ use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 
 class UserController extends AbstractController {
+
+    public function signup(Request $request, Response $response): Response{
+        $post = $request->getParsedBody();
+
+        $parser = RouteContext::fromRequest($request)->getRouteParser();
+
+        if (!empty($post['login']) && !empty($post['password']) && !empty($post['confirm-password'])) {
+            $login = htmlspecialchars($post['login']);
+            $password = htmlspecialchars($post['password']);
+            $confirmPassword = htmlspecialchars($post['confirm-password']);
+
+            if ($password == $confirmPassword) {
+                $manager = new UserManager(new UserDAO($this->database));
+
+                $user = $manager->register($login, $password);
+
+                if ($user !== null) {
+                    $_SESSION['user_id'] = $user->getId();
+                    return $response->withStatus(StatusCodeInterface::STATUS_FOUND)
+                        ->withHeader('Location', $parser->urlFor('home'));
+                }
+            }
+
+            Flashes::add(FlashMessage::danger('Mot de passe différent de la confirmation !'));
+            return $response->withStatus(StatusCodeInterface::STATUS_NOT_ACCEPTABLE)
+                ->withHeader('Location', $parser->urlFor('sign-in'));
+        }
+
+        return $response->withStatus(StatusCodeInterface::STATUS_NOT_ACCEPTABLE);
+    }
 	public function login(Request $request, Response $response): Response{
 		$post = $request->getParsedBody();
 
@@ -35,7 +65,7 @@ class UserController extends AbstractController {
 			
 			// Invalid login or credentials, alert the user
 			Flashes::add(FlashMessage::danger('Login ou mot de passe incorrects !'));
-			return $response->withStatus(StatusCodeInterface::STATUS_FOUND)
+			return $response->withStatus(StatusCodeInterface::STATUS_NOT_ACCEPTABLE)
 				->withHeader('Location', $parser->urlFor('sign-in'));
 		}
 		return $response;
