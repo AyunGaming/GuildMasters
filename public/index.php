@@ -18,6 +18,7 @@ use Slim\Routing\RouteCollectorProxy;
 use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use Twig\Extension\DebugExtension;
 
 require_once __DIR__ . '/../app/Models/User.php';
 require_once __DIR__ . '/../app/Models/Kamenews.php';
@@ -47,7 +48,7 @@ $twig = Twig::create(__DIR__ . '/../app/Templates', [
 	'debug' => true,
 ]);
 
-$twig->getEnvironment()->addExtension(new \Twig\Extension\DebugExtension());
+$twig->getEnvironment()->addExtension(new DebugExtension());
 
 
 $container->set(Twig::class, $twig);
