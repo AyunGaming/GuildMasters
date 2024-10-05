@@ -90,6 +90,7 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 
 	$kamenews->group('/read', static function (RouteCollectorProxy $read) {
 		$read->post('/get/{id:[1-9][0-9]*}', [KamenewsController::class, 'postGetKamenews'])->setName('read-kamenews');
+		$read->get('/latest', [KamenewsController::class, 'displayLastKamenews'])->setName('last-kamenews');
 		$read->get('', [KamenewsController::class, 'readKamenews'])->setName('display-kamenews');
 	});
 

@@ -104,7 +104,7 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 		}
 	}
 
-	public function getLastInserted(int $n): array {
+	public function getLastInserted(int $n = 1): array {
 		try{
 			$req = $this->database->prepare('SELECT * FROM kamenews ORDER BY id DESC LIMIT ?');
 			$req->bindParam(1, $n);
@@ -115,6 +115,7 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 
 			$kamenewsList = [];
 			foreach ($data as $datum) {
+				$datum['writer'] = $this->userDAO->getById($datum['user']);
 				$kamenews = new Kamenews();
 				$kamenews->hydrate($datum);
 				$kamenewsList[] = $kamenews;

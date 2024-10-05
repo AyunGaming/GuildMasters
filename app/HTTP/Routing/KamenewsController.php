@@ -99,7 +99,7 @@ class KamenewsController extends AbstractController {
 			$file->moveTo(__DIR__ . '/../../../public/images/kamenews/' . $filename);
 			$image = $filename;
 		}
-		if(isset($image)) $post['banner'] = $image;
+		if (isset($image)) $post['banner'] = $image;
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 
@@ -201,6 +201,15 @@ class KamenewsController extends AbstractController {
 			Flashes::add(FlashMessage::danger($e->getMessage()));
 			return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('home'));
 		}
+	}
+
+	public function displayLastKamenews(Request $request, Response $response, Twig $twig): Response {
+		$user = $request->getAttribute(User::class);
+
+		return $twig->render($response, 'kamenewsViewer.twig', [
+			'user' => $user,
+			'kamenews' => $this->kamenewsManager->getLastKamenews(),
+		]);
 	}
 
 	public function displayAllKamenews(Request $request, Response $response, Twig $twig): Response {

@@ -119,4 +119,8 @@ class KamenewsManager {
 		$this->kamenewsArticlesDAO->deleteByArticle($id);
 		$this->articlesDAO->delete($id);
 	}
+
+	public function getLastKamenews(): Kamenews {
+		return $this->getKamenews($this->kamenewsDAO->getLastInserted()[0]->getId());
+	}
 }
