@@ -4,7 +4,7 @@ namespace division\HTTP\Routing;
 
 use division\Data\Database;
 use division\Models\User;
-use division\Utils\Flashes;
+use division\Utils\Alerts;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
@@ -18,7 +18,7 @@ class IndexController extends AbstractController {
 		unset($_SESSION['filtres']);
 		$user = $request->getAttribute(User::class);
 		return $twig->render($response, 'main.twig', [
-			'flashes' => Flashes::all(),
+			'alerts' => Alerts::all(),
 			'user_id' => @$_SESSION['a2v_user'],
 			'user' => $user
 		]);
@@ -27,7 +27,7 @@ class IndexController extends AbstractController {
 	public function viewNoticesPage(Response $response, Request $request, Twig $twig): Response {
 		$user = $request->getAttribute(User::class);
 		return $twig->render($response, 'legal_notices.twig', [
-			'flashes' => Flashes::all(),
+			'alerts' => Alerts::all(),
 			'user' => $user
 		]);
 	}
@@ -35,7 +35,7 @@ class IndexController extends AbstractController {
 	public function viewCGUPage(Response $response, Request $request, Twig $twig): Response {
 		$user = $request->getAttribute(User::class);
 		return $twig->render($response, 'cgu.twig', [
-			'flashes' => Flashes::all(),
+			'alerts' => Alerts::all(),
 			'user' => $user
 		]);
 	}

@@ -9,7 +9,9 @@ use division\Data\DAO\UserDAO;
 use division\Data\Database;
 use division\Models\Managers\KamenewsManager;
 use division\Models\User;
-use division\Utils\Flashes;
+use division\Utils\Alerts;
+use division\Utils\alerts\Alert;
+use division\Utils\alerts\AlertTypes;
 use division\Utils\FlashMessage;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -36,9 +38,9 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->updateArticle($post);
-			Flashes::add(FlashMessage::success("Le kamenews n°{$post['id']} a bien été modifié"));
+			Alerts::add(new Alert("Le kamenews n°{$post['id']} a bien été modifié", AlertTypes::SUCCESS));
 		} catch (\Exception) {
-			Flashes::add(FlashMessage::danger("Le kamenews n°{$post['id']} n'a pas pu être modifié"));
+			Alerts::add(new Alert("Le kamenews n°{$post['id']} n'a pas pu être modifié", AlertTypes::ERROR));
 		}
 
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('admin-kamenews'));
@@ -50,9 +52,9 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->updateKamenews($post);
-			Flashes::add(FlashMessage::success("L'article a bien été modifié"));
+			Alerts::add(new Alert("L'article a bien été modifié", AlertTypes::SUCCESS));
 		} catch (\Exception) {
-			Flashes::add(FlashMessage::danger("L'article n'a pas pu être modifié"));
+			Alerts::add(new Alert("L'article n'a pas pu être modifié", AlertTypes::ERROR));
 		}
 
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('admin-kamenews'));
@@ -63,9 +65,9 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->deleteArticle($post['id']);
-			Flashes::add(FlashMessage::success("L'article n°{$post['id']} a bien été supprimé"));
+			Alerts::add(new Alert("L'article n°{$post['id']} a bien été supprimé", AlertTypes::SUCCESS));
 		} catch (\Exception) {
-			Flashes::add(FlashMessage::danger("L'article n°{$post['id']} n'a pas pu être supprimé"));
+			Alerts::add(new Alert("L'article n°{$post['id']} n'a pas pu être supprimé", AlertTypes::ERROR));
 		}
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
@@ -77,9 +79,9 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->deleteArticle($post['id']);
-			Flashes::add(FlashMessage::success("L'article n°{$post['id']} a bien été supprimé"));
+			Alerts::add(new Alert("L'article n°{$post['id']} a bien été supprimé", AlertTypes::SUCCESS));
 		} catch (\Exception) {
-			Flashes::add(FlashMessage::danger("L'article n°{$post['id']} n'a pas pu être supprimé"));
+			Alerts::add(new Alert("L'article n°{$post['id']} n'a pas pu être supprimé", AlertTypes::ERROR));
 		}
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
@@ -105,9 +107,9 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->addKamenews($post);
-			Flashes::add(FlashMessage::success("Le kamenews a bien été créé"));
+			Alerts::add(new Alert("Le kamenews a bien été créé", AlertTypes::SUCCESS));
 		} catch (\Exception) {
-			Flashes::add(FlashMessage::danger("Le kamenews n'a pas pu être créé"));
+			Alerts::add(new Alert("Le kamenews n'a pas pu être créé", AlertTypes::ERROR));
 		}
 
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('kamenews'));
@@ -130,9 +132,9 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->deleteKamenews($post['ID']);
-			Flashes::add(FlashMessage::success("Le kamenews n°{$post['ID']} a été supprimé"));
+			Alerts::add(new Alert("Le kamenews n°{$post['ID']} a été supprimé", AlertTypes::SUCCESS));
 		} catch (\Exception $e) {
-			Flashes::add(FlashMessage::danger("Le kamenews n°{$post['ID']} n'a pas pu être supprimé"));
+			Alerts::add(new Alert("Le kamenews n°{$post['ID']} n'a pas pu être supprimé", AlertTypes::ERROR));
 		}
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
@@ -178,9 +180,9 @@ class KamenewsController extends AbstractController {
 
 		try {
 			$this->kamenewsManager->addArticle($post);
-			Flashes::add(FlashMessage::success("L'article a bien été créé"));
+			Alerts::add(new Alert("L'article a bien été créé", AlertTypes::SUCCESS));
 		} catch (\Exception) {
-			Flashes::add(FlashMessage::danger("L'article n'a pas pu être créé"));
+			Alerts::add(new Alert("L'article n'a pas pu être créé", AlertTypes::ERROR));
 		}
 
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('new-kamenews'));
@@ -193,12 +195,12 @@ class KamenewsController extends AbstractController {
 
 		try {
 			return $twig->render($response, 'kamenewsViewer.twig', [
-				'flashes' => Flashes::all(),
+				'alerts' => Alerts::all(),
 				'user' => $user,
 				'kamenews' => $_SESSION['display_kamenews'],
 			]);
 		} catch (\Exception $e) {
-			Flashes::add(FlashMessage::danger($e->getMessage()));
+			Alerts::add(new Alert($e->getMessage(), AlertTypes::ERROR));
 			return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('home'));
 		}
 	}
@@ -218,7 +220,7 @@ class KamenewsController extends AbstractController {
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 		return $twig->render($response, 'kamenews.twig', [
-			'flashes' => Flashes::all(),
+			'alerts' => Alerts::all(),
 			'read_kamenews_url' => $parser->urlFor('read-kamenews', [
 				'id' => 'Id'
 			]),
@@ -233,7 +235,7 @@ class KamenewsController extends AbstractController {
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 		return $twig->render($response, 'kamenewsAdmin.twig', [
-			'flashes' => Flashes::all(),
+			'alerts' => Alerts::all(),
 			'read_kamenews_url' => $parser->urlFor('read-kamenews', [
 				'id' => 'Id'
 			]),
@@ -249,7 +251,7 @@ class KamenewsController extends AbstractController {
 		$user = $request->getAttribute(User::class);
 
 		return $twig->render($response, 'kamenewsEdit.twig', [
-			'flashes' => Flashes::all(),
+			'alerts' => Alerts::all(),
 			'kamenews' => @$_SESSION['display_kamenews'],
 			'user_id' => @$_SESSION['a2v_user'],
 			'user' => $user
@@ -260,7 +262,7 @@ class KamenewsController extends AbstractController {
 		$user = $request->getAttribute(User::class);
 
 		return $twig->render($response, 'kamenewsCreate.twig', [
-			'flashes' => Flashes::all(),
+			'alerts' => Alerts::all(),
 			'user_id' => @$_SESSION['a2v_user'],
 			'user' => $user
 		]);
