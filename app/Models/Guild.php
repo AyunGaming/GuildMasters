@@ -2,7 +2,6 @@
 
 namespace division\Models;
 
-use division\Data\DAO\UserDAO;
 
 class Guild {
 	private string $name;

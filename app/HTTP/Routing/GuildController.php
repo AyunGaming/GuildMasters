@@ -19,6 +19,7 @@ use Slim\Views\Twig;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use const Grpc\STATUS_ABORTED;
 
 class GuildController extends AbstractController{
 	private GuildManager $guildManager;
@@ -98,12 +99,11 @@ class GuildController extends AbstractController{
 
 	public function viewManageGuild(Request $request, Response $response, Twig $twig): Response{
 		$user = $request->getAttribute(User::class);
+		$parser = RouteContext::fromRequest($request)->getRouteParser();
+		if(is_null($user)) return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('sign-in'));
 		$guild = $this->guildManager->getByOwner($user);
 
-		if($guild == null){
-			$parser = RouteContext::fromRequest($request)->getRouteParser();
-			return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('create-guild'));
-		}
+		if($guild == null) return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('create-guild'));
 
 		return $twig->render($response, 'guildAdminPanel.twig', [
 			'user' => $user,
