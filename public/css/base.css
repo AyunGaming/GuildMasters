@@ -18,7 +18,7 @@ body {
 }
 
 .characterImage {
-	width: 256px;
+	max-width: 100px;
 }
 
 .alert

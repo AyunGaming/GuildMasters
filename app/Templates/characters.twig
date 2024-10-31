@@ -305,8 +305,8 @@
                     <div class="flex w-full">
                         <label for="character-research" hidden="hidden">Recherche de personnage</label>
                         <select name="filter-select-character-research" id="character-research" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600">
-                            <option value="name" selected>Nom</option>
-                            <option value="id">ID</option>
+                            <option value="name">Nom</option>
+                            <option value="id" selected>ID</option>
                         </select>
                         <label hidden="hidden" for="search"> Barre de Recherche: </label>
                         <div class="relative w-full">
@@ -448,7 +448,7 @@
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ character.getImage() }}
                                 </th>
-                                <td class="px-6 py-4">
+                                <td class="p-2">
                                     <img draggable="false" id="characterImage" class="characterImage"
                                          src="/public/images/characters/{{ character.getImage() }}.png"
                                          alt="Image de {{ character.getImage() }}">
