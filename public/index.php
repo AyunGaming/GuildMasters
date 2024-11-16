@@ -35,13 +35,13 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 $container = new Container();
 
-try {
-	$database = new Database(DatabaseConfig::load());
-} catch (RuntimeException) {
-	die('Cannot connect to database');
-}
+//try {
+//	$database = new Database(DatabaseConfig::load());
+//} catch (RuntimeException) {
+//	die('Cannot connect to database');
+//}
 
-$container->set(Database::class, $database);
+//$container->set(Database::class, $database);
 
 $twig = Twig::create(__DIR__ . '/../app/Templates', [
 	'debug' => true,
@@ -119,6 +119,6 @@ $app->group('/legal', static function (RouteCollectorProxy $legal) {
 	$legal->get('/notices', [IndexController::class, 'viewNoticesPage'])->setName('notices');
 });
 
-$app->addMiddleware(new GetUserMiddleware(new UserManager(new UserDAO($database))));
+//$app->addMiddleware(new GetUserMiddleware(new UserManager(new UserDAO($database))));
 
 $app->run();

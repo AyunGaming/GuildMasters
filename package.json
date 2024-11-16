@@ -3,18 +3,25 @@
   "version": "1.0.0",
   "description": "Bienvenue sur Division net ! Ce projet vise à fournir une plateforme en ligne pour améliorer l'expérience des membres de ma guilde dans le jeu Dragon Ball Legends. Grâce à cette application web, il est possible de centraliser les informations, coordonner des activités et renforcer la communauté de votre guilde.",
   "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack serve --open --config webpack.config.js",
+    "build": "webpack --config webpack.config.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "flowbite": "^2.3.0"
+    "@tiptap/core": "^2.9.1",
+    "@tiptap/extension-highlight": "^2.9.1",
+    "@tiptap/extension-image": "^2.9.1",
+    "@tiptap/extension-underline": "^2.9.1",
+    "@tiptap/pm": "^2.9.1",
+    "@tiptap/starter-kit": "^2.9.1",
+    "flowbite": "^2.3.0",
+    "flowbite-typography": "^1.0.4",
+    "webpack": "^5.96.1"
   }
 }

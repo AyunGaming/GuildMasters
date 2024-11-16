@@ -1,0 +1,396 @@
+<!--Editor-->
+<div class="w-full border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+    <!--Header-->
+    <div class="px-3 py-2 border-b dark:border-gray-600">
+        <!--First Row-->
+        <div class="flex flex-wrap items-center">
+            <!--Bold / Italic / Underline / Strike / Highlight / Text Size / Text Color (custom palette) / Format / Align (left - center - right) / Image / List - Ordered List / Blockquote-->
+            <div class="flex items-center space-x-1 rtl:space-x-reverse flex-wrap">
+                <!--Bold-->
+                <button id="toggleBoldButton" data-tooltip-target="tooltip-bold" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5h4.5a3.5 3.5 0 1 1 0 7H8m0-7v7m0-7H6m2 7h6.5a3.5 3.5 0 1 1 0 7H8m0-7v7m0 0H6"></path>
+                    </svg>
+                    <span class="sr-only">Gras</span>
+                </button>
+                <div id="tooltip-bold" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0 auto auto 0; margin: 0; transform: translate(0px, 69px);" data-popper-placement="bottom">
+                    Gras
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0; transform: translate(45px, 0px);"></div>
+                </div>
+
+                <!--Italic-->
+                <button id="toggleItalicButton" data-tooltip-target="tooltip-italic" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8.874 19 6.143-14M6 19h6.33m-.66-14H18"></path>
+                    </svg>
+                    <span class="sr-only">Italique</span>
+                </button>
+                <div id="tooltip-italic" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0 auto auto 0; margin: 0; transform: translate(33px, 69px);" data-popper-placement="bottom">
+                    Italique
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0; transform: translate(49px, 0px);"></div>
+                </div>
+
+                <!--Underline-->
+                <button id="toggleUnderlineButton" data-tooltip-target="tooltip-underline" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M6 19h12M8 5v9a4 4 0 0 0 8 0V5M6 5h4m4 0h4"></path>
+                    </svg>
+                    <span class="sr-only">Souligner</span>
+                </button>
+                <div id="tooltip-underline" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700" style="position: absolute; inset: 0 auto auto 0; margin: 0; transform: translate(53px, 69px);" data-popper-placement="bottom">
+                    Souligner
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0; transform: translate(64px, 0px);"></div>
+                </div>
+
+                <!--Strike-->
+                <button id="toggleStrikeButton" data-tooltip-target="tooltip-strike" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 6.2V5h12v1.2M7 19h6m.2-14-1.677 6.523M9.6 19l1.029-4M5 5l6.523 6.523M19 19l-7.477-7.477"></path>
+                    </svg>
+                    <span class="sr-only">Barrer</span>
+                </button>
+                <div id="tooltip-strike" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0 auto auto 0; margin: 0; transform: translate(102px, 69px);" data-popper-placement="bottom">
+                    Barrer
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0; transform: translate(51px, 0px);"></div>
+                </div>
+
+                <!--Separator-->
+                <div class="px-1">
+                    <span class="block w-px h-4 bg-gray-300 dark:bg-gray-600"></span>
+                </div>
+
+                <!--Highlight-->
+                <button id="toggleHighlightButton" data-tooltip-target="tooltip-highlight" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 19.2H5.5c-.3 0-.5-.2-.5-.5V16c0-.2.2-.4.5-.4h13c.3 0 .5.2.5.4v2.7c0 .3-.2.5-.5.5H18m-6-1 1.4 1.8h.2l1.4-1.7m-7-5.4L12 4c0-.1 0-.1 0 0l4 8.8m-6-2.7h4m-7 2.7h2.5m5 0H17"></path>
+                    </svg>
+                    <span class="sr-only">Surligner</span>
+                </button>
+                <div id="tooltip-highlight" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0 auto auto 0; margin: 0; transform: translate(127px, 69px);" data-popper-placement="bottom">
+                    Surligner
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0; transform: translate(62px, 0px);"></div>
+                </div>
+
+                <!--TextSize-->
+                <button id="toggleTextSizeButton" data-tooltip-target="tooltip-textsize" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6.2V5h11v1.2M8 5v14m-3 0h6m2-6.8V11h8v1.2M17 11v8m-1.5 0h3"></path>
+                    </svg>
+                    <span class="sr-only">Taille</span>
+                </button>
+                <div id="tooltip-textsize" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(295px, 69px);" data-popper-placement="bottom">
+                    Taille
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(38px, 0px);"></div>
+                </div>
+
+                <!--TextColor-->
+                <button id="toggleTextColorButton" data-tooltip-target="tooltip-textcolor" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="25" height="24" fill="none" viewBox="0 0 25 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m6.532 15.982 1.573-4m-1.573 4h-1.1m1.1 0h1.65m-.077-4 2.725-6.93a.11.11 0 0 1 .204 0l2.725 6.93m-5.654 0H8.1m.006 0h5.654m0 0 .617 1.569m5.11 4.453c0 1.102-.854 1.996-1.908 1.996-1.053 0-1.907-.894-1.907-1.996 0-1.103 1.907-4.128 1.907-4.128s1.909 3.025 1.909 4.128Z"></path>
+                    </svg>
+                    <span class="sr-only">Couleur</span>
+                </button>
+                <div id="tooltip-textcolor" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(328px, 69px);" data-popper-placement="bottom">
+                    Couleur
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(41px, 0px);"></div>
+                </div>
+
+                <!--Format--> <!--a integrer: data-dropdown-toggle-->
+                <button id="typographyDropdownButton" class="flex items-center justify-center rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-50 dark:bg-gray-600 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white dark:focus:ring-gray-600" type="button">
+                    Format
+                    <svg class="-me-0.5 ms-1.5 h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"></path>
+                    </svg>
+                </button>
+
+                <!--Separator-->
+                <div class="px-1">
+                    <span class="block w-px h-4 bg-gray-300 dark:bg-gray-600"></span>
+                </div>
+
+                <!--AlignLeft-->
+                <button id="toggleAlignLeftButton" data-tooltip-target="tooltip-alignleft" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6h8m-8 4h12M6 14h8m-8 4h12"></path>
+                    </svg>
+                    <span class="sr-only">Gauche</span>
+                </button>
+                <div id="tooltip-alignleft" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(416px, 69px);" data-popper-placement="bottom">
+                    Gauche
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(38px, 0px);"></div>
+                </div>
+                <!--AlignCenter-->
+                <button id="toggleAlignCenterButton" data-tooltip-target="tooltip-aligncenter" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6h8M6 10h12M8 14h8M6 18h12"></path>
+                    </svg>
+                    <span class="sr-only">Centré</span>
+                </button>
+                <div id="tooltip-aligncenter" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(442px, 69px);" data-popper-placement="bottom">
+                    Centré
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(49px, 0px);"></div>
+                </div>
+                <!--AlignRight-->
+                <button id="toggleAlignRightButton" data-tooltip-target="tooltip-alignright" type="button" class="headerButtonTE">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6h-8m8 4H6m12 4h-8m8 4H6"></path>
+                    </svg>
+                    <span class="sr-only">Droite</span>
+                </button>
+                <div id="tooltip-alignright" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(484px, 69px);" data-popper-placement="bottom">
+                    Droite
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(43px, 0px);"></div>
+                </div>
+
+                <!--Separator-->
+                <div class="ps-1.5">
+                    <span class="block w-px h-4 bg-gray-300 dark:bg-gray-600"></span>
+                </div>
+
+                <!--Image-->
+                <button id="addImageButton" type="button" data-tooltip-target="tooltip-image" class="p-1.5 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M13 10a1 1 0 0 1 1-1h.01a1 1 0 1 1 0 2H14a1 1 0 0 1-1-1Z" clip-rule="evenodd"></path>
+                        <path fill-rule="evenodd" d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12c0 .556-.227 1.06-.593 1.422A.999.999 0 0 1 20.5 20H4a2.002 2.002 0 0 1-2-2V6Zm6.892 12 3.833-5.356-3.99-4.322a1 1 0 0 0-1.549.097L4 12.879V6h16v9.95l-3.257-3.619a1 1 0 0 0-1.557.088L11.2 18H8.892Z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Image</span>
+                </button>
+                <div id="tooltip-image" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(113px, -420px);" data-popper-placement="top">
+                    Image
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(44px, 0px);"></div>
+                </div>
+
+                <!--List-->
+                <button id="toggleListButton" type="button" data-tooltip-target="tooltip-list" class="p-1.5 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5"></path>
+                    </svg>
+                    <span class="sr-only">Puce</span>
+                </button>
+                <div id="tooltip-list" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(195px, -420px);" data-popper-placement="top">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Puce
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(43px, 0px);"></div>
+                </div>
+                <!--OrderedList-->
+                <button id="toggleOrderedListButton" type="button" data-tooltip-target="tooltip-ordered-list" class="p-1.5 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6h8m-8 6h8m-8 6h8M4 16a2 2 0 1 1 3.321 1.5L4 20h5M4 5l2-1v6m-2 0h4"></path>
+                    </svg>
+                    <span class="sr-only">Numérotation</span>
+                </button>
+                <div id="tooltip-ordered-list" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(206px, -420px);" data-popper-placement="top">
+                    Numérotation
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(71px, 0px);"></div>
+                </div>
+
+                <!--Blockquote-->
+                <button id="toggleBlockquoteButton" type="button" data-tooltip-target="tooltip-blockquote" class="p-1.5 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" d="M6 6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a3 3 0 0 1-3 3H5a1 1 0 1 0 0 2h1a5 5 0 0 0 5-5V8a2 2 0 0 0-2-2H6Zm9 0a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h3a3 3 0 0 1-3 3h-1a1 1 0 1 0 0 2h1a5 5 0 0 0 5-5V8a2 2 0 0 0-2-2h-3Z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Citation</span>
+                </button>
+                <div id="tooltip-blockquote" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(247px, -420px);" data-popper-placement="top">
+                    Citation
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(70px, 0px);"></div>
+                </div>
+            </div>
+        </div>
+
+        <!--Second Row-->
+        <div class="flex items-center gap-2 pt-2 flex-wrap">
+            <!--Custom GuildMasters utils-->
+            <div class="flex items-center space-x-1 rtl:space-x-reverse flex-wrap">
+                <!--Rareté-->
+                <button id="rarityDropdownButton" data-dropdown-toggle="rarityDropdown" class="flex items-center justify-center rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-50 dark:bg-gray-600 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white dark:focus:ring-gray-600" type="button">
+                    <img src="/public/images/rarities/SPARKING.ico" alt="rareté" class="h-5 w-auto"/>
+                    <svg class="-me-0.5 ms-1.5 h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div id="rarityDropdown" class="z-10 w-52 rounded bg-white p-2 shadow dark:bg-gray-700 hidden" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 111px);" data-popper-placement="bottom" aria-hidden="true">
+                    <ul class="space-y-1 text-sm font-medium" aria-labelledby="rarityDropdownButton">
+                        <li>
+                            <button id="addRarityHE" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/rarities/HERO.ico" alt="héros" class="h-5 w-auto"/> Héros
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addRarityEX" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/rarities/EXTREME.ico" alt="extrême" class="h-5 w-auto"/> Extrême
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addRaritySP" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/rarities/SPARKING.ico" alt="sparking" class="h-5 w-auto"/> Sparking
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addRarityUL" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/rarities/ULTRA.ico" alt="ultra" class="h-5 w-auto"/> Ultra
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--Couleur-->
+                <button id="colorDropdownButton" data-dropdown-toggle="colorDropdown" class="flex items-center justify-center rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-50 dark:bg-gray-600 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white dark:focus:ring-gray-600" type="button">
+                    <img src="/public/images/colors/LUM.ico" alt="couleur" class="h-5 w-auto"/>
+                    <svg class="-me-0.5 ms-1.5 h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div id="colorDropdown" class="z-10 w-52 rounded bg-white p-2 shadow dark:bg-gray-700 hidden" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 111px);" data-popper-placement="bottom" aria-hidden="true">
+                    <ul class="space-y-1 text-sm font-medium" aria-labelledby="colorDropdownButton">
+                        <li>
+                            <button id="addColorLUM" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/colors/LUM.ico" alt="lumière" class="h-5 w-auto"/> Lumière
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addColorROU" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/colors/ROU.ico" alt="rouge" class="h-5 w-auto"/> Rouge
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addColorJAU" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/colors/JAU.ico" alt="jaune" class="h-5 w-auto"/> Jaune
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addColorVIO" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/colors/VIO.ico" alt="violet" class="h-5 w-auto"/> Violet
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addColorVER" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/colors/VER.ico" alt="vert" class="h-5 w-auto"/> Vert
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addColorBLE" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/colors/BLE.ico" alt="bleu" class="h-5 w-auto"/> Bleu
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--Cartes-->
+                <button id="cardDropdownButton" data-dropdown-toggle="cardDropdown" class="flex items-center justify-center rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-50 dark:bg-gray-600 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white dark:focus:ring-gray-600" type="button">
+                    <img src="/public/images/cards/strike.ico" alt="cartes" class="h-5 w-auto"/>
+                    <svg class="-me-0.5 ms-1.5 h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div id="cardDropdown" class="z-10 w-52 rounded bg-white p-2 shadow dark:bg-gray-700 hidden" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 111px);" data-popper-placement="bottom" aria-hidden="true">
+                    <ul class="space-y-1 text-sm font-medium" aria-labelledby="cardDropdownButton">
+                        <li>
+                            <button id="addCardSTR" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/cards/strike.ico" alt="strike" class="h-5 w-auto"/> Physique
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addCardBLA" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/cards/blast.ico" alt="blast" class="h-5 w-auto"/> Énergie
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addCardUNI" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/cards/unique.ico" alt="unique" class="h-5 w-auto"/> Unique
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addCardSPE" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/cards/special.ico" alt="special" class="h-5 w-auto"/> Spécial
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addCardULT" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/cards/ultimate.ico" alt="ultimate" class="h-5 w-auto"/> Ultime
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addCardAWA" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/cards/awakened.ico" alt="awakened" class="h-5 w-auto"/> Éveil
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--Jauges-->
+                <button id="gaugeDropdownButton" data-dropdown-toggle="gaugeDropdown" class="flex items-center justify-center rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-50 dark:bg-gray-600 dark:text-gray-400 dark:hover:bg-gray-500 dark:hover:text-white dark:focus:ring-gray-600" type="button">
+                    <img src="/public/images/gauges/g_attack.ico" alt="gauges" class="h-5 w-auto"/>
+                    <svg class="-me-0.5 ms-1.5 h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div id="gaugeDropdown" class="z-10 w-52 rounded bg-white p-2 shadow dark:bg-gray-700 hidden" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 111px);" data-popper-placement="bottom" aria-hidden="true">
+                    <ul class="space-y-1 text-sm font-medium" aria-labelledby="gaugeDropdownButton">
+                        <li>
+                            <button id="addGaugeATT" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_attack.ico" alt="attack" class="h-5 w-auto"/> Attaque
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addGaugeCHA" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_charge.ico" alt="charge" class="h-5 w-auto"/> Charge
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addGaugeCOU" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_counter.ico" alt="counter" class="h-5 w-auto"/> Contre
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addGaugeEVA" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_evade.ico" alt="evade" class="h-5 w-auto"/> Évasion
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addGaugeSUS" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_sustained.ico" alt="sustained" class="h-5 w-auto"/> Défense
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addGaugeSWI" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_switch.ico" alt="switch" class="h-5 w-auto"/> Échange
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addGaugeTIM" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_time.ico" alt="time" class="h-5 w-auto"/> Temps
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addGaugeDRA" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_dragonball.ico" alt="dragonball" class="h-5 w-auto"/> DragonBall
+                            </button>
+                        </li>
+                        <li>
+                            <button id="addGaugeSYN" type="button" class="flex justify-between items-center w-full text-base rounded px-3 py-2 hover:bg-gray-100 text-gray-900 dark:hover:bg-gray-600 dark:text-white">
+                                <img src="/public/images/gauges/g_synchro.ico" alt="synchro" class="h-5 w-auto"/> Synchro
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!--LF-->
+                <button id="LFButton" type="button" data-tooltip-target="tooltip-lf" class="p-1.5 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
+                    <img src="/public/images/assets/lf_plate.ico" alt="lf" class="h-5 w-auto"/>
+                    <span class="sr-only">Legends Limited</span>
+                </button>
+                <div id="tooltip-lf" role="tooltip" class="absolute z-10 inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700 opacity-0 invisible" style="position: absolute; inset: auto auto 0px 0px; margin: 0px; transform: translate(247px, -420px);" data-popper-placement="top">
+                    Legends Limited
+                    <div class="tooltip-arrow" data-popper-arrow="" style="position: absolute; left: 0px; transform: translate(70px, 0px);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Content-->
+    <div class="px-4 py-2 bg-white rounded-b-lg dark:bg-gray-800 h-[24rem] overflow-y-auto">
+        <div id="wysiwyg" class="block w-full px-0 text-sm text-gray-800 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400">
+            <!--Text Editor Area-->
+        </div>
+    </div>
+    <script type="module" src="/dist/editor.bundle.js"></script>
+</div>
