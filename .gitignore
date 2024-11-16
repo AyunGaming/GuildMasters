@@ -130,3 +130,4 @@ modules.xml
 /config/database.ini
 /vendor/*
 /members/*
+/node_modules/*
