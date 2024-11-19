@@ -82,7 +82,7 @@ class UserController extends AbstractController {
 
 			// Invalid login or credentials, alert the user
 			Alerts::add(new Alert('Login ou mot de passe incorrects !',AlertTypes::ERROR));
-			return $response->withStatus(StatusCodeInterface::STATUS_NOT_ACCEPTABLE)
+			return $response->withStatus(StatusCodeInterface::STATUS_FOUND)
 				->withHeader('Location', $parser->urlFor('sign-in'));
 		}
 		return $response;

@@ -4,18 +4,15 @@ use DI\Container;
 use division\Configs\DatabaseConfig;
 use division\Data\DAO\UserDAO;
 use division\Data\Database;
+use division\HTTP\HtmlErrorRenderer;
 use division\HTTP\Middlewares\GetUserMiddleware;
 use division\HTTP\Routing\CharacterController;
+use division\HTTP\Routing\CustomErrorHandler;
 use division\HTTP\Routing\IndexController;
 use division\HTTP\Routing\KamenewsController;
 use division\HTTP\Routing\UserController;
 use division\Models\Managers\UserManager;
-use division\Models\User;
-use division\Utils\Alerts;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteCollectorProxy;
-use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Twig\Extension\DebugExtension;
@@ -56,6 +53,10 @@ $container->set(Twig::class, $twig);
 
 $app = Bridge::create($container);
 $app->add(TwigMiddleware::createFromContainer($app, Twig::class));
+
+$errorMiddleware = $app->addErrorMiddleware(true, true, false);
+$errorHandler = $errorMiddleware->getDefaultErrorHandler();
+$errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 
 $app->group('/signin', static function (RouteCollectorProxy $signIn) {
 	$signIn->post('', [UserController::class, 'login']);

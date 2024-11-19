@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<!-- Fonts -->
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+
+	<!--Flowbite-->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
+
+	<!-- Styles -->
+	<link rel="stylesheet" href="../../public/css/base.css">
+	<link rel="stylesheet" href="../../public/css/output.css">
+
+	<script>
+		// On page load or when changing themes, best to add inline in `head` to avoid FOUC
+		if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+			document.documentElement.classList.add('dark');
+		} else {
+			document.documentElement.classList.remove('dark')
+		}
+	</script>
+
+	<link rel="icon" type="image/vnd.icon" href=" /public/images/division_ico.ico">
+	<title>{% block title %}{% endblock %}</title>
+
+	{% block styles %} {% endblock %}
+	{% block script %} {% endblock %}
+</head>
+
+<script>
+	// On page load or when changing themes, best to add inline in `head` to avoid FOUC
+	if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+		document.documentElement.classList.add('dark');
+	} else {
+		document.documentElement.classList.remove('dark')
+	}
+</script>
+
+
+<body class="bg-white dark:bg-gray-900">
+	<section class="2xl:xl:md:sm:container mx-auto px-8 py-8">
+		<h1 class="max-w-2xl mb-4 text-4xl tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">{{ code }} Error</h1>
+
+		<div class="max-w-screen-xl px-4 py-8 mx-auto">
+			<img src="/public/images/goku-kinto.gif" alt="Error" class="mb-8" width="300">
+			<p class="mb-6 dark:text-white">{{ message }}</p>
+			<a class="button blue-button" href="{{ url_for('home') }}">Back to home</a>
+		</div>
+	</section>
+</body>
