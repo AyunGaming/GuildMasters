@@ -1,9 +1,18 @@
 import { Editor, Node } from '@tiptap/core';
-import StarterKit from '@tiptap/starter-kit'; /*remove 'https://esm.sh/' to convert from CDN to vanilla JS*/
-import Highlight from '@tiptap/extension-highlight'; /*remove 'https://esm.sh/' to convert from CDN to vanilla JS*/
-import Underline from '@tiptap/extension-underline'; /*remove 'https://esm.sh/' to convert from CDN to vanilla JS*/
-import Image from '@tiptap/extension-image'; /*remove 'https://esm.sh/' to convert from CDN to vanilla JS*/
+import {Placeholder} from "@tiptap/extension-placeholder";
+import {Document} from "@tiptap/extension-document";
+import StarterKit from '@tiptap/starter-kit';
+import Highlight from '@tiptap/extension-highlight';
+import Underline from '@tiptap/extension-underline';
+import Image from '@tiptap/extension-image';
+import {Typography} from "@tiptap/extension-typography";
+import {TextAlign} from "@tiptap/extension-text-align";
+import {Color} from "@tiptap/extension-color";
+import {TextStyle} from "@tiptap/extension-text-style";
+import {FontFamily} from "@tiptap/extension-font-family";
 
+import { initFlowbite } from "flowbite";
+initFlowbite()
 
 //Custom node for <span>
 const BackgroundImageSpan = Node.create({
@@ -24,17 +33,19 @@ const BackgroundImageSpan = Node.create({
     renderHTML({ HTMLAttributes }) {
         const isVisible = HTMLAttributes.text === ' LEGENDS LIMITED ';
 
+        //font-size: .75rem;
         return [
             'span',
             {
                 'data-background-image': '',
                 style: `
                 display:inline-block;
-                font-size: .75rem;
                 background-image:url('${HTMLAttributes.src}');
-                background-size:contain;
+                background-size: ${isVisible ? '100% 125%' : 'contain'};
                 background-repeat: no-repeat;
+                background-position: center;
                 font-family: sans-serif;
+                font-weight: normal;
                 color: ${isVisible ? '#424242' : 'transparent'};
                 padding: .25em .75em;`,
             },
@@ -43,22 +54,42 @@ const BackgroundImageSpan = Node.create({
     },
 });
 
+const CustomDocument = Document.extend({
+    content: 'heading block*',
+})
 
 const editor = new Editor({
     element: document.querySelector("#wysiwyg"),
     extensions: [
-        StarterKit,
+        CustomDocument,
+        StarterKit.configure({
+            document: false,
+        }),
+        Placeholder.configure({
+            placeholder: ({ node }) => {
+                if (node.type.name === 'heading') {
+                    return 'Quel est le titre de l\'article?'
+                }
+            },
+        }),
         Highlight,
         Underline,
         Image,
         BackgroundImageSpan,
+        Typography,
+        TextAlign.configure({
+            types: ['heading', 'paragraph'],
+        }),
+        Color,
+        TextStyle,
+        FontFamily,
     ],
     content: `
         
       `,
     editorProps: {
         attributes: {
-            class: 'format lg:format-lg dark:format-invert focus:outline-none format-blue max-w-none h-[24rem] list-disc',
+            class: 'format lg:format-lg dark:format-invert focus:outline-none format-blue max-w-none h-[24rem]',
         },
     },
     // Listen to state transactions (selection and content updates)
@@ -79,7 +110,7 @@ function addImageToEditor(location, filename, text = "default text") {
 
 
 function updateMarkButtons() {
-    const marks = ['bold', 'italic', 'underline', 'strike', 'highlight', 'list', 'orderedList'];
+    const marks = ['bold', 'italic', 'underline', 'strike', 'highlight', 'list', 'orderedList', 'alignLeft', 'alignCenter', 'alignRight'];
 
     marks.forEach((mark) => {
         const button = document.getElementById(`toggle${mark.charAt(0).toUpperCase() + mark.slice(1)}Button`);
@@ -124,6 +155,67 @@ document.getElementById('toggleHighlightButton').addEventListener('click', funct
 
 document.getElementById('toggleListButton').addEventListener('click', () => editor.chain().focus().toggleBulletList().run());
 
+document.getElementById('toggleOrderedListButton').addEventListener('click', () => editor.chain().focus().toggleOrderedList().run());
+
+document.getElementById('toggleAlignLeftButton').addEventListener('click', () => editor.chain().focus().setTextAlign('left').run());
+
+document.getElementById('toggleAlignCenterButton').addEventListener('click', () => editor.chain().focus().setTextAlign('center').run());
+
+document.getElementById('toggleAlignRightButton').addEventListener('click', () => editor.chain().focus().setTextAlign('right').run());
+
+document.getElementById('toggleBlockquoteButton').addEventListener('click', () => editor.chain().focus().toggleBlockquote().run());
+
+const colorPicker = document.getElementById('RTEcolor');
+colorPicker.addEventListener('input', (event) => {
+    const selectedColor = event.target.value;
+
+    editor.chain().focus().setColor(selectedColor).run();
+})
+document.querySelectorAll('[data-hex-color]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const selectedColor = button.getAttribute('data-hex-color');
+
+        // Apply the selected color to the selected text
+        editor.chain().focus().setColor(selectedColor).run();
+    });
+});
+document.getElementById('reset-color').addEventListener('click', () => {
+    editor.commands.unsetColor();
+})
+
+
+document.querySelectorAll('[data-font-family]').forEach((button) => {
+   button.addEventListener('click', () => {
+       const fontFamily = button.getAttribute('data-font-family');
+       editor.chain().focus().setFontFamily(fontFamily).run()
+
+       document.getElementById('fontFamilyDropdown').ariaHidden = "true";
+
+
+   });
+});
+
+
+
+document.getElementById('toggleParagraphButton').addEventListener('click', () => {
+    editor.chain().focus().setParagraph().run();
+    document.getElementById('typographyDropdown').ariaHidden = "true";
+});
+document.querySelectorAll('[data-heading-level]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const level = button.getAttribute('data-heading-level');
+        editor.chain().focus().toggleHeading({ level: parseInt(level) }).run()
+        document.getElementById('typographyDropdown').ariaHidden = "true";
+    });
+});
+
+
+document.getElementById('addImageButton').addEventListener('click', () => {
+    const url = window.prompt('Enter image URL:', 'https://placehold.co/600x400');
+    if (url) {
+        editor.chain().focus().setImage({ src: url }).run();
+    }
+});
 
 /* Event listeners for custom GuildMasters buttons*/
 //LF
@@ -212,4 +304,16 @@ document.getElementById('addGaugeDRA').addEventListener('click', function() {
 });
 document.getElementById('addGaugeSYN').addEventListener('click', function() {
     addImageToEditor('gauges', 'g_synchro', 'SY');
+});
+
+document.getElementById('toggleHTMLButton').addEventListener('click', () => {
+
+    // basically just use editor.getHTML(); to get the raw html
+
+    // articleHTML = editor.getHTML()
+    //     .replace(/&/g, "&amp;") // Escape & character
+    //     .replace(/</g, "&lt;")  // Escape < character
+    //     .replace(/>/g, "&gt;")  // Escape > character
+    //     .replace(/"/g, "&quot;") // Escape " character
+    //     .replace(/'/g, "&#039;"); // Escape ' character
 });

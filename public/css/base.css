@@ -81,3 +81,55 @@ body {
 .headerButtonTE {
 	@apply p-1.5 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600
 }
+
+@layer base {
+	#wysiwyg div ul {
+		@apply pl-1.5 list-disc list-outside
+	}
+
+	#wysiwyg div ol {
+		@apply pl-1.5 list-decimal list-outside
+	}
+
+	#wysiwyg {
+		blockquote {
+			border-left: 3px solid #CCC;
+			margin: 0.5rem 0;
+			padding-left: 1rem;
+		}
+
+		h1, h2, h3, h4, h5, h6 {
+			line-height: 1.1;
+			margin-top: 2.5rem;
+			text-wrap: pretty;
+		}
+		h1, h2 {
+			margin-top: 1.5rem;
+			margin-bottom: 1.5rem;
+		}
+
+		h1 {
+			font-size: 1.4rem;
+		}
+
+		h2 {
+			font-size: 1.2rem;
+		}
+
+		h3 {
+			font-size: 1.1rem;
+		}
+
+		h4, h5, h6 {
+			font-size: 1rem;
+		}
+
+		.is-empty:first-child::before {
+			color: #CCC;
+			content: attr(data-placeholder);
+			float: left;
+			height: 0;
+			pointer-events: none;
+		}
+	}
+}
