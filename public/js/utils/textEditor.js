@@ -319,14 +319,17 @@ document.getElementById('addGaugeSYN').addEventListener('click', function() {
     addImageToEditor('gauges', 'g_synchro', 'SY');
 });
 
-document.getElementById('toggleHTMLButton').addEventListener('click', () => {
+document.getElementById('toggleHTMLButton').addEventListener('click', async () => {
 
     // basically just use editor.getHTML(); to get the raw html
 
-    // articleHTML = editor.getHTML()
-    //     .replace(/&/g, "&amp;") // Escape & character
-    //     .replace(/</g, "&lt;")  // Escape < character
-    //     .replace(/>/g, "&gt;")  // Escape > character
-    //     .replace(/"/g, "&quot;") // Escape " character
-    //     .replace(/'/g, "&#039;"); // Escape ' character
+    let articleHTML = editor.getHTML()
+        .replace(/&/g, "&amp;") // Escape & character
+        .replace(/</g, "&lt;")  // Escape < character
+        .replace(/>/g, "&gt;")  // Escape > character
+        .replace(/"/g, "&quot;") // Escape " character
+        .replace(/'/g, "&#039;"); // Escape ' character
+
+    document.getElementById("content").innerHTML = articleHTML;
+    document.getElementById('title').value = document.getElementById('title-input').value;
 });
