@@ -2,8 +2,6 @@
 
 namespace division\HTTP\Routing;
 
-use division\Data\DAO\ArticlesDAO;
-use division\Data\DAO\KamenewsArticlesDAO;
 use division\Data\DAO\KamenewsDAO;
 use division\Data\DAO\UserDAO;
 use division\Data\Database;
@@ -26,8 +24,10 @@ class KamenewsController extends AbstractController {
 	public function __construct(Database $database) {
 		parent::__construct($database);
 		$kamenewsDAO = new KamenewsDAO($this->database, new UserDAO($this->database));
-		$articlesDAO = new ArticlesDAO($this->database);
 		$userDAO = new UserDAO($this->database);
+<<<<<<< HEAD
+		$this->kamenewsManager = new KamenewsManager($kamenewsDAO, $userDAO);
+=======
 		$this->kamenewsManager = new KamenewsManager($kamenewsDAO, $articlesDAO, new KamenewsArticlesDAO($this->database, $kamenewsDAO, $articlesDAO), $userDAO);
 	}
 
@@ -44,6 +44,7 @@ class KamenewsController extends AbstractController {
 		}
 
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('admin-kamenews'));
+>>>>>>> dev
 	}
 
 	public function editKamenews(Request $request, Response $response): Response {
@@ -60,9 +61,35 @@ class KamenewsController extends AbstractController {
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('admin-kamenews'));
 	}
 
-	public function deleteArticle(Request $request, Response $response): Response {
-		$post = $request->getParsedBody();
+//	public function deleteArticle(Request $request, Response $response): Response {
+//		$post = $request->getParsedBody();
+//
+//		try {
+//			$this->kamenewsManager->deleteArticle($post['id']);
+//			Flashes::add(FlashMessage::success("L'article n°{$post['id']} a bien été supprimé"));
+//		} catch (\Exception) {
+//			Flashes::add(FlashMessage::danger("L'article n°{$post['id']} n'a pas pu être supprimé"));
+//		}
+//
+//		$parser = RouteContext::fromRequest($request)->getRouteParser();
+//		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('new-kamenews'));
+//	}
 
+<<<<<<< HEAD
+//	public function removeArticle(Request $request, Response $response): Response {
+//		$post = $request->getParsedBody();
+//
+//		try {
+//			$this->kamenewsManager->deleteArticle($post['id']);
+//			Flashes::add(FlashMessage::success("L'article n°{$post['id']} a bien été supprimé"));
+//		} catch (\Exception) {
+//			Flashes::add(FlashMessage::danger("L'article n°{$post['id']} n'a pas pu être supprimé"));
+//		}
+//
+//		$parser = RouteContext::fromRequest($request)->getRouteParser();
+//		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('edit-kamenews'));
+//	}
+=======
 		try {
 			$this->kamenewsManager->deleteArticle($post['id']);
 			Alerts::add(new Alert("L'article n°{$post['id']} a bien été supprimé", AlertTypes::SUCCESS));
@@ -115,6 +142,7 @@ class KamenewsController extends AbstractController {
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('kamenews'));
 
 	}
+>>>>>>> dev
 
 	public function getAllKamenews(): array {
 		return $this->kamenewsManager->getAllKamenews();
@@ -127,6 +155,21 @@ class KamenewsController extends AbstractController {
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('display-kamenews'));
 	}
 
+<<<<<<< HEAD
+//	public function deleteKamenews(Request $request, Response $response): Response {
+//		$post = $request->getParsedBody();
+//
+//		try {
+//			$this->kamenewsManager->deleteKamenews($post['ID']);
+//			Flashes::add(FlashMessage::success("Le kamenews n°{$post['ID']} a été supprimé"));
+//		} catch (\Exception $e) {
+//			Flashes::add(FlashMessage::danger("Le kamenews n°{$post['ID']} n'a pas pu être supprimé"));
+//		}
+//
+//		$parser = RouteContext::fromRequest($request)->getRouteParser();
+//		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('admin-kamenews'));
+//	}
+=======
 	public function deleteKamenews(Request $request, Response $response): Response {
 		$post = $request->getParsedBody();
 
@@ -140,6 +183,7 @@ class KamenewsController extends AbstractController {
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('admin-kamenews'));
 	}
+>>>>>>> dev
 
 	public function postEditKamenews(int $id, Request $request, Response $response): Response {
 		$_SESSION["display_kamenews"] = $this->kamenewsManager->getKamenews($id);
@@ -148,6 +192,11 @@ class KamenewsController extends AbstractController {
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('edit-kamenews'));
 	}
 
+<<<<<<< HEAD
+
+	public function sendKamenews(Request $request, Response $response)
+	{
+=======
 	private function saveImage($files, array $post): array {
 		$images = [];
 		$i = 0;
@@ -171,12 +220,16 @@ class KamenewsController extends AbstractController {
 	}
 
 	public function createArticle(Request $request, Response $response): Response {
+>>>>>>> dev
 		$post = $request->getParsedBody();
-		$file = $request->getUploadedFiles()['image'];
-		$image = $this->saveImage($file, $post);
-		$post['image'] = $image;
+		$title = $post['title'];
+		$kamenews = $post['kamenews-content'];
+		$this->kamenewsManager->createKamenews($title, $kamenews);
 
 		$parser = RouteContext::fromRequest($request)->getRouteParser();
+<<<<<<< HEAD
+		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('home'));
+=======
 
 		try {
 			$this->kamenewsManager->addArticle($post);
@@ -186,6 +239,7 @@ class KamenewsController extends AbstractController {
 		}
 
 		return $response->withStatus(StatusCodeInterface::STATUS_FOUND)->withHeader('Location', $parser->urlFor('new-kamenews'));
+>>>>>>> dev
 	}
 
 	//region Display

@@ -11,9 +11,17 @@ module.exports = {
         clifford: '#da373d',
       }
     },
+    height: {
+        '100': '10rem'
+    }
   },
   plugins: [
-      require('flowbite/plugin')
+      require('flowbite-typography'),
+      require('@tailwindcss/typography'),
+      require('flowbite/plugin')({
+          wysiwyg: true,
+      }),
   ],
+    darkMode: 'selector'
 }
 

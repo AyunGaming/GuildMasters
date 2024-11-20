@@ -4,6 +4,9 @@
 
 {% block body %}
 	{{ parent() }}
+<<<<<<< HEAD
+	{% include './elements/kamenews/articleEditor.twig' %}
+=======
 
 	<section class="modals">
 		<div id="modal-add-article" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -204,9 +207,10 @@
 		</div>
 	</div>
 	-->
+>>>>>>> dev
 {% endblock %}
 
 
 {% block script %}
-	<script src="/public/js/kamenewsCreate.js" defer></script>
+	<script src="/public/js/fetchURLFor.js" defer></script>
 {% endblock %}

@@ -9,18 +9,15 @@ class Kamenews {
 
 	private string $title;
 
+	private string $content;
+
 	private string $date;
 
 	private string $desc;
 
-	/**
-	 * @var array<Article>
-	 */
-	private array $articles = [];
-
 	private User $writer;
 
-	public function hydrate(array $data) {
+	public function hydrate(array $data): void {
 		if (array_key_exists('id', $data)) {
 			$this->id = $data['id'];
 		}
@@ -31,6 +28,10 @@ class Kamenews {
 
 		if (array_key_exists('titre', $data)) {
 			$this->title = $data['titre'];
+		}
+
+		if (array_key_exists('content', $data)) {
+			$this->content = $data['content'];
 		}
 
 		if (array_key_exists('date', $data)) {
@@ -66,15 +67,17 @@ class Kamenews {
 		return $this->desc;
 	}
 
-	public function getArticles(): array {
-		return $this->articles;
-	}
 
 	public function getWriter(): User {
 		return $this->writer;
 	}
 
+<<<<<<< HEAD
+	public function getContent(): string {
+		return $this->content;
+=======
 	public function getBanner(): string {
 		return $this->banner;
+>>>>>>> dev
 	}
 }

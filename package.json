@@ -3,20 +3,42 @@
   "version": "1.0.0",
   "description": "Bienvenue sur Division net ! Ce projet vise à fournir une plateforme en ligne pour améliorer l'expérience des membres de ma guilde dans le jeu Dragon Ball Legends. Grâce à cette application web, il est possible de centraliser les informations, coordonner des activités et renforcer la communauté de votre guilde.",
   "main": "index.js",
-  "directories": {
-    "test": "tests"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack --config webpack.config.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+<<<<<<< HEAD
+    "@tailwindcss/typography": "^0.5.15",
+    "tailwindcss": "^3.4.3",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@tiptap/core": "^2.9.1",
+    "@tiptap/extension-color": "^2.9.1",
+    "@tiptap/extension-document": "^2.9.1",
+    "@tiptap/extension-font-family": "^2.9.1",
+    "@tiptap/extension-highlight": "^2.9.1",
+    "@tiptap/extension-image": "^2.9.1",
+    "@tiptap/extension-placeholder": "^2.9.1",
+    "@tiptap/extension-text-align": "^2.9.1",
+    "@tiptap/extension-text-style": "^2.9.1",
+    "@tiptap/extension-typography": "^2.9.1",
+    "@tiptap/extension-underline": "^2.9.1",
+    "@tiptap/pm": "^2.9.1",
+    "@tiptap/starter-kit": "^2.9.1",
+    "flowbite": "^2.3.0",
+    "flowbite-typography": "^1.0.4",
+    "watch": "^1.0.2",
+    "webpack": "^5.96.1"
+=======
     "tailwindcss": "^3.4.13"
   },
   "dependencies": {
     "fast-glob": "^3.3.2",
     "flowbite": "^2.3.0",
     "glob": "^11.0.0"
+>>>>>>> dev
   }
 }

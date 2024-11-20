@@ -19,7 +19,6 @@ use Twig\Extension\DebugExtension;
 
 require_once __DIR__ . '/../app/Models/User.php';
 require_once __DIR__ . '/../app/Models/Kamenews.php';
-require_once __DIR__ . '/../app/Models/Article.php';
 require_once __DIR__ . '/../app/Models/Character.php';
 require_once __DIR__ . '/../app/Models/Tag.php';
 require_once __DIR__ . '/../app/Utils/alerts/AlertTypes.php';
@@ -86,6 +85,11 @@ $app->group('/admin', static function (RouteCollectorProxy $admin) {
 
 $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 	unset($_SESSION['filtres']);
+	$kamenews->group('/send', static function (RouteCollectorProxy $send) {
+		$send->post('/save', [KamenewsController::class, 'sendKamenews'])->setName('send-kamenews');
+		$send->get('', [KamenewsController::class, 'displayAllKamenews'])->setName('');
+	});
+
 	$kamenews->group('/list', static function (RouteCollectorProxy $list) {
 		$list->get('', [KamenewsController::class, 'displayAllKamenews'])->setName('kamenews');
 	});
