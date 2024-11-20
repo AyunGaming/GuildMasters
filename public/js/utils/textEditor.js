@@ -74,7 +74,11 @@ const editor = new Editor({
         }),
         Highlight,
         Underline,
-        Image,
+        Image.configure({
+            HTMLAttributes: {
+                class: 'kamenewsArticleImage',
+            }
+        }),
         BackgroundImageSpan,
         Typography,
         TextAlign.configure({
@@ -211,11 +215,20 @@ document.querySelectorAll('[data-heading-level]').forEach((button) => {
 
 
 document.getElementById('addImageButton').addEventListener('click', () => {
-    const url = window.prompt('Enter image URL:', 'https://placehold.co/600x400');
-    if (url) {
-        editor.chain().focus().setImage({ src: url }).run();
+    const url = window.prompt('Entrez l\'url imgur de l\'image à ajouter:', 'https://placehold.co/600x400');
+    const alt = window.prompt('Entrez le texte alternatif (si l\'image ne s\'affiche pas):', 'Image d\'article')
+    if (url && alt) {
+        editor.chain().focus().setImage({ src: url , alt: alt}).run();
     }
 });
+
+document.getElementById('toggleHardBreakButton').addEventListener('click', () => {
+    editor.chain().focus().setHardBreak().run()
+})
+
+document.getElementById('toggleHorizontalRuleButton').addEventListener('click', () => {
+    editor.chain().focus().setHorizontalRule().run()
+})
 
 /* Event listeners for custom GuildMasters buttons*/
 //LF
