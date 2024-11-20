@@ -1,7 +1,6 @@
 function initKamenewsCreator(){
-	document.querySelectorAll('#date').forEach(date => {
-		date.valueAsDate = new Date()
-	})
+	document.getElementById('hidden-date').valueAsDate = new Date();
+	document.getElementById('date').valueAsDate = new Date();
 
 	if(localStorage.getItem('kamenews') !== null){
 		const kamenews = JSON.parse(localStorage.getItem('kamenews'))

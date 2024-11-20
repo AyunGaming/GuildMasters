@@ -58,4 +58,8 @@ class KamenewsManager {
 		$kamenews->hydrate(['titre' => $title, 'writer' => $ayun, 'content' => $content, 'date' => $today->format('Y-m-d'), 'description' => '']);
 		$this->kamenewsDAO->create($kamenews);
 	}
+
+	public function getLastKamenews(): Kamenews {
+		return $this->getKamenews($this->kamenewsDAO->getLastInserted()[0]->getId());
+	}
 }

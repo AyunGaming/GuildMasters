@@ -13,7 +13,9 @@ use division\Models\Enums\Rarity;
 use division\Models\Managers\CharacterManager;
 use division\Models\Managers\TagManager;
 use division\Models\User;
-use division\Utils\Flashes;
+use division\Utils\Alerts;
+use division\Utils\alerts\Alert;
+use division\Utils\alerts\AlertTypes;
 use division\Utils\FlashMessage;
 use Fig\Http\Message\StatusCodeInterface;
 use PDOException;
@@ -152,9 +154,9 @@ class CharacterController extends AbstractController
 
         try {
             $this->characterManager->createCharacter($post, $tags);
-            Flashes::add(FlashMessage::success("Le personnage {$post['Id']} a été créé !"));
+            Alerts::add(new Alert("Le personnage {$post['Id']} a été créé !", AlertTypes::SUCCESS));
         } catch (\RuntimeException $e) {
-            Flashes::add(FlashMessage::danger($e->getMessage()));
+            Alerts::add(new Alert($e->getMessage(), AlertTypes::ERROR));
         }
 
         return $res;
@@ -181,7 +183,7 @@ class CharacterController extends AbstractController
         try {
             $this->characterManager->updateCharacter($post);
         } catch (CannotUpdateCharacterException $e) {
-            Flashes::add(FlashMessage::danger($e->getMessage()));
+            Alerts::add(new Alert($e->getMessage(), AlertTypes::ERROR));
         }
 
         try {
@@ -189,7 +191,7 @@ class CharacterController extends AbstractController
             $old = $this->characterTagDAO->getByCharacter($character->getImage());
             $this->updateTags($character, $tags, $old, $this->characterTagDAO);
         } catch (PDOException) {
-            Flashes::add(FlashMessage::danger("Le personnage {$post['Id']} n'existe pas"));
+            Alerts::add(new Alert("Le personnage {$post['Id']} n'existe pas", AlertTypes::ERROR));
         }
 
         return $res;
@@ -206,9 +208,9 @@ class CharacterController extends AbstractController
         try {
             $character = $this->characterManager->getByImage($post['characterId']);
             $dao->delete($character);
-            Flashes::add(FlashMessage::success("Le personnage {$post['characterId']} a été supprimé !"));
+            Alerts::add(new Alert("Le personnage {$post['characterId']} a été supprimé !", AlertTypes::SUCCESS));
         } catch (\Exception) {
-            Flashes::add(FlashMessage::danger("Le personnage {$post['characterId']} n'existe pas !"));
+            Alerts::add(new Alert("Le personnage {$post['characterId']} n'existe pas !", AlertTypes::ERROR));
         }
 
         return $res;
@@ -244,7 +246,7 @@ class CharacterController extends AbstractController
         $disable = ['next' => $this->disableNext($page, $pages), 'prev' => $this->disablePrev($page),
 			'first' => $this->disableFirst($page), 'last' => $this->disableLast($page, $pages)];
         return $twig->render($response, 'characters.twig', [
-            'flashes' => Flashes::all(),
+            'alerts' => Alerts::all(),
             'user' => $user,
             'displayed' => $displayed['characters'],
             'characters' => $characterNumber,

@@ -90,12 +90,13 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 
 	public function create(Kamenews $kamenews): void {
 		try{
-			$req = $this->database->prepare('INSERT INTO kamenews (titre, description, date, user) VALUES (?, ?, ?, ?)');
+			$req = $this->database->prepare('INSERT INTO kamenews (banner, titre, description, date, user) VALUES (?, ?, ?, ?, ?)');
 
-			$req->bindValue(1, $kamenews->getTitle());
-			$req->bindValue(2, $kamenews->getDesc());
-			$req->bindValue(3, $kamenews->getDate());
-			$req->bindValue(4, $kamenews->getWriter()->getId());
+			$req->bindValue(1, $kamenews->getBanner());
+			$req->bindValue(2, $kamenews->getTitle());
+			$req->bindValue(3, $kamenews->getDesc());
+			$req->bindValue(4, $kamenews->getDate());
+			$req->bindValue(5, $kamenews->getWriter()->getId());
 
 			$req->execute();
 		} catch (PDOException $e) {
@@ -103,7 +104,7 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 		}
 	}
 
-	public function getLastInserted(int $n): array {
+	public function getLastInserted(int $n = 1): array {
 		try{
 			$req = $this->database->prepare('SELECT * FROM kamenews ORDER BY id DESC LIMIT ?');
 			$req->bindParam(1, $n);
@@ -114,6 +115,7 @@ class KamenewsDAO extends BaseDAO implements IKamenewsDAO {
 
 			$kamenewsList = [];
 			foreach ($data as $datum) {
+				$datum['writer'] = $this->userDAO->getById($datum['user']);
 				$kamenews = new Kamenews();
 				$kamenews->hydrate($datum);
 				$kamenewsList[] = $kamenews;

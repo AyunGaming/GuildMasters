@@ -10,20 +10,10 @@ readonly class FlashMessage {
 		return $this->type;
 	}
 
-
 	public function getMessage(): string {
 		return $this->message;
 	}
 
-
-	public static function primary(string $message): static {
-		return new static('primary', $message);
-	}
-
-
-	public static function secondary(string $message): static {
-		return new static('secondary', $message);
-	}
 
 
 	public static function success(string $message): static {
@@ -43,15 +33,5 @@ readonly class FlashMessage {
 
 	public static function info(string $message): static {
 		return new static('info', $message);
-	}
-
-
-	public static function light(string $message): static {
-		return new static('light', $message);
-	}
-
-
-	public static function dark(string $message): static {
-		return new static('dark', $message);
 	}
 }

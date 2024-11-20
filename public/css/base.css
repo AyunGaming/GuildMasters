@@ -18,11 +18,16 @@ body {
 }
 
 .characterImage {
+<<<<<<< HEAD
 	width: 256px;
+=======
+	max-width: 100px;
+>>>>>>> dev
 }
 
 .alert
 {
+<<<<<<< HEAD
 	@apply flex items-center border-t-4 p-4 mx-44 my-4 rounded-lg
 }
 
@@ -75,11 +80,39 @@ body {
 {
 	@apply text-blue-600 dark:text-blue-500 hover:underline
 }
+=======
+	display: grid;
+	grid-template-rows: 20px 1fr;
+	row-gap: 20px;
+	@apply mx-auto border-t-4 p-4 max-w-[50%] sm:md:lg:xl:max-w-[30%] my-4 rounded-lg;
+}
+
+.alert-error { @apply text-red-800 border-red-300 bg-red-50 dark:text-red-400 dark:bg-gray-800 dark:border-red-800 }
+
+.alert-info{ @apply text-blue-800 border-blue-300 bg-blue-50 dark:text-blue-400 dark:bg-gray-800 dark:border-blue-800 }
+
+.alert-success { @apply text-green-800 border-green-300 bg-green-50 dark:bg-gray-800 dark:text-green-400 dark:border-green-800 }
+
+.text {	@apply dark:text-white }
+
+.button { @apply text-white font-medium rounded-lg text-sm px-2 py-2.5 focus:outline-none text-center }
+
+.button-large {	@apply text-white font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none text-center }
+
+.green-button {	@apply bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 dark:hover:bg-green-700 dark:focus:ring-green-800 }
+
+.blue-button { @apply bg-blue-700 hover:bg-blue-800 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800}
+
+.card { @apply bg-slate-200 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8 }
+
+.link {	@apply text-blue-600 dark:text-blue-500 hover:underline }
+>>>>>>> dev
 
 
 /** TextEditor WYSIWYG **/
 .headerButtonTE {
 	@apply p-1.5 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600
+<<<<<<< HEAD
 }
 
 .kamenewsArticleImage {
@@ -187,4 +220,6 @@ body {
 			pointer-events: none;
 		}
 	}
+=======
+>>>>>>> dev
 }

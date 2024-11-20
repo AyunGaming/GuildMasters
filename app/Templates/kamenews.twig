@@ -3,37 +3,40 @@
 {% block title %} Kamenews {% endblock %}
 
 {% block body %}
+	{% if user is not null and user.getRole() is constant('division\\Models\\Enums\\Role::ADMIN') %}
 	<section class="pt-10 pb-5">
 		<div class="justify-end flex px-8 mx-auto max-w-screen-xl">
 			<div class="grid lg:grid-cols-2 sm:grid-cols-1 gap-4">
-					<a href="{{ url_for('new-kamenews') }}" class="text-white bg-blue-700 hover:bg-green-800 focus:ring-4
-						focus:ring-green-300 font-medium rounded-lg text-sm px-2 py-2.5 dark:bg-green-600 dark:hover:bg-green-700
-						focus:outline-none dark:focus:ring-green-800 text-center">
+					<a href="{{ url_for('new-kamenews') }}" class="button green-button">
 						Créer un kamenews
 					</a>
-					<a href="{{ url_for('admin-kamenews') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4
-						focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700
-						focus:outline-none dark:focus:ring-blue-800 text-center">
+					<a href="{{ url_for('admin-kamenews') }}" class="button blue-button">
 						Gérer les kamenews
 					</a>
 			</div>
 		</div>
 	</section>
-
-	<section class="py-2 bg-white dark:bg-gray-900 mb-10">
+	{% endif %}
+	<section class="pb-2 pt-5 bg-slate-50 dark:bg-gray-900 my-10">
 		<div class="px-8 mx-auto max-w-screen-xl">
+			{% if kamenews|length == 0 %}
+				<div class="flex justify-center items-center text-center mt-8">
+					<p class="text-xl dark:text-white">Aucun Kamenews n'est actuellement disponible</p>
+				</div>
+			{% endif %}
+
 			<div class="grid lg:grid-cols-3 sm:grid-cols-1 gap-8">
 				{% for k in kamenews %}
 					<a href="{{ url_for('display-kamenews') }}" id="{{ k.getId() }}" class="kamenews-read">
-						<div class="flex flex-col lg:w-96 bg-white rounded-lg shadow dark:bg-gray-800 p-3 kamenews-card justify-between items-center" style="height: 544px">
+						<div class="flex flex-col lg:w-96 bg-slate-50 rounded-lg shadow dark:bg-gray-800 p-3 kamenews-card justify-between items-center" style="height: 544px">
 							<div>
 								<div class="justify-center border-gray-200 dark:border-gray-700 mb-3">
 									<h5 class="text-xl text-center font-bold leading-none text-gray-900 dark:text-white">
 										Kamenews n°{{ k.getId() }}
 									</h5>
-								</div><hr>
+								</div><hr class="border-gray-800 dark:border-gray-700">
 								<div class="flex justify-center pt-5">
-									<img class="rounded-lg shadow" src="/public/images/kamenews/eqico_info_sp.jpg" alt="">
+									<img class="rounded-lg shadow" src="/public/images/kamenews/{{ k.getBanner() }}" alt="">
 								</div>
 								<div class="justify-between">
 									<p class="text-base text-gray-700 dark:text-gray-300 mt-4 mx-4 text-justify sm:text-xl">{{ k.getDesc() }}</p>

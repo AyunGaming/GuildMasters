@@ -4,25 +4,24 @@ use DI\Container;
 use division\Configs\DatabaseConfig;
 use division\Data\DAO\UserDAO;
 use division\Data\Database;
+use division\HTTP\HtmlErrorRenderer;
 use division\HTTP\Middlewares\GetUserMiddleware;
 use division\HTTP\Routing\CharacterController;
+use division\HTTP\Routing\CustomErrorHandler;
 use division\HTTP\Routing\IndexController;
 use division\HTTP\Routing\KamenewsController;
 use division\HTTP\Routing\UserController;
 use division\Models\Managers\UserManager;
-use division\Models\User;
-use division\Utils\Flashes;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Slim\Routing\RouteCollectorProxy;
-use Slim\Routing\RouteContext;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
+use Twig\Extension\DebugExtension;
 
 require_once __DIR__ . '/../app/Models/User.php';
 require_once __DIR__ . '/../app/Models/Kamenews.php';
 require_once __DIR__ . '/../app/Models/Character.php';
 require_once __DIR__ . '/../app/Models/Tag.php';
+require_once __DIR__ . '/../app/Utils/alerts/AlertTypes.php';
 require_once __DIR__ . '/../app/Models/Enums/Rarity.php';
 require_once __DIR__ . '/../app/Models/Enums/Color.php';
 require_once __DIR__ . '/../app/Models/Enums/Role.php';
@@ -46,13 +45,17 @@ $twig = Twig::create(__DIR__ . '/../app/Templates', [
 	'debug' => true,
 ]);
 
-$twig->getEnvironment()->addExtension(new \Twig\Extension\DebugExtension());
+$twig->getEnvironment()->addExtension(new DebugExtension());
 
 
 $container->set(Twig::class, $twig);
 
 $app = Bridge::create($container);
 $app->add(TwigMiddleware::createFromContainer($app, Twig::class));
+
+$errorMiddleware = $app->addErrorMiddleware(true, true, false);
+$errorHandler = $errorMiddleware->getDefaultErrorHandler();
+$errorHandler->registerErrorRenderer('text/html', HtmlErrorRenderer::class);
 
 $app->group('/signin', static function (RouteCollectorProxy $signIn) {
 	$signIn->post('', [UserController::class, 'login']);
@@ -93,6 +96,7 @@ $app->group('/kamenews', static function (RouteCollectorProxy $kamenews) {
 
 	$kamenews->group('/read', static function (RouteCollectorProxy $read) {
 		$read->post('/get/{id:[1-9][0-9]*}', [KamenewsController::class, 'postGetKamenews'])->setName('read-kamenews');
+		$read->get('/latest', [KamenewsController::class, 'displayLastKamenews'])->setName('last-kamenews');
 		$read->get('', [KamenewsController::class, 'readKamenews'])->setName('display-kamenews');
 	});
 
