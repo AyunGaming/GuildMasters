@@ -72,12 +72,11 @@ class Kamenews {
 		return $this->writer;
 	}
 
-<<<<<<< HEAD
 	public function getContent(): string {
 		return $this->content;
-=======
+	}
+
 	public function getBanner(): string {
 		return $this->banner;
->>>>>>> dev
 	}
 }

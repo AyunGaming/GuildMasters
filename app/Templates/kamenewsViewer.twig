@@ -6,19 +6,10 @@
 	{{ parent() }}
 
 	{% if kamenews is not null %}
-<<<<<<< HEAD
 		<section class="px-8 mx-auto max-w-screen-xl bg-white dark:bg-gray-900 mt-3 mb-8">
 			<div class="flex justify-center">
 				<img alt="Illustration d'un journal" draggable="false" src="/public/images/kamenews/kamenewspaper.png">
 			</div>
-=======
-		<section id="2xl:xl:md:sm:container">
-			<div class="grid grid-rows-2 px-8 mx-auto max-w-screen-xl bg-white dark:bg-gray-900 mt-5 mb-8">
-				<div class="flex justify-center">
-					<img alt="Illustration d'un journal" draggable="false" src="/public/images/kamenews/kamenewspaper.png">
-				</div>
->>>>>>> dev
-
 			<div class="my-8 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
 				<div class="grid lg:grid-cols-3 sm:grid-cols-2">
 					<div class="text-3xl text-gray-900 font-bold dark:text-white col-span-2">
@@ -29,33 +20,10 @@
 						<p class="text-end text-gray-300">Publié par {{ kamenews.getWriter().getLogin() }} le {{ kamenews.getDate()|date("d/m/Y") }}</p>
 					</div>
 				</div>
-<<<<<<< HEAD
 				<hr class="mt-2 -mx-10 overflow-hidden">
 				<div class="mt-4 ms-2 mb-3">
 					<div class="text-gray-900 dark:text-white text-justify mt-3 ms-2 kamenews-container">
 							{{ kamenews.content() | raw }}
-=======
-
-				{% for article in kamenews.getArticles() %}
-					<div class="grid grid-rows-3 grid-cols-1 mt-4 ms-2 mb-3">
-						<div class="text-2xl text-gray-900 font-bold dark:text-white">
-							{{ article.getTitle() }}
-						</div>
-
-						<div class="text-gray-900 dark:text-white text-justify mt-3 ms-2">
-							{% autoescape %}
-								{{ article.getText()|raw }}
-							{% endautoescape %}
-						</div>
-
-						<div class="grid grid-cols-3 articleImages">
-							{% for image in article.getImage() %}
-								<div class="flex justify-center mt-4 imageContainer">
-									<img class="rounded-lg shadow min-w-0 max-w-2xl images" src="/public/images/kamenews/{{ image.image_name }}" alt="Illustration du Kamenews">
-								</div>
-							{% endfor %}
-						</div>
->>>>>>> dev
 					</div>
 				</div>
 			</div>
