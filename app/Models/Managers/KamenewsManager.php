@@ -55,7 +55,7 @@ class KamenewsManager {
 		$kamenews = new Kamenews();
 		$today = new DateTime();
 		$ayun = $this->userDAO->getByLogin('Ayun');
-		$kamenews->hydrate(['titre' => $title, 'writer' => $ayun, 'content' => $content, 'date' => $today->format('Y-m-d'), 'description' => '']);
+		$kamenews->hydrate(['titre' => $title, 'banner' => 'Reveals&Stuff.jpg', 'writer' => $ayun, 'content' => $content, 'date' => $today->format('Y-m-d'), 'description' => '']);
 		$this->kamenewsDAO->create($kamenews);
 	}
 

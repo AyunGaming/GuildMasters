@@ -132,8 +132,7 @@ class KamenewsController extends AbstractController {
 	}
 
 
-	public function sendKamenews(Request $request, Response $response)
-	{
+	public function sendKamenews(Request $request, Response $response): Response {
 		$post = $request->getParsedBody();
 		$title = $post['title'];
 		$kamenews = $post['kamenews-content'];
