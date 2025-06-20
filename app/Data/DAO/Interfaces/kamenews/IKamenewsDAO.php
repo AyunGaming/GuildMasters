@@ -16,5 +16,9 @@ interface IKamenewsDAO {
 
 	public function create(Kamenews $kamenews): void;
 
-	public function getLastInserted(int $n): array;
+	/**
+	 * @param int $n
+	 * @return array<int, Kamenews>
+	 */
+	public function getLastInserted(int $n = 1): array;
 }

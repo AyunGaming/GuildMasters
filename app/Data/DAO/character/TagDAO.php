@@ -68,4 +68,21 @@ class TagDAO extends BaseDAO implements ITagDAO {
 			return [];
 		}
 	}
+
+	public function createTag(string $name): ?Tag {
+		try{
+			$req = $this->database->prepare('INSERT INTO tags (name) VALUES (?)');
+
+			$req->bindParam(1, $name);
+
+			if ($req->execute() !== false) {
+				$id = $this->database->lastInsertId();
+				return $this->getById($id);
+			}
+			return null;
+		}
+		catch (PDOException) {
+			return null;
+		}
+	}
 }

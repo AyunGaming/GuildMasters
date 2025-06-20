@@ -13,6 +13,13 @@ class TagManager {
 		$this->tagDAO = $tagDAO;
 	}
 
+	public function createTag(string $name): ?Tag {
+		$tag = new Tag();
+		$tag->setName($name);
+
+		return $this->tagDAO->createTag($tag);
+	}
+
 	public function getByName(string $name): ?Tag {
 		return $this->tagDAO->getByName($name);
 	}

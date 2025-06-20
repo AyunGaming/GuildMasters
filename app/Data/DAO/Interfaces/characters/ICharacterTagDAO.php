@@ -11,4 +11,6 @@ interface ICharacterTagDAO {
 	public function create(Character $character, Tag $tag): array;
 
 	public function delete(Character $character, Tag $tag): array;
+
+    public function tagsFilterComparison(array $characters, array $filter): array;
 }

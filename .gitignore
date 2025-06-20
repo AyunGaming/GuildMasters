@@ -128,3 +128,6 @@ modules.xml
 
 /public/images/kamenews/*
 /config/database.ini
+/vendor/*
+/members/*
+/node_modules/

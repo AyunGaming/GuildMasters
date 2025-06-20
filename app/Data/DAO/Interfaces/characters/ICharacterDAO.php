@@ -15,4 +15,10 @@ interface ICharacterDAO {
 	public function update(Character $character, string $oldId): void;
 
 	public function delete(Character $character): void;
+
+	public function count(): int;
+
+    public function searchBy(string $query): array;
+
+    public function characterSearchQuery(array $filters): string;
 }

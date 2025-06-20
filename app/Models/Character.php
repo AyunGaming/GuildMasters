@@ -41,6 +41,10 @@ class Character implements JsonSerializable {
 		return $this->color;
 	}
 
+    public function getTags(): array {
+        return $this->tags;
+    }
+
 	public function getTagString(): string {
 		$string = "";
 		for ($i = 0; $i <= count($this->tags) - 1; $i++) {
@@ -72,7 +76,9 @@ class Character implements JsonSerializable {
 		}
 
 		if (array_key_exists('IsLF', $data)) {
-
+            if($data['IsLF'] === true || $data['IsLF'] === false){
+                $this->isLF = $data['IsLF'];
+            }
 			if ($data['IsLF'] == 'on') {
 				$this->isLF = true;
 			} elseif (is_numeric($data['IsLF'])) {

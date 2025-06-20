@@ -6,7 +6,7 @@ class Article {
 	private int $id;
 	private string $title;
 
-	private string $image;
+	private array $image;
 
 	private string $text;
 
@@ -23,10 +23,10 @@ class Article {
 		}
 
 		if (array_key_exists('image', $data)) {
-			$this->image = $data['image'];
+			is_array($data['image']) ? $this->image = $data['image'] : $this->image[] = $data['image'];
 		}
 		else{
-			$this->image = '';
+			$this->image = [];
 		}
 
 		if (array_key_exists('text', $data)) {
@@ -42,7 +42,7 @@ class Article {
 		return $this->title;
 	}
 
-	public function getImage(): string {
+	public function getImage(): array {
 		return $this->image;
 	}
 

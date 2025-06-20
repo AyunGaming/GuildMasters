@@ -1,7 +1,6 @@
 function initKamenewsCreator(){
-	document.querySelectorAll('.date').forEach(date => {
-		date.valueAsDate = new Date()
-	})
+	document.getElementById('hidden-date').valueAsDate = new Date();
+	document.getElementById('date').valueAsDate = new Date();
 
 	if(localStorage.getItem('kamenews') !== null){
 		const kamenews = JSON.parse(localStorage.getItem('kamenews'))
@@ -15,14 +14,14 @@ function initKamenewsCreator(){
 function checkHasArticle(){
 	const articles = JSON.parse(localStorage.getItem('articles'))
 	if(articles == null){
-		document.getElementById('articles-list').innerHTML = '<p class="ms-2 mt-1 fst-italic">Aucun article</p>'
+		document.getElementById('articles-list').innerHTML = '<p class="ms-2 mt-1 italic text-gray-900 dark:text-white">Aucun article</p>'
 	}
 	else{
 		document.getElementById('articles-list').innerHTML = ''
 		articles.forEach(article => {
 			document.getElementById('articles-list').innerHTML += `
 					<li class="article-item mb-2">
-						<label>${article.title}</label>
+						<label class="text-gray-900 dark:text-white">${article.title}</label>
 						<button id="delete-${article.id}" class="btn btn-sm btn-danger ms-1 delete-articles" type="button" 
 						data-bs-toggle="modal" data-bs-target="#deleteArticleModal"
 						onclick="initDeleteModal('${article.id}', '${article.title}')">

@@ -3,7 +3,9 @@
 namespace division\HTTP\Middlewares;
 
 use division\Models\Enums\Role;
-use division\Utils\Flashes;
+use division\Utils\Alerts;
+use division\Utils\alerts\Alert;
+use division\Utils\alerts\AlertTypes;
 use division\Utils\FlashMessage;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -20,11 +22,11 @@ class UserNeedsRoleMiddleware implements MiddlewareInterface {
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
 		$user = $request->getAttribute(User::class);
 		if($user === null){
-			Flashes::add(FlashMessage::danger('Vous devez être connecté pour accéder à cette page !'));
+			Alerts::add(new Alert('Vous devez être connecté pour accéder à cette page !', AlertTypes::WARNING));
 			return $this->redirect($request, 'sign-in');
 		}
 		if($user->getRole() !== $this->role){
-			Flashes::add(FlashMessage::danger('Vous n\'êtes pas autorisé à accéder à cette page !'));
+			Alerts::add(new Alert('Vous n\'êtes pas autorisé à accéder à cette page !', AlertTypes::ERROR));
 			return $this->redirect($request, 'home');
 		}
 		return $handler->handle($request);
